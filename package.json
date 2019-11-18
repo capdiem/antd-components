@@ -11,8 +11,9 @@
     "access": "public"
   },
   "scripts": {
-    "build": "tsc",
-    "build:check": "tsc --noEmit"
+    "prepublishOnly": "npm run compile",
+    "compile": "tsc -p .",
+    "watch": "tsc -w -p ."
   },
   "repository": {
     "type": "git",
