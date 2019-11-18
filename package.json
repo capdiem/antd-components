@@ -1,0 +1,40 @@
+{
+  "name": "@capdiem/antd-components",
+  "version": "0.0.2",
+  "description": "custom antd components",
+  "main": "dist/index",
+  "typings": "dist/index",
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "build:check": "tsc --noEmit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/capdiem/antd-components.git"
+  },
+  "keywords": [
+    "antd",
+    "component"
+  ],
+  "author": "capdiem",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/capdiem/antd-components/issues"
+  },
+  "homepage": "https://github.com/capdiem/antd-components#readme",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "antd": "^3.25.2",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0"
+  },
+  "devDependencies": {
+    "@types/node": "^12.12.8",
+    "typescript": "^3.7.2"
+  }
+}
