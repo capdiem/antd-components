@@ -1,5 +1,3 @@
 import SubstringText from "./substring-text";
 
-export default {
-  SubstringText
-};
+export { SubstringText };
