@@ -1,4 +1,5 @@
 import { Col, Form, Modal, Row } from "antd";
+import { FormComponentProps } from "antd/lib/form";
 import React from "react";
 
 import { renderItem } from "./helper";
@@ -6,7 +7,9 @@ import { FormItem, FormModalComponentProps } from "./types";
 
 const { Item: FormItem } = Form;
 
-const FormModal: React.FC<FormModalComponentProps> = ({
+type Props = FormModalComponentProps & FormComponentProps;
+
+const FormModal: React.FC<Props> = ({
   form: { getFieldDecorator, validateFields, resetFields },
   title,
   visible,
@@ -126,4 +129,4 @@ const FormModal: React.FC<FormModalComponentProps> = ({
   );
 };
 
-export default Form.create<FormModalComponentProps>()(FormModal);
+export default Form.create<Props>()(FormModal);

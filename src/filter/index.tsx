@@ -2,6 +2,7 @@ import {
     Button, Cascader, Col, DatePicker, Form, Input, InputNumber, Popconfirm, Row, Select, Upload
 } from "antd";
 import { CascaderOptionType } from "antd/lib/cascader";
+import { FormComponentProps } from "antd/lib/form";
 import { UploadProps } from "antd/lib/upload";
 import React from "react";
 
@@ -18,7 +19,9 @@ function computeCell(count: number) {
   return 6;
 }
 
-const Filter: React.FC<FilterComponentProps> = ({
+type Props = FilterComponentProps & FormComponentProps;
+
+const Filter: React.FC<Props> = ({
   form: { getFieldDecorator, getFieldsValue, resetFields },
   style,
   initialValues = {},
@@ -312,4 +315,4 @@ const Filter: React.FC<FilterComponentProps> = ({
   );
 };
 
-export default Form.create<FilterComponentProps>()(Filter);
+export default Form.create<Props>()(Filter);

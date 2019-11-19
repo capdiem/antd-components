@@ -1,4 +1,4 @@
-import { FormComponentProps, ValidationRule } from "antd/lib/form";
+import { ValidationRule } from "antd/lib/form";
 
 declare const FormItemTypes: [
   "input",
@@ -44,7 +44,7 @@ export interface FormItem extends PlainItem {
   rules?: Array<ValidationRule>;
 }
 
-export interface FormModalComponentProps extends FormComponentProps {
+export interface FormModalComponentProps {
   title?: React.ReactNode;
   tips?: React.ReactNode;
   visible: boolean;

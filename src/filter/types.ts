@@ -1,5 +1,4 @@
 import { ButtonProps } from "antd/lib/button";
-import { FormComponentProps } from "antd/lib/form";
 
 declare const FormItemTypes: [
   "input",
@@ -24,7 +23,7 @@ type Size = typeof Sizes[number];
 type SelectOption = { label: string; value: string | number };
 type FilterFormItems<T> = Array<FilterFormItem<T>>;
 
-export type Btn<T> = Omit<ButtonProps, "onClick"> & {
+export type Btn<T = any> = Omit<ButtonProps, "onClick"> & {
   text?: string;
   mode?: ButtonMode;
   visible?: boolean;
@@ -43,7 +42,7 @@ export interface FilterFormItem<T = any> {
   [prop: string]: any;
 }
 
-export interface FilterComponentProps<T = any> extends FormComponentProps {
+export interface FilterComponentProps<T = any> {
   style?: React.CSSProperties;
   initialValues?: T;
   size?: Size;
