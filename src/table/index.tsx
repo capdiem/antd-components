@@ -2,7 +2,7 @@ import { Table as AntdTable } from "antd";
 import { ColumnProps } from "antd/lib/table";
 import React from "react";
 
-import { ListComponentProps } from "./types";
+import { TableComponentProps } from "./types";
 
 function recursion(columns: ColumnProps<any>[]) {
   return columns.map((item) => {
@@ -16,7 +16,7 @@ function recursion(columns: ColumnProps<any>[]) {
   });
 }
 
-const Table: React.FC<ListComponentProps<any>> = ({ rowKey, columns, ...tableProps }) => {
+const Table: React.FC<TableComponentProps<any>> = ({ rowKey, columns, ...tableProps }) => {
   function getRowKey(item: any) {
     if (rowKey) {
       if (typeof rowKey === "string") {
