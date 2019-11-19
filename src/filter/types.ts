@@ -1,5 +1,4 @@
 import { ButtonProps } from "antd/lib/button";
-import { CascaderOptionType } from "antd/lib/cascader";
 import { FormComponentProps } from "antd/lib/form";
 
 declare const FormItemTypes: [
@@ -35,12 +34,12 @@ export type Btn<T> = Omit<ButtonProps, "onClick"> & {
   [prop: string]: any;
 };
 
-export interface FilterFormItem<T> {
+export interface FilterFormItem<T = any> {
   label?: string;
   field: keyof T;
   placeholder?: string;
   type?: FormItemType;
-  options?: Array<SelectOption> | Array<CascaderOptionType>;
+  options?: Array<SelectOption>;
   [prop: string]: any;
 }
 

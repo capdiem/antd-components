@@ -1,6 +1,8 @@
 import {
     Button, Cascader, Col, DatePicker, Form, Input, InputNumber, Popconfirm, Row, Select, Upload
 } from "antd";
+import { CascaderOptionType } from "antd/lib/cascader";
+import { UploadProps } from "antd/lib/upload";
 import React from "react";
 
 import { Btn, FilterComponentProps, FilterFormItem } from "./types";
@@ -42,7 +44,7 @@ const Filter: React.FC<FilterComponentProps> = ({
 
     let element: React.ReactNode;
     const colProps = {
-      key: field,
+      key: field as string,
       style: {
         marginBottom: 5,
       },
@@ -129,7 +131,7 @@ const Filter: React.FC<FilterComponentProps> = ({
           <Cascader
             size={size}
             changeOnSelect
-            options={options}
+            options={options as CascaderOptionType[]}
             placeholder={placeholder || label}
             style={{ width: "100%" }}
             {...props}
@@ -178,7 +180,7 @@ const Filter: React.FC<FilterComponentProps> = ({
 
     return (
       <Col lg={lg} md={24} sm={24} xs={24} {...colProps}>
-        {getFieldDecorator(field, {
+        {getFieldDecorator(field as string, {
           initialValue,
         })(element)}
       </Col>
@@ -216,7 +218,7 @@ const Filter: React.FC<FilterComponentProps> = ({
           }
 
           return (
-            <Upload {...props} key={index}>
+            <Upload {...(props as UploadProps)} key={index}>
               <Button size={size} type="primary" loading={loading} icon={icon} style={style}>
                 {text}
               </Button>
