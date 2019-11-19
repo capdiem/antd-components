@@ -1,4 +1,5 @@
-import { Table as AntdTable } from "antd";
+import AntdTable from "antd/es/table";
+import "antd/es/table/style";
 import { ColumnProps } from "antd/lib/table";
 import React from "react";
 
