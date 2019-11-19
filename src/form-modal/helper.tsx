@@ -2,7 +2,7 @@ import {
     Button, Cascader, DatePicker, Input, InputNumber, message, Select, Switch, Upload
 } from "antd";
 import { CascaderOptionType } from "antd/lib/cascader";
-import { RcFile } from "antd/lib/upload";
+import { RcFile, UploadProps } from "antd/lib/upload";
 import React from "react";
 
 import { PlainItem } from "./types";
@@ -148,8 +148,10 @@ export function renderItem(item: PlainItem) {
 
     case "upload-excel":
       return (
-        <Upload size={size} accept=".xlsx, .xls" beforeUpload={beforeUploadExcel} {...props}>
-          <Button icon="upload">上传文件</Button>
+        <Upload accept=".xlsx, .xls" beforeUpload={beforeUploadExcel} {...(props as UploadProps)}>
+          <Button size={size} icon="upload">
+            上传文件
+          </Button>
         </Upload>
       );
 
