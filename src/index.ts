@@ -3,6 +3,7 @@ import EditableText from "./editable-text";
 import Filter from "./filter";
 import FormModal from "./form-modal";
 import SubstringText from "./substring-text";
+import Table from "./table";
 import TableOperation from "./table-operation";
 
-export { SubstringText, BlockText, EditableText, Filter, TableOperation, FormModal };
+export { SubstringText, BlockText, EditableText, Filter, TableOperation, FormModal, Table };
