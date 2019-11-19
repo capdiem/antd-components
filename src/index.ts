@@ -4,6 +4,16 @@ import Filter from "./filter";
 import FormModal from "./form-modal";
 import SubstringText from "./substring-text";
 import Table from "./table";
+import TableModal from "./table-modal";
 import TableOperation from "./table-operation";
 
-export { SubstringText, BlockText, EditableText, Filter, TableOperation, FormModal, Table };
+export {
+  SubstringText,
+  BlockText,
+  EditableText,
+  Filter,
+  TableOperation,
+  FormModal,
+  Table,
+  TableModal,
+};
