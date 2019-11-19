@@ -1,20 +1,9 @@
-import React from "react";
 import {
-  Form,
-  Row,
-  Col,
-  Button,
-  Input,
-  InputNumber,
-  Select,
-  DatePicker,
-  Cascader,
-  Upload,
-  Popconfirm,
+    Button, Cascader, Col, DatePicker, Form, Input, InputNumber, Popconfirm, Row, Select, Upload
 } from "antd";
+import React from "react";
 
-import { FilterComponentProps, FilterFormItem, Btn } from "./types";
-import { CascaderOptionType } from "antd/lib/cascader";
+import { Btn, FilterComponentProps, FilterFormItem } from "./types";
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
@@ -81,7 +70,7 @@ const Filter: React.FC<FilterComponentProps> = ({
             size={size}
             {...props}
           >
-            {options.map(u => (
+            {options.map((u) => (
               <Option key={u.value} value={u.value}>
                 {u.label}
               </Option>
@@ -127,7 +116,7 @@ const Filter: React.FC<FilterComponentProps> = ({
             style={{ width: "100%" }}
             {...props}
           >
-            {options.map(u => (
+            {options.map((u) => (
               <Option key={u.value} value={u.value}>
                 {u.label}
               </Option>
@@ -140,7 +129,7 @@ const Filter: React.FC<FilterComponentProps> = ({
           <Cascader
             size={size}
             changeOnSelect
-            options={options as CascaderOptionType[]}
+            options={options}
             placeholder={placeholder || label}
             style={{ width: "100%" }}
             {...props}
@@ -197,14 +186,14 @@ const Filter: React.FC<FilterComponentProps> = ({
   }
 
   const cols: React.ReactNode[] = [];
-  formItemsGroups.forEach(items => {
+  formItemsGroups.forEach((items) => {
     const lg = computeCell(items.length);
-    cols.push(...items.map(item => renderFormItem(item, lg)));
+    cols.push(...items.map((item) => renderFormItem(item, lg)));
   });
 
   function renderBtns(items: Btn<any>[]) {
     return items
-      .filter(u => u.visible === undefined || u.visible === true)
+      .filter((u) => u.visible === undefined || u.visible === true)
       .map((item, index) => {
         const {
           mode = "default",
@@ -267,7 +256,7 @@ const Filter: React.FC<FilterComponentProps> = ({
   if (btns && btns.length > 0) {
     btnElementGroups.push(renderBtns(btns));
   } else if (btnGroups && btnGroups.length > 0) {
-    btnGroups.forEach(items => {
+    btnGroups.forEach((items) => {
       btnElementGroups.push(renderBtns(items));
     });
   }
@@ -321,4 +310,4 @@ const Filter: React.FC<FilterComponentProps> = ({
   );
 };
 
-export default Form.create()(Filter);
+export default Form.create<FilterComponentProps>()(Filter);
