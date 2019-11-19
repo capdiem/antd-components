@@ -1,4 +1,12 @@
-import { Col, Form, Modal, Row } from "antd";
+import "antd/es/modal/style";
+import "antd/es/row/style";
+import "antd/es/col/style";
+import "antd/es/form/style";
+
+import Col from "antd/es/col";
+import Form from "antd/es/form";
+import Modal from "antd/es/modal";
+import Row from "antd/es/row";
 import { FormComponentProps } from "antd/lib/form";
 import React from "react";
 

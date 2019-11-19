@@ -1,4 +1,6 @@
-import { Modal } from "antd";
+import "antd/es/modal/style";
+
+import Modal from "antd/es/modal";
 import { ModalProps } from "antd/lib/modal";
 import React from "react";
 

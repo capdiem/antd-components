@@ -1,6 +1,26 @@
-import {
-    Button, Cascader, Col, DatePicker, Form, Input, InputNumber, Popconfirm, Row, Select, Upload
-} from "antd";
+import "antd/es/button/style";
+import "antd/es/cascader/style";
+import "antd/es/col/style";
+import "antd/es/date-picker/style";
+import "antd/es/form/style";
+import "antd/es/input/style";
+import "antd/es/input-number/style";
+import "antd/es/popconfirm/style";
+import "antd/es/row/style";
+import "antd/es/select/style";
+import "antd/es/upload/style";
+
+import Button from "antd/es/button";
+import Cascader from "antd/es/cascader";
+import Col from "antd/es/col";
+import DatePicker from "antd/es/date-picker";
+import Form from "antd/es/form";
+import Input from "antd/es/input";
+import InputNumber from "antd/es/input-number";
+import Popconfirm from "antd/es/popconfirm";
+import Row from "antd/es/row";
+import Select from "antd/es/select";
+import Upload from "antd/es/upload";
 import { CascaderOptionType } from "antd/lib/cascader";
 import { FormComponentProps } from "antd/lib/form";
 import { UploadProps } from "antd/lib/upload";

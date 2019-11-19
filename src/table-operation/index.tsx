@@ -1,4 +1,12 @@
-import { Button, Dropdown, Icon, Menu } from "antd";
+import "antd/es/icon/style";
+import "antd/es/button/style";
+import "antd/es/dropdown/style";
+import "antd/es/menu/style";
+
+import Button from "antd/es/button";
+import Dropdown from "antd/es/dropdown";
+import Icon from "antd/es/icon";
+import Menu from "antd/es/menu";
 import React from "react";
 
 import { TableOperationComponentProps } from "./types";

@@ -1,6 +1,22 @@
-import {
-    Button, Cascader, DatePicker, Input, InputNumber, message, Select, Switch, Upload
-} from "antd";
+import "antd/es/button/style";
+import "antd/es/cascader/style";
+import "antd/es/date-picker/style";
+import "antd/es/input/style";
+import "antd/es/input-number/style";
+import "antd/es/select/style";
+import "antd/es/upload/style";
+import "antd/es/message/style";
+import "antd/es/switch/style";
+
+import Button from "antd/es/button";
+import Cascader from "antd/es/cascader";
+import DatePicker from "antd/es/date-picker";
+import Input from "antd/es/input";
+import InputNumber from "antd/es/input-number";
+import message from "antd/es/message";
+import Select from "antd/es/select";
+import Switch from "antd/es/switch";
+import Upload from "antd/es/upload";
 import { CascaderOptionType } from "antd/lib/cascader";
 import { RcFile, UploadProps } from "antd/lib/upload";
 import React from "react";

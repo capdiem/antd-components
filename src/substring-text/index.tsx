@@ -1,4 +1,6 @@
-import { Tooltip } from "antd";
+import "antd/es/tooltip/style";
+
+import Tooltip from "antd/es/tooltip";
 import React from "react";
 
 export interface SubstringTextComponentProps {
@@ -24,10 +26,10 @@ const SubstringText: React.FC<SubstringTextComponentProps> = ({
     const arr = text.split(separator);
     text = arr.join("\n");
     if (arr.length <= 5) {
-      return arr.some(u => u.length > limit) ? (
+      return arr.some((u) => u.length > limit) ? (
         <Tooltip title={text}>
           {arr
-            .map(item => (item.length > limit ? item.substring(0, limit - 1) + "..." : item))
+            .map((item) => (item.length > limit ? item.substring(0, limit - 1) + "..." : item))
             .join("\n")}
         </Tooltip>
       ) : (
@@ -39,7 +41,7 @@ const SubstringText: React.FC<SubstringTextComponentProps> = ({
         <a>
           {arr
             .filter((_, i) => i < 5)
-            .map(item => (item.length > limit ? item.substring(0, limit - 1) + "..." : item))
+            .map((item) => (item.length > limit ? item.substring(0, limit - 1) + "..." : item))
             .join("\n")}
           <br />. . .
         </a>
