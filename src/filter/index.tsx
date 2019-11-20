@@ -256,7 +256,7 @@ const Filter: React.FC<Props> = ({
               okText={confirmText || "确定"}
               onConfirm={() => onClick!(getFieldsValue())}
             >
-              <Button size={size} type="primary" icon={icon} {...props}>
+              <Button size={size} type="primary" loading={loading} icon={icon} {...props}>
                 {text}
               </Button>
             </Popconfirm>
@@ -267,6 +267,7 @@ const Filter: React.FC<Props> = ({
             type="primary"
             size={size}
             icon={icon}
+            loading={loading}
             onClick={() => onClick!(getFieldsValue())}
             key={index}
             {...props}
