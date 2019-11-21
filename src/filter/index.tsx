@@ -228,6 +228,7 @@ const Filter: React.FC<Props> = ({
           confirmTitle,
           confirmText,
           loading,
+          disabled,
           ...props
         } = item;
         if (mode === "upload") {
@@ -241,8 +242,15 @@ const Filter: React.FC<Props> = ({
           }
 
           return (
-            <Upload {...(props as UploadProps)} key={index}>
-              <Button size={size} type="primary" loading={loading} icon={icon} style={style}>
+            <Upload disabled={disabled} key={index} {...(props as UploadProps)}>
+              <Button
+                size={size}
+                type="primary"
+                loading={loading}
+                icon={icon}
+                disabled={disabled}
+                style={style}
+              >
                 {text}
               </Button>
             </Upload>
@@ -255,8 +263,16 @@ const Filter: React.FC<Props> = ({
               title={confirmTitle}
               okText={confirmText || "确定"}
               onConfirm={() => onClick!(getFieldsValue())}
+              disabled={disabled}
             >
-              <Button size={size} type="primary" loading={loading} icon={icon} {...props}>
+              <Button
+                size={size}
+                type="primary"
+                loading={loading}
+                icon={icon}
+                disabled={disabled}
+                {...props}
+              >
                 {text}
               </Button>
             </Popconfirm>
@@ -268,6 +284,7 @@ const Filter: React.FC<Props> = ({
             size={size}
             icon={icon}
             loading={loading}
+            disabled={disabled}
             onClick={() => onClick!(getFieldsValue())}
             key={index}
             {...props}
