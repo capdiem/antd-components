@@ -4,7 +4,7 @@ import Tooltip from "antd/es/tooltip";
 import React from "react";
 
 export interface SubstringTextComponentProps {
-  text: string;
+  text: string | string[];
   /**
    * 每行最大长度
    */
@@ -12,55 +12,51 @@ export interface SubstringTextComponentProps {
   /**
    * 是否全为英文字符
    */
-  az?: boolean;
+  az?: "all" | "mixed" | "none";
   /**
    * 显示行数
    */
   row?: number;
-  /**
-   * 分隔字符
-   */
-  separator?: string;
 }
 
 const SubstringText: React.FC<SubstringTextComponentProps> = ({
-  text = "",
+  text,
   width,
-  az = false,
+  az = "none",
   row = 1,
-  separator,
 }) => {
-  if (!width) {
+  if (!text || !width) {
     return <span>{text}</span>;
   }
 
   /**
    * 17:  每个中文所占的像素值
    * 1.7: 如果全部为英文字符（非中文字符）则再乘以1.7
+   * 1.5: 如果中英文混合 则乘以1.5
    */
-  const limit = Number((Number(width) / 17).toFixed()) * (az ? 1.7 : 1) * row;
+  const limit =
+    Number((Number(width) / 17).toFixed()) * (az === "all" ? 1.7 : az === "mixed" ? 1.5 : 1) * row;
 
-  if (separator && text.includes(separator)) {
-    const arr = text.split(separator);
-    text = arr.join("\n");
-    if (arr.length <= 5) {
-      return arr.some((u) => u.length > limit) ? (
+  if (text instanceof Array) {
+    if (text.length <= 5) {
+      return text.some((u) => u.length > limit) ? (
         <Tooltip title={text}>
-          {arr
-            .map((item) => (item.length > limit ? item.substring(0, limit - 1) + "..." : item))
-            .join("\n")}
+          {text.map((item) => (
+            <div>{item.length > limit ? item.substring(0, limit - 1) + "..." : item}</div>
+          ))}
         </Tooltip>
       ) : (
-        <span>{arr.join("\n")}</span>
+        <span>{text.join("\n")}</span>
       );
     }
     return (
       <Tooltip title={text}>
         <a>
-          {arr
+          {text
             .filter((_, i) => i < 5)
-            .map((item) => (item.length > limit ? item.substring(0, limit - 1) + "..." : item))
-            .join("\n")}
+            .map((item) => (
+              <div>{item.length > limit ? item.substring(0, limit - 1) + "..." : item}</div>
+            ))}
           <br />. . .
         </a>
       </Tooltip>
