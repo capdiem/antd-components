@@ -46,7 +46,11 @@ const SubstringText: React.FC<SubstringTextComponentProps> = ({
           ))}
         </Tooltip>
       ) : (
-        <span>{text.join("\n")}</span>
+        <span>
+          {text.map((u) => (
+            <div>{u}</div>
+          ))}
+        </span>
       );
     }
     return (
