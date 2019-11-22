@@ -16,14 +16,16 @@ export interface SubstringTextComponentProps {
   /**
    * 显示行数
    */
-  row?: number;
+  rows?: number;
+  rowStyle?: React.CSSProperties;
 }
 
 const SubstringText: React.FC<SubstringTextComponentProps> = ({
   text,
   width,
   az = "none",
-  row = 1,
+  rows = 1,
+  rowStyle,
 }) => {
   if (!text || !width) {
     return <span>{text}</span>;
@@ -35,20 +37,22 @@ const SubstringText: React.FC<SubstringTextComponentProps> = ({
    * 1.5: 如果中英文混合 则乘以1.5
    */
   const limit =
-    Number((Number(width) / 17).toFixed()) * (az === "all" ? 1.7 : az === "mixed" ? 1.5 : 1) * row;
+    Number((Number(width) / 17).toFixed()) * (az === "all" ? 1.7 : az === "mixed" ? 1.5 : 1) * rows;
 
   if (text instanceof Array) {
     if (text.length <= 5) {
       return text.some((u) => u.length > limit) ? (
         <Tooltip title={text}>
           {text.map((item) => (
-            <div>{item.length > limit ? item.substring(0, limit - 1) + "..." : item}</div>
+            <div style={rowStyle}>
+              {item.length > limit ? item.substring(0, limit - 1) + "..." : item}
+            </div>
           ))}
         </Tooltip>
       ) : (
         <span>
           {text.map((u) => (
-            <div>{u}</div>
+            <div style={rowStyle}>{u}</div>
           ))}
         </span>
       );
@@ -59,7 +63,9 @@ const SubstringText: React.FC<SubstringTextComponentProps> = ({
           {text
             .filter((_, i) => i < 5)
             .map((item) => (
-              <div>{item.length > limit ? item.substring(0, limit - 1) + "..." : item}</div>
+              <div style={rowStyle}>
+                {item.length > limit ? item.substring(0, limit - 1) + "..." : item}
+              </div>
             ))}
           <br />. . .
         </a>
@@ -68,7 +74,9 @@ const SubstringText: React.FC<SubstringTextComponentProps> = ({
   } else if ((text && text.length) > limit) {
     return (
       <Tooltip title={text}>
-        <a>{text.substring(0, limit - 1) + "..."}</a>
+        <a>
+          <span style={rowStyle}>{text.substring(0, limit - 1) + "..."}</span>
+        </a>
       </Tooltip>
     );
   } else {
