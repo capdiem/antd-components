@@ -2,6 +2,7 @@ declare const Sizes: ["default", "small", "large"];
 
 export interface Item {
   content: React.ReactNode;
+  disabled?: boolean;
   visible?: boolean;
   onClick: () => void;
 }

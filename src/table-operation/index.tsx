@@ -21,10 +21,10 @@ const TableOperation: React.FC<TableOperationComponentProps> = ({
   const menuItems = items
     .filter((u) => u.visible === undefined || u.visible === true)
     .map((item, index) => {
-      const { content, onClick = () => {} } = item;
+      const { content, disabled = false, onClick = () => {} } = item;
 
       return (
-        <MenuItem onClick={onClick} key={index}>
+        <MenuItem onClick={onClick} disabled={disabled} key={index}>
           {content}
         </MenuItem>
       );
