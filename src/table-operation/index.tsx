@@ -25,7 +25,7 @@ const TableOperation: React.FC<TableOperationComponentProps> = ({
 
   const menuItems: React.ReactNode[] = [];
 
-  itemGroups.forEach((s: Items) => {
+  itemGroups.forEach((s: Items, n: number) => {
     const group = s
       .filter((u) => u.visible === undefined || u.visible === true)
       .map((u, i) => {
@@ -33,7 +33,7 @@ const TableOperation: React.FC<TableOperationComponentProps> = ({
 
         return (
           <MenuItem onClick={onClick} disabled={disabled} key={i}>
-            {icon && <Icon type={icon} />}
+            {icon && (typeof icon === "string" ? <Icon type={icon} /> : icon)}
             {content}
           </MenuItem>
         );
@@ -41,7 +41,9 @@ const TableOperation: React.FC<TableOperationComponentProps> = ({
 
     if (group.length > 0) {
       menuItems.push(...group);
-      menuItems.push(<MenuDivider />);
+      if (n !== itemGroups.length - 1) {
+        menuItems.push(<MenuDivider />);
+      }
     }
   });
 
