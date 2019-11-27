@@ -5,6 +5,8 @@ import React from "react";
 
 export interface SubstringTextComponentProps {
   text: string | string[];
+  textStyle?: React.CSSProperties;
+  type: "link" | "dotted";
   /**
    * 每行最大长度
    */
@@ -22,6 +24,8 @@ export interface SubstringTextComponentProps {
 
 const SubstringText: React.FC<SubstringTextComponentProps> = ({
   text,
+  textStyle = {},
+  type = "dotted",
   width,
   az = "none",
   rows = 1,
@@ -31,6 +35,8 @@ const SubstringText: React.FC<SubstringTextComponentProps> = ({
     return <span>{text}</span>;
   }
 
+  // TODO: 只能提示
+
   /**
    * 17:  每个中文所占的像素值
    * 1.7: 如果全部为英文字符（非中文字符）则再乘以1.7
@@ -39,44 +45,68 @@ const SubstringText: React.FC<SubstringTextComponentProps> = ({
   const limit =
     Number((Number(width) / 17).toFixed()) * (az === "all" ? 1.7 : az === "mixed" ? 1.5 : 1) * rows;
 
+  const title = (
+    <div style={{ overflow: "auto", maxHeight: "50vh", fontSize: "smaller", ...textStyle }}>
+      {text}
+    </div>
+  );
+
+  const dottedStyle: React.CSSProperties = {
+    borderBottomStyle: "dotted",
+    borderBottomWidth: 1,
+    cursor: "pointer",
+  };
+
   if (text instanceof Array) {
     if (text.length <= 5) {
       return text.some((u) => u.length > limit) ? (
-        <Tooltip title={text}>
-          {text.map((item) => (
-            <div style={rowStyle}>
-              {item.length > limit ? item.substring(0, limit - 1) + "..." : item}
-            </div>
-          ))}
+        <Tooltip title={title}>
+          {text.map((item) => {
+            const sub = item.length > limit ? item.substring(0, limit - 1) + "..." : item;
+
+            return (
+              <div style={rowStyle}>
+                {type === "link" ? <a>{sub}</a> : <span style={dottedStyle}>{sub}</span>}
+              </div>
+            );
+          })}
         </Tooltip>
       ) : (
         <span>
           {text.map((u) => (
-            <div style={rowStyle}>{u}</div>
+            <div style={rowStyle}>
+              {type === "link" ? <a>{u}</a> : <span style={dottedStyle}>{u}</span>}
+            </div>
           ))}
         </span>
       );
     }
+
     return (
-      <Tooltip title={text}>
+      <Tooltip title={title}>
         <a>
           {text
             .filter((_, i) => i < 5)
-            .map((item) => (
-              <div style={rowStyle}>
-                {item.length > limit ? item.substring(0, limit - 1) + "..." : item}
-              </div>
-            ))}
+            .map((item) => {
+              const sub = item.length > limit ? item.substring(0, limit - 1) + "..." : item;
+
+              return (
+                <div style={rowStyle}>
+                  {type === "link" ? <a>{sub}</a> : <span style={dottedStyle}>{sub}</span>}
+                </div>
+              );
+            })}
           <br />. . .
         </a>
       </Tooltip>
     );
   } else if ((text && text.length) > limit) {
+    const sub = text.substring(0, limit - 1) + "...";
     return (
-      <Tooltip title={text}>
-        <a>
-          <span style={rowStyle}>{text.substring(0, limit - 1) + "..."}</span>
-        </a>
+      <Tooltip title={title}>
+        <div style={rowStyle}>
+          {type === "link" ? <a>{sub}</a> : <span style={dottedStyle}>{sub}</span>}
+        </div>
       </Tooltip>
     );
   } else {
