@@ -9,26 +9,41 @@ import Icon from "antd/es/icon";
 import Menu from "antd/es/menu";
 import React from "react";
 
-import { TableOperationComponentProps } from "./types";
+import { Items, TableOperationComponentProps } from "./types";
 
-const { Item: MenuItem } = Menu;
+const { Item: MenuItem, Divider: MenuDivider } = Menu;
 
 const TableOperation: React.FC<TableOperationComponentProps> = ({
   style,
   items = [],
+  itemGroups = [],
   size = "default",
 }) => {
-  const menuItems = items
-    .filter((u) => u.visible === undefined || u.visible === true)
-    .map((item, index) => {
-      const { content, disabled = false, onClick = () => {} } = item;
+  if (items.length > 0) {
+    itemGroups.push(items);
+  }
 
-      return (
-        <MenuItem onClick={onClick} disabled={disabled} key={index}>
-          {content}
-        </MenuItem>
-      );
-    });
+  const menuItems: React.ReactNode[] = [];
+
+  itemGroups.forEach((s: Items) => {
+    const group = s
+      .filter((u) => u.visible === undefined || u.visible === true)
+      .map((u, i) => {
+        const { content, icon, disabled = false, onClick = () => {} } = u;
+
+        return (
+          <MenuItem onClick={onClick} disabled={disabled} key={i}>
+            {icon && <Icon type={icon} />}
+            {content}
+          </MenuItem>
+        );
+      });
+
+    if (group.length > 0) {
+      menuItems.push(...group);
+      menuItems.push(<MenuDivider />);
+    }
+  });
 
   const rootStyle = {
     padding: "0px 12px",
