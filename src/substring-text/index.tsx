@@ -41,10 +41,10 @@ const SubstringText: React.FC<SubstringTextComponentProps> = ({
    * fontSize default set 14px
    * 14:  每个中文所占的像素值
    * 1.7: 如果全部为英文字符（非中文字符）则再乘以1.7
-   * 1.4: 如果中英文混合 则乘以1.4
+   * 1.3: 如果中英文混合 则乘以1.3
    */
   const limit =
-    Number(((Number(width) / 14) * (az === "all" ? 1.7 : az === "mixed" ? 1.4 : 1)).toFixed()) *
+    Number(((Number(width) / 14) * (az === "all" ? 1.7 : az === "mixed" ? 1.3 : 1)).toFixed()) *
     rows;
 
   const title = (
