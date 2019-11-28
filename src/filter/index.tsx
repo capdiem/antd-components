@@ -326,7 +326,7 @@ const Filter: React.FC<Props> = ({
       )}
       <Row type="flex" justify="end" gutter={4}>
         {btnElementGroups.map((btnElements, index) => (
-          <Col key={index} style={{ marginBottom: 2 }}>
+          <Col key={index}>
             <ButtonGroup style={{ display: "flex" }} size={size}>
               {btnElements}
             </ButtonGroup>
