@@ -63,11 +63,11 @@ const SubstringText: React.FC<SubstringTextComponentProps> = ({
     if (text.length <= 5) {
       return text.some((u) => u.length > limit) ? (
         <Tooltip title={title}>
-          {text.map((item) => {
+          {text.map((item, index) => {
             const sub = item.length > limit ? item.substring(0, limit - 1) + "..." : item;
 
             return (
-              <div style={rowStyle}>
+              <div key={index} style={rowStyle}>
                 {type === "link" ? <a>{sub}</a> : <span style={dottedStyle}>{sub}</span>}
               </div>
             );
@@ -75,8 +75,10 @@ const SubstringText: React.FC<SubstringTextComponentProps> = ({
         </Tooltip>
       ) : (
         <span>
-          {text.map((u) => (
-            <div style={rowStyle}>{u}</div>
+          {text.map((u, i) => (
+            <div key={i} style={rowStyle}>
+              {u}
+            </div>
           ))}
         </span>
       );
@@ -87,11 +89,11 @@ const SubstringText: React.FC<SubstringTextComponentProps> = ({
         <a>
           {text
             .filter((_, i) => i < 5)
-            .map((item) => {
+            .map((item, index) => {
               const sub = item.length > limit ? item.substring(0, limit - 1) + "..." : item;
 
               return (
-                <div style={rowStyle}>
+                <div key={index} style={rowStyle}>
                   {type === "link" ? <a>{sub}</a> : <span style={dottedStyle}>{sub}</span>}
                 </div>
               );
