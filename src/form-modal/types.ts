@@ -18,7 +18,7 @@ declare const Sizes: ["default", "small", "large"];
 
 type FormItemType = typeof FormItemTypes[number];
 type Size = typeof Sizes[number];
-type SelectOption = { label: string; value: string | number };
+type SelectOption = { label: string; value: string | number; disabled?: boolean };
 type FormItems = Array<FormItem>;
 
 export interface PlainItemGroup {
