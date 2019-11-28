@@ -38,12 +38,13 @@ const SubstringText: React.FC<SubstringTextComponentProps> = ({
   // TODO: 只能提示
 
   /**
-   * 17:  每个中文所占的像素值
+   * fontSize default set 14px
+   * 14:  每个中文所占的像素值
    * 1.7: 如果全部为英文字符（非中文字符）则再乘以1.7
    * 1.5: 如果中英文混合 则乘以1.5
    */
   const limit =
-    Number((Number(width) / 17).toFixed()) * (az === "all" ? 1.7 : az === "mixed" ? 1.5 : 1) * rows;
+    Number((Number(width) / 14).toFixed()) * (az === "all" ? 1.7 : az === "mixed" ? 1.5 : 1) * rows;
 
   const title = (
     <div style={{ overflow: "auto", maxHeight: "50vh", fontSize: "smaller", ...textStyle }}>
@@ -54,7 +55,7 @@ const SubstringText: React.FC<SubstringTextComponentProps> = ({
   const dottedStyle: React.CSSProperties = {
     borderBottomStyle: "dotted",
     borderBottomWidth: 1,
-    cursor: "pointer",
+    cursor: "default",
   };
 
   if (text instanceof Array) {
@@ -74,9 +75,7 @@ const SubstringText: React.FC<SubstringTextComponentProps> = ({
       ) : (
         <span>
           {text.map((u) => (
-            <div style={rowStyle}>
-              {type === "link" ? <a>{u}</a> : <span style={dottedStyle}>{u}</span>}
-            </div>
+            <div style={rowStyle}>{u}</div>
           ))}
         </span>
       );
