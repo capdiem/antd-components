@@ -6,7 +6,7 @@ import React from "react";
 export interface SubstringTextComponentProps {
   text: string | string[];
   textStyle?: React.CSSProperties;
-  type: "link" | "dotted";
+  type?: "link" | "dotted";
   /**
    * 每行最大长度
    */
