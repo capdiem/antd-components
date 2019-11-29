@@ -22,7 +22,8 @@ type SelectOption = { label: string; value: string | number; disabled?: boolean 
 type FormItems = Array<FormItem>;
 
 export interface PlainItemGroup {
-  title: string;
+  key: string;
+  title: React.ReactNode;
   items: PlainItem[];
 }
 
