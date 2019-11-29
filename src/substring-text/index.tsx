@@ -98,7 +98,7 @@ const SubstringText: React.FC<SubstringTextComponentProps> = ({
                 </div>
               );
             })}
-          <br />. . .
+          . . .
         </a>
       </Tooltip>
     );
