@@ -47,11 +47,13 @@ const SubstringText: React.FC<SubstringTextComponentProps> = ({
     Number(((Number(width) / 14) * (az === "all" ? 1.7 : az === "mixed" ? 1.3 : 1)).toFixed()) *
     rows;
 
-  const title = (
-    <div style={{ overflow: "auto", maxHeight: "50vh", fontSize: "smaller", ...textStyle }}>
-      {text}
-    </div>
-  );
+  function getTitle(content: string) {
+    return (
+      <div style={{ overflow: "auto", maxHeight: "50vh", fontSize: "smaller", ...textStyle }}>
+        {content}
+      </div>
+    );
+  }
 
   const dottedStyle: React.CSSProperties = {
     borderBottomStyle: "dotted",
@@ -62,7 +64,7 @@ const SubstringText: React.FC<SubstringTextComponentProps> = ({
   if (text instanceof Array) {
     if (text.length <= 5) {
       return text.some((u) => u.length > limit) ? (
-        <Tooltip title={title}>
+        <Tooltip title={getTitle(text.join("\n"))}>
           {text.map((item, index) => {
             const sub = item.length > limit ? item.substring(0, limit - 1) + "..." : item;
 
@@ -85,7 +87,7 @@ const SubstringText: React.FC<SubstringTextComponentProps> = ({
     }
 
     return (
-      <Tooltip title={title}>
+      <Tooltip title={getTitle(text.join("\n"))}>
         {text
           .filter((_, i) => i < 5)
           .map((item, index) => {
@@ -103,7 +105,7 @@ const SubstringText: React.FC<SubstringTextComponentProps> = ({
   } else if ((text && text.length) > limit) {
     const sub = text.substring(0, limit - 1) + "...";
     return (
-      <Tooltip title={title}>
+      <Tooltip title={getTitle(text)}>
         <div style={rowStyle}>
           {type === "link" ? <a>{sub}</a> : <span style={dottedStyle}>{sub}</span>}
         </div>
