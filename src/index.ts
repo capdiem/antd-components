@@ -1,4 +1,5 @@
 import BlockText from "./block-text";
+import Dividers from "./dividers";
 import EditableText from "./editable-text";
 import Filter from "./filter";
 import FormModal from "./form-modal";
@@ -16,4 +17,5 @@ export {
   FormModal,
   Table,
   TableModal,
+  Dividers,
 };
