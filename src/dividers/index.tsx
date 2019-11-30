@@ -7,6 +7,7 @@ export interface DividerComponentProps {
   rows: React.ReactNode[];
   type?: DividerProps["type"];
   style?: React.CSSProperties;
+  dividerStyle?: React.CSSProperties;
   rowStyle?: React.CSSProperties;
 }
 
@@ -14,17 +15,21 @@ const Dividers: React.FC<DividerComponentProps> = ({
   rows,
   type = "horizontal",
   style = {},
+  dividerStyle = {},
   rowStyle = {},
 }) => {
-  const baseStyle: React.CSSProperties =
+  const _dividerStyle: React.CSSProperties =
     type === "horizontal" ? { margin: "1px 0px -2px 0px" } : {};
 
+  const _style: React.CSSProperties =
+    type === "vertical" ? { display: "flex", justifyContent: "center" } : {};
+
   return (
-    <div>
+    <div style={{ textAlign: "center", ..._style, ...style }}>
       {rows.map((row, index) => (
-        <div key={index} style={rowStyle}>
-          {index !== 0 && <Divider style={{ ...baseStyle, ...style }} type={type} />}
-          {row}
+        <div key={index}>
+          {index !== 0 && <Divider style={{ ..._dividerStyle, ...dividerStyle }} type={type} />}
+          <div style={rowStyle}>{row}</div>
         </div>
       ))}
     </div>
