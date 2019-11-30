@@ -23,7 +23,7 @@ const Dividers: React.FC<DividerComponentProps> = ({
     <div>
       {rows.map((row, index) => (
         <div key={index} style={rowStyle}>
-          {index !== 0 && <Divider style={{ ...baseStyle, ...style }} />}
+          {index !== 0 && <Divider style={{ ...baseStyle, ...style }} type={type} />}
           {row}
         </div>
       ))}
