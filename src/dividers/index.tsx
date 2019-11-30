@@ -27,7 +27,7 @@ const Dividers: React.FC<DividerComponentProps> = ({
   return (
     <div style={{ textAlign: "center", ..._style, ...style }}>
       {rows
-        .filter((row) => row !== undefined && row !== null)
+        .filter((row) => row !== undefined && row !== null && row !== false)
         .map((row, index) => (
           <div key={index} style={rowStyle}>
             {index !== 0 && <Divider style={{ ..._dividerStyle, ...dividerStyle }} type={type} />}
