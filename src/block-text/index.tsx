@@ -48,7 +48,13 @@ const BlockText: React.FC<BlockTextComponentProps> = ({
         <Tag
           color={color}
           key={text}
-          style={{ whiteSpace: "unset", padding: "0 4px", ...tagStyle }}
+          style={{
+            whiteSpace: "unset",
+            padding: "0 4px",
+            marginRight: 4,
+            maxWidth: 60,
+            ...tagStyle,
+          }}
         >
           {text}
         </Tag>
