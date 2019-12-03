@@ -43,7 +43,7 @@ const BlockText: React.FC<BlockTextComponentProps> = ({
       }}
     >
       {tags.map(({ text, color }) => (
-        <Tag color={color} key={text}>
+        <Tag color={color} key={text} style={{ whiteSpace: "unset" }}>
           {text}
         </Tag>
       ))}
