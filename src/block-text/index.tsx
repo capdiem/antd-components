@@ -14,6 +14,7 @@ export interface BlockTextComponentProps {
   tags?: TagProps[];
   majorStyle?: React.CSSProperties;
   minorStyle?: React.CSSProperties;
+  tagStyle?: React.CSSProperties;
 }
 
 const BlockText: React.FC<BlockTextComponentProps> = ({
@@ -22,6 +23,7 @@ const BlockText: React.FC<BlockTextComponentProps> = ({
   minor,
   majorStyle,
   minorStyle,
+  tagStyle,
 }) => {
   const _majorStyle = {
     ...majorStyle,
@@ -43,7 +45,11 @@ const BlockText: React.FC<BlockTextComponentProps> = ({
       }}
     >
       {tags.map(({ text, color }) => (
-        <Tag color={color} key={text} style={{ whiteSpace: "unset" }}>
+        <Tag
+          color={color}
+          key={text}
+          style={{ whiteSpace: "unset", padding: "0 4px", ...tagStyle }}
+        >
           {text}
         </Tag>
       ))}
