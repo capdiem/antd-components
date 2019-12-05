@@ -55,6 +55,11 @@ const SubstringText: React.FC<SubstringTextComponentProps> = ({
     );
   }
 
+  const baseRowStyle: React.CSSProperties = {
+    wordBreak: "break-all",
+    ...rowStyle,
+  };
+
   const dottedStyle: React.CSSProperties = {
     borderBottomStyle: "dotted",
     borderBottomWidth: 1,
@@ -69,7 +74,7 @@ const SubstringText: React.FC<SubstringTextComponentProps> = ({
             const sub = item.length > limit ? item.substring(0, limit - 1) + "..." : item;
 
             return (
-              <div key={index} style={rowStyle}>
+              <div key={index} style={baseRowStyle}>
                 {type === "link" ? <a>{sub}</a> : <span style={dottedStyle}>{sub}</span>}
               </div>
             );
@@ -78,7 +83,7 @@ const SubstringText: React.FC<SubstringTextComponentProps> = ({
       ) : (
         <span>
           {text.map((u, i) => (
-            <div key={i} style={rowStyle}>
+            <div key={i} style={baseRowStyle}>
               {u}
             </div>
           ))}
@@ -94,7 +99,7 @@ const SubstringText: React.FC<SubstringTextComponentProps> = ({
             const sub = item.length > limit ? item.substring(0, limit - 1) + "..." : item;
 
             return (
-              <div key={index} style={rowStyle}>
+              <div key={index} style={baseRowStyle}>
                 {type === "link" ? <a>{sub}</a> : <span style={dottedStyle}>{sub}</span>}
               </div>
             );
@@ -106,7 +111,7 @@ const SubstringText: React.FC<SubstringTextComponentProps> = ({
     const sub = text.substring(0, limit - 1) + "...";
     return (
       <Tooltip title={getTitle(text)}>
-        <div style={rowStyle}>
+        <div style={baseRowStyle}>
           {type === "link" ? <a>{sub}</a> : <span style={dottedStyle}>{sub}</span>}
         </div>
       </Tooltip>
