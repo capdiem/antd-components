@@ -31,12 +31,13 @@
   "homepage": "https://github.com/capdiem/antd-components#readme",
   "dependencies": {
     "antd": "^3.25.2",
+    "radium": "^0.26.0",
     "react": "^16.12.0",
     "react-dom": "^16.12.0"
   },
   "devDependencies": {
     "@types/node": "^12.12.8",
-    "prettier": "^1.19.1",
-    "typescript": "^3.7.2"
+    "@types/radium": "^0.24.2",
+    "prettier": "^1.19.1"
   }
 }
