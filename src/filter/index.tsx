@@ -213,7 +213,11 @@ const Filter: React.FC<Props> = ({
   const cols: React.ReactNode[] = [];
   formItemsGroups.forEach((items) => {
     const lg = computeCell(items.length);
-    cols.push(...items.map((item) => renderFormItem(item, lg)));
+    cols.push(
+      ...items
+        .filter((u) => u.visible === undefined || u.visible)
+        .map((item) => renderFormItem(item, lg))
+    );
   });
 
   function renderBtns(items: Btn<any>[]) {

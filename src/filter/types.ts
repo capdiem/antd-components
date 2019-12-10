@@ -39,6 +39,7 @@ export interface FilterFormItem<T = any> {
   placeholder?: string;
   type?: FormItemType;
   options?: Array<SelectOption>;
+  visible?: boolean;
   [prop: string]: any;
 }
 
