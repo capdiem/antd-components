@@ -1,21 +1,22 @@
 import "antd/es/table/style";
 
 import AntdTable from "antd/es/table";
-import { ColumnProps } from "antd/lib/table";
 import React from "react";
 
-import { TableComponentProps } from "./types";
+import { TableColumnProps, TableComponentProps } from "./types";
 
-function recursion(columns: ColumnProps<any>[]) {
-  return columns.map((item) => {
-    if (item.children) {
-      item.children = recursion(item.children);
-    } else if (!item.align) {
-      item.align = "center";
-    }
+function recursion(columns: TableColumnProps<any>[]) {
+  return columns
+    .filter((u) => u.visible === undefined || u.visible)
+    .map((item) => {
+      if (item.children) {
+        item.children = recursion(item.children);
+      } else if (!item.align) {
+        item.align = "center";
+      }
 
-    return item;
-  });
+      return item;
+    });
 }
 
 const Table: React.FC<TableComponentProps<any>> = ({ rowKey, columns, ...tableProps }) => {
