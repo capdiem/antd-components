@@ -46,7 +46,7 @@ const Table: React.FC<TableComponentProps<any>> = ({
 
   const newColumns = columns ? recursion(columns) : undefined;
 
-  if (fullscreenAbility) {
+  if (fullscreenAbility && fullscreen) {
     tableProps.scroll = {
       ...tableProps.scroll,
       y: "calc(100vh - 300px)",
