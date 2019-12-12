@@ -30,7 +30,7 @@ export default function() {
           <h1>Dividers</h1>
           <Dividers rows={[<a key="1">Action 1</a>, <a key="2">Action 2</a>]} type="vertical" />
         </Col>
-        <Col span={20}>
+        <Col span={10}>
           <div>
             <h1 style={{ display: 'inline-block', marginRight: 10 }}>Table</h1>
             <Button
@@ -45,6 +45,17 @@ export default function() {
             </Button>
           </div>
           <Table
+            columns={columns}
+            dataSource={[{ name: 'cyx', age: 25, gender: 'man' }]}
+            bordered={true}
+          />
+        </Col>
+        <Col span={10}>
+          <div>
+            <h1>Table with fullscreen</h1>
+          </div>
+          <Table
+            fullscreen={true}
             columns={columns}
             dataSource={[{ name: 'cyx', age: 25, gender: 'man' }]}
             bordered={true}
