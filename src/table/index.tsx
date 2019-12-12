@@ -1,7 +1,9 @@
 import "antd/es/table/style";
 
+import Button from "antd/es/button";
+import Modal from "antd/es/modal";
 import AntdTable from "antd/es/table";
-import React from "react";
+import React, { useState } from "react";
 
 import { TableColumnProps, TableComponentProps } from "./types";
 
@@ -19,7 +21,15 @@ function recursion(columns: TableColumnProps<any>[]) {
     });
 }
 
-const Table: React.FC<TableComponentProps<any>> = ({ rowKey, columns, ...tableProps }) => {
+const Table: React.FC<TableComponentProps<any>> = ({
+  fullscreen: fullscreenAbility,
+  fullscreenWidth = "95%",
+  rowKey,
+  columns,
+  ...tableProps
+}) => {
+  const [fullscreen, setFullscreen] = useState<boolean>(false);
+
   function getRowKey(item: any) {
     if (rowKey) {
       if (typeof rowKey === "string") {
@@ -36,7 +46,41 @@ const Table: React.FC<TableComponentProps<any>> = ({ rowKey, columns, ...tablePr
 
   const newColumns = columns ? recursion(columns) : undefined;
 
-  return <AntdTable {...tableProps} columns={newColumns} rowKey={(item) => getRowKey(item)} />;
+  if (fullscreenAbility) {
+    tableProps.scroll = {
+      ...tableProps.scroll,
+      y: "calc(100vh - 300px)",
+    };
+  }
+
+  return (
+    <div style={{ position: "relative" }}>
+      {fullscreenAbility && (
+        <Button
+          type="dashed"
+          icon="fullscreen"
+          style={{ position: "absolute", zIndex: 1, left: 0 }}
+          onClick={() => setFullscreen(true)}
+        />
+      )}
+      {!fullscreen && (
+        <AntdTable {...tableProps} columns={newColumns} rowKey={(item) => getRowKey(item)} />
+      )}
+      <Modal
+        visible={fullscreen}
+        title={null}
+        footer={null}
+        centered
+        closable={false}
+        width={fullscreenWidth}
+        onCancel={() => setFullscreen(false)}
+      >
+        {fullscreenAbility && (
+          <AntdTable {...tableProps} columns={newColumns} rowKey={(item) => getRowKey(item)} />
+        )}
+      </Modal>
+    </div>
+  );
 };
 
 export default Table;

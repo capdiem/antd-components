@@ -6,6 +6,8 @@ export type TableColumnProps<T> = Omit<ColumnProps<T>, "children"> & {
 };
 
 export type TableComponentProps<T> = Omit<TableProps<T>, "rowKey" | "columns"> & {
+  fullscreen?: boolean;
+  fullscreenWidth?: string | number;
   rowKey?: keyof T | (keyof T)[] | ((record: T) => string);
   columns?: TableColumnProps<T>[];
 };
