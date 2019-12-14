@@ -6,13 +6,14 @@ import Col from "antd/es/col";
 import Row from "antd/es/row";
 import React, { useEffect, useState } from "react";
 
-import { Dividers, Table } from "../../../src";
+import { Dividers, FormModal, Table } from "../../../src";
 import { TableColumnProps } from "../../../src/table/types";
 // import { Dividers, Table } from '../../../lib';
 import styles from "./index.css";
 
 export default function() {
   const [columns, setColumns] = useState<TableColumnProps<any>[]>([]);
+  const [formModalVisible, setFormModalVisible] = useState<boolean>(false);
 
   useEffect(() => {
     setColumns([
@@ -24,7 +25,13 @@ export default function() {
 
   return (
     <div className={styles.normal}>
-      <div className={styles.welcome} />
+      <Row gutter={9}>
+        <Col span={6}>
+          <Button type="primary" onClick={() => setFormModalVisible(true)}>
+            Form Modal
+          </Button>
+        </Col>
+      </Row>
       <Row gutter={8}>
         <Col span={4}>
           <h1>Dividers</h1>
@@ -62,6 +69,33 @@ export default function() {
           />
         </Col>
       </Row>
+      <FormModal
+        visible={formModalVisible}
+        labelCol={4}
+        wrapperCol={20}
+        formItems={[
+          {
+            type: 'upload-image',
+            field: 'imageId',
+            label: '图片',
+            initialValue: {
+              uid: -1000,
+              name: '主图.png',
+              status: 'done',
+              url:
+                'http://qstbgmall.oss-cn-hangzhou.aliyuncs.com/gms/mainImage/微信图片_20191115111055_191115163314839.png',
+            },
+            beforeUpload: () =>
+              Promise.resolve({
+                uid: '12345',
+                url:
+                  'http://qstbgmall.oss-cn-hangzhou.aliyuncs.com/gms/mainImage/微信图片_20191115111055_191115163314839.png',
+              }),
+          },
+        ]}
+        onOk={(values: any) => console.log('values', values)}
+        onCancel={() => setFormModalVisible(false)}
+      />
     </div>
   );
 }
