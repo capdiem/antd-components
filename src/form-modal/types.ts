@@ -11,7 +11,8 @@ declare const FormItemTypes: [
   "cascader",
   "upload-excel",
   "textarea",
-  "switch"
+  "switch",
+  "upload-image"
 ];
 
 declare const Sizes: ["default", "small", "large"];

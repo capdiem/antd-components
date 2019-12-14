@@ -3,12 +3,14 @@ import "antd/es/row/style";
 import "antd/es/col/style";
 import "antd/es/form/style";
 
+import Button from "antd/es/button";
 import Col from "antd/es/col";
 import Form from "antd/es/form";
 import Modal from "antd/es/modal";
 import Row from "antd/es/row";
+import Upload from "antd/es/upload";
 import { FormComponentProps } from "antd/lib/form";
-import React from "react";
+import React, { useState } from "react";
 
 import { renderItem } from "./helper";
 import { FormItem, FormModalComponentProps } from "./types";
@@ -36,6 +38,8 @@ const FormModal: React.FC<Props> = ({
   onCancel,
   ...modalProps
 }) => {
+  const [fileList, setFileList] = useState<any>([]);
+
   const formProps: any = {};
   if (size === "small") {
     formProps.layout = "vertical";
@@ -60,7 +64,10 @@ const FormModal: React.FC<Props> = ({
       if (err) return;
 
       // return Promise.Resolve meanings request succeeded
-      const promise = onOk(values);
+      const promise = onOk({
+        ...values,
+        ...fileList,
+      });
       if (promise) {
         promise.then(() => {
           resetFields();
@@ -100,14 +107,67 @@ const FormModal: React.FC<Props> = ({
       value = initialData[field];
     }
 
+    if (type === "upload-image" && !fileList[field]) {
+      const obj: any = { [field]: [value] };
+      setFileList({ ...obj, ...fileList });
+    }
+
     return (
       <Col {...colProps}>
         <FormItem label={label} {...formItemProps} key={field}>
-          {getFieldDecorator(field, {
-            initialValue: value,
-            rules: [requiredRule, ...rules],
-            valuePropName,
-          })(renderItem({ type, field, label, ...props }))}
+          {type === "upload-image"
+            ? getFieldDecorator(field, {
+                initialValue: fileList[field],
+                valuePropName: "fileList",
+                getValueFromEvent: (e) => (Array.isArray(e) ? e : e && e.fileList),
+                rules: [requiredRule, ...rules],
+              })(
+                <Upload
+                  accept="image/*"
+                  listType="picture"
+                  beforeUpload={(file) =>
+                    item.beforeUpload(file).then((data: any) => {
+                      setFileList((state: any) => {
+                        state[field] = [
+                          {
+                            ...file,
+                            uid: data.uid,
+                            url: data.url,
+                          },
+                        ];
+                        return state;
+                      });
+                    })
+                  }
+                  onPreview={(file) => item.preview(file)}
+                  onRemove={() => {
+                    setFileList((state: any) => {
+                      state[field] = [];
+                      return state;
+                    });
+                  }}
+                >
+                  {fileList[field] && fileList[field].length > 0 ? null : (
+                    <Button
+                      icon="upload"
+                      type="dashed"
+                      style={{
+                        position: "relative",
+                        height: "66px",
+                        padding: "8px",
+                        width: item.width
+                      }}
+                    >
+                      上传图片
+                    </Button>
+                  )}
+                </Upload>
+              )
+            : getFieldDecorator(field, {
+                initialValue: value,
+                rules: [requiredRule, ...rules],
+                valuePropName,
+              })(renderItem({ type, field, label, ...props }))}
         </FormItem>
       </Col>
     );
