@@ -75,16 +75,25 @@ export default function() {
         wrapperCol={20}
         formItems={[
           {
-            type: 'upload-image',
+            type: 'upload-images',
             field: 'imageId',
             label: '图片',
-            initialValue: {
-              uid: -1000,
-              name: '主图.png',
-              status: 'done',
-              url:
-                'http://qstbgmall.oss-cn-hangzhou.aliyuncs.com/gms/mainImage/微信图片_20191115111055_191115163314839.png',
-            },
+            initialValue: [
+              {
+                uid: -1000,
+                name: '主图.png',
+                status: 'done',
+                url:
+                  'http://qstbgmall.oss-cn-hangzhou.aliyuncs.com/gms/mainImage/微信图片_20191115111055_191115163314839.png',
+              },
+              {
+                uid: -1001,
+                name: '主图.png',
+                status: 'done',
+                url:
+                  'http://qstbgmall.oss-cn-hangzhou.aliyuncs.com/gms/mainImage/微信图片_20191115111055_191115163314839.png',
+              },
+            ],
             beforeUpload: () =>
               Promise.resolve({
                 uid: '12345',
