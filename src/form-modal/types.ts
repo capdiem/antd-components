@@ -32,7 +32,7 @@ export interface PlainItemGroup<T = any> {
   items: PlainItem<T>[];
 }
 
-export interface PlainItem<T> {
+export interface PlainItem<T = any> {
   type?: FormItemType;
   label: string;
   field: Extract<keyof T, string>;
