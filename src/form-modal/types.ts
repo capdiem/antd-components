@@ -1,3 +1,5 @@
+import { RcFile } from "antd/es/upload";
+import { UploadFile } from "antd/es/upload/interface";
 import { ValidationRule } from "antd/lib/form";
 
 declare const FormItemTypes: [
@@ -12,7 +14,8 @@ declare const FormItemTypes: [
   "upload-excel",
   "textarea",
   "switch",
-  "upload-image"
+  "upload-image",
+  "upload-images"
 ];
 
 declare const Sizes: ["default", "small", "large"];
@@ -36,6 +39,8 @@ export interface PlainItem {
   options?: Array<SelectOption>;
   readonly?: boolean;
   showTime?: boolean;
+  beforeUpload?: (file: RcFile, fileList: RcFile[]) => Promise<any>;
+  onPreview?: (file: UploadFile<any>) => void;
   [prop: string]: any;
 }
 

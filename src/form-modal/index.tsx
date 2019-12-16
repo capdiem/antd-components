@@ -3,14 +3,14 @@ import "antd/es/row/style";
 import "antd/es/col/style";
 import "antd/es/form/style";
 
-import Button from "antd/es/button";
 import Col from "antd/es/col";
 import Form from "antd/es/form";
+import Icon from "antd/es/icon";
 import Modal from "antd/es/modal";
 import Row from "antd/es/row";
-import Upload from "antd/es/upload";
+import Upload, { RcFile } from "antd/es/upload";
 import { FormComponentProps } from "antd/lib/form";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { renderItem } from "./helper";
 import { FormItem, FormModalComponentProps } from "./types";
@@ -38,7 +38,29 @@ const FormModal: React.FC<Props> = ({
   onCancel,
   ...modalProps
 }) => {
-  const [fileList, setFileList] = useState<any>([]);
+  const [fileList, setFileList] = useState<any>({});
+
+  useEffect(() => {
+    let _fileList: any = {};
+
+    formItems
+      .filter((u) => u.type === "upload-image")
+      .forEach((u) => {
+        if (u.initialValue) _fileList[u.field] = [u.initialValue];
+        else if (initialData && initialData[u.field]) _fileList[u.field] = [initialData[u.field]];
+        else _fileList[u.field] = [];
+      });
+
+    formItems
+      .filter((u) => u.type === "upload-images")
+      .forEach((u) => {
+        if (u.initialValue) _fileList[u.field] = u.initialValue;
+        else if (initialData && initialData[u.field]) _fileList[u.field] = initialData[u.field];
+        else _fileList[u.field] = [];
+      });
+
+    setFileList(_fileList);
+  }, [visible]);
 
   const formProps: any = {};
   if (size === "small") {
@@ -85,6 +107,8 @@ const FormModal: React.FC<Props> = ({
       required = false,
       rules = [],
       valuePropName = "value",
+      beforeUpload,
+      onPreview,
       ...props
     } = item;
 
@@ -107,15 +131,10 @@ const FormModal: React.FC<Props> = ({
       value = initialData[field];
     }
 
-    if (type === "upload-image" && !fileList[field]) {
-      const obj: any = { [field]: [value] };
-      setFileList({ ...obj, ...fileList });
-    }
-
     return (
       <Col {...colProps}>
         <FormItem label={label} {...formItemProps} key={field}>
-          {type === "upload-image"
+          {type === "upload-image" || type === "upload-images"
             ? getFieldDecorator(field, {
                 initialValue: fileList[field],
                 valuePropName: "fileList",
@@ -124,11 +143,12 @@ const FormModal: React.FC<Props> = ({
               })(
                 <Upload
                   accept="image/*"
-                  listType="picture"
-                  beforeUpload={(file) =>
-                    item.beforeUpload(file).then((data: any) => {
+                  listType="picture-card"
+                  beforeUpload={(file, fileList) =>
+                    beforeUpload!(file, fileList).then((data: any) => {
                       setFileList((state: any) => {
                         state[field] = [
+                          ...state[field],
                           {
                             ...file,
                             uid: data.uid,
@@ -139,27 +159,21 @@ const FormModal: React.FC<Props> = ({
                       });
                     })
                   }
-                  onPreview={(file) => item.preview(file)}
-                  onRemove={() => {
+                  onPreview={onPreview}
+                  onRemove={(file) => {
                     setFileList((state: any) => {
-                      state[field] = [];
+                      state[field] = state[field].filter((u: RcFile) => u.uid !== file.uid);
                       return state;
                     });
                   }}
                 >
-                  {fileList[field] && fileList[field].length > 0 ? null : (
-                    <Button
-                      icon="upload"
-                      type="dashed"
-                      style={{
-                        position: "relative",
-                        height: "66px",
-                        padding: "8px",
-                        width: item.width
-                      }}
-                    >
-                      上传图片
-                    </Button>
+                  {fileList[field] &&
+                  type === "upload-image" &&
+                  fileList[field].length > 0 ? null : (
+                    <a>
+                      <Icon type="upload" />
+                      <span style={{ marginLeft: 2 }}>上传图片</span>
+                    </a>
                   )}
                 </Upload>
               )
