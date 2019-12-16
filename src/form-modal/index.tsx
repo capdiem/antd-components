@@ -123,8 +123,14 @@ const FormModal: React.FC<Props> = ({
 
     const requiredRule = {
       required,
-      message: type === "select" || type === "dynamicSelect" ? `请选择${label}` : `请输入${label}`,
+      message: `请输入${label}`,
     };
+
+    if (type === "upload-image" || type === "upload-images" || type === "upload-excel") {
+      requiredRule.message = `请上传${label}`;
+    } else if (type === "select" || type === "dynamicSelect") {
+      requiredRule.message = `请选择${label}`;
+    }
 
     let value = initialValue;
     if (initialData && initialValue === undefined) {
@@ -136,7 +142,8 @@ const FormModal: React.FC<Props> = ({
         <FormItem label={label} {...formItemProps} key={field}>
           {type === "upload-image" || type === "upload-images"
             ? getFieldDecorator(field, {
-                initialValue: fileList[field],
+                initialValue:
+                  fileList[field] && fileList[field].length > 0 ? fileList[field] : undefined,
                 valuePropName: "fileList",
                 getValueFromEvent: (e) => (Array.isArray(e) ? e : e && e.fileList),
                 rules: [requiredRule, ...rules],
