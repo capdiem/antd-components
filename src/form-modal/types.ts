@@ -23,18 +23,19 @@ declare const Sizes: ["default", "small", "large"];
 type FormItemType = typeof FormItemTypes[number];
 type Size = typeof Sizes[number];
 type SelectOption = { label: string; value: string | number; disabled?: boolean };
-type FormItems = Array<FormItem>;
+type FormItems<T> = Array<FormItem<T>>;
+type SimpleUploadFile = Required<Pick<UploadFile, "uid" | "url">>;
 
-export interface PlainItemGroup {
+export interface PlainItemGroup<T = any> {
   key: string;
   title: React.ReactNode;
-  items: PlainItem[];
+  items: PlainItem<T>[];
 }
 
-export interface PlainItem {
+export interface PlainItem<T> {
   type?: FormItemType;
   label: string;
-  field: string;
+  field: Extract<keyof T, string>;
   placeholder?: string;
   options?: Array<SelectOption>;
   readonly?: boolean;
@@ -44,18 +45,18 @@ export interface PlainItem {
   [prop: string]: any;
 }
 
-export interface FormItem extends PlainItem {
+export interface FormItem<T = any> extends PlainItem<T> {
   required?: boolean;
-  initialValue?: any;
+  initialValue?: SimpleUploadFile | any;
   visible?: boolean;
   rules?: Array<ValidationRule>;
 }
 
-export interface FormModalComponentProps {
+export interface FormModalComponentProps<T = any> {
   title?: React.ReactNode;
   tips?: React.ReactNode;
   visible: boolean;
-  formItems: FormItems;
+  formItems: FormItems<T>;
   formItemCol?: {
     lg: number;
     md: number;
@@ -63,7 +64,7 @@ export interface FormModalComponentProps {
     xs: number;
   };
   maskClosable?: boolean;
-  initialData?: any;
+  initialData?: T;
   labelCol?: number | {};
   wrapperCol?: number | {};
   hasFeedback?: boolean;
