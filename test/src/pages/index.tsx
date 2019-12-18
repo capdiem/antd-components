@@ -94,7 +94,7 @@ export default function() {
                   'http://qstbgmall.oss-cn-hangzhou.aliyuncs.com/gms/mainImage/微信图片_20191115111055_191115163314839.png',
               },
             ],
-            beforeUpload: () =>
+            onUpload: () =>
               Promise.resolve({
                 uid: '12345',
                 url:
