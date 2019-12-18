@@ -40,7 +40,7 @@ export interface PlainItem<T = any> {
   options?: Array<SelectOption>;
   readonly?: boolean;
   showTime?: boolean;
-  beforeUpload?: (file: RcFile, fileList: RcFile[]) => Promise<any>;
+  onUpload?: (file: File) => Promise<{ uid: string; url: string }>;
   onPreview?: (file: UploadFile<any>) => void;
   [prop: string]: any;
 }

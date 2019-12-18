@@ -107,7 +107,7 @@ const FormModal: React.FC<Props> = ({
       required = false,
       rules = [],
       valuePropName = "value",
-      beforeUpload,
+      onUpload,
       onPreview,
       ...props
     } = item;
@@ -137,6 +137,8 @@ const FormModal: React.FC<Props> = ({
       value = initialData[field];
     }
 
+    console.log("fileList", fileList);
+
     return (
       <Col {...colProps}>
         <FormItem label={label} {...formItemProps} key={field}>
@@ -151,21 +153,28 @@ const FormModal: React.FC<Props> = ({
                 <Upload
                   accept="image/*"
                   listType="picture-card"
-                  beforeUpload={(file, fileList) =>
-                    beforeUpload!(file, fileList).then((data: any) => {
-                      setFileList((state: any) => {
-                        state[field] = [
-                          ...state[field],
-                          {
-                            ...file,
-                            uid: data.uid,
-                            url: data.url,
-                          },
-                        ];
-                        return state;
-                      });
-                    })
-                  }
+                  customRequest={({ file, onSuccess, onError }) => {
+                    if (!file || !onUpload) return false;
+
+                    onUpload(file)
+                      .then((data) => {
+                        setFileList((state: any) => {
+                          state[field] = [
+                            ...state[field],
+                            {
+                              ...file,
+                              uid: data.uid,
+                              url: data.url,
+                            },
+                          ];
+
+                          return state;
+                        });
+
+                        onSuccess(data, file);
+                      })
+                      .catch(onError);
+                  }}
                   onPreview={onPreview}
                   onRemove={(file) => {
                     setFileList((state: any) => {
