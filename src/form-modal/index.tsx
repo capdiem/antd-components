@@ -41,7 +41,7 @@ const FormModal: React.FC<Props> = ({
   const [fileList, setFileList] = useState<any>({});
 
   useEffect(() => {
-    let _fileList: any = {};
+    const _fileList: any = {};
 
     formItems
       .filter((u) => u.type === "upload-image")
@@ -136,8 +136,6 @@ const FormModal: React.FC<Props> = ({
     if (initialData && initialValue === undefined) {
       value = initialData[field];
     }
-
-    console.log("fileList", fileList);
 
     return (
       <Col {...colProps}>
