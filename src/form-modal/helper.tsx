@@ -114,7 +114,7 @@ export function renderItem(item: PlainItem) {
             option.props
               .children!.toString()
               .toLowerCase()
-              .indexOf(input.toLowerCase()) > -1
+              .includes(input.toLowerCase())
           }
           {...props}
         >

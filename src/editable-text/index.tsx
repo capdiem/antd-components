@@ -33,6 +33,7 @@ export interface EditableTextComponentProps {
 
 const Option = Select.Option;
 
+// eslint-disable-next-line no-useless-escape
 const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 function validate(rule: string, value: any) {
@@ -72,6 +73,7 @@ const EditableText: React.FC<EditableTextComponentProps> = ({
       setSpinning(true);
 
       const promise = onOk(value);
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises
       if (promise) {
         promise
           .then(() => {

@@ -54,12 +54,12 @@ const Filter: React.FC<Props> = ({
   onReload,
 }) => {
   function handleOnSearch() {
-    onSearch!(getFieldsValue());
+    typeof onSearch === "function" && onSearch(getFieldsValue());
   }
 
   function handleOnReload() {
     resetFields();
-    onReload!();
+    typeof onReload === "function" && onReload();
   }
 
   function renderFormItem(item: FilterFormItem<any>, lg: number) {
@@ -112,10 +112,11 @@ const Filter: React.FC<Props> = ({
             allowClear
             showSearch
             filterOption={(input, option) =>
+              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
               option.props
                 .children!.toString()
                 .toLowerCase()
-                .indexOf(input.toLowerCase()) > -1
+                .includes(input.toLowerCase())
             }
             {...props}
           >
@@ -266,7 +267,7 @@ const Filter: React.FC<Props> = ({
               key={index}
               title={confirmTitle}
               okText={confirmText || "确定"}
-              onConfirm={() => onClick!(getFieldsValue())}
+              onConfirm={() => typeof onClick === "function" && onClick(getFieldsValue())}
               disabled={disabled}
             >
               <Button
@@ -289,7 +290,7 @@ const Filter: React.FC<Props> = ({
             icon={icon}
             loading={loading}
             disabled={disabled}
-            onClick={() => onClick!(getFieldsValue())}
+            onClick={() => typeof onClick === "function" && onClick(getFieldsValue())}
             key={index}
             {...props}
           >

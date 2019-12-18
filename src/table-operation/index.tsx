@@ -29,10 +29,14 @@ const TableOperation: React.FC<TableOperationComponentProps> = ({
     const group = s
       .filter((u) => u.visible === undefined || u.visible === true)
       .map((u, i) => {
-        const { content, icon, disabled = false, onClick = () => {} } = u;
+        const { content, icon, onClick, disabled = false } = u;
+
+        function handleOnClick() {
+          typeof onClick === "function" && onClick();
+        }
 
         return (
-          <MenuItem onClick={onClick} disabled={disabled} key={i}>
+          <MenuItem onClick={handleOnClick} disabled={disabled} key={i}>
             {icon && (typeof icon === "string" ? <Icon type={icon} /> : icon)}
             {content}
           </MenuItem>

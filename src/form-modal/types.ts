@@ -1,4 +1,3 @@
-import { RcFile } from "antd/es/upload";
 import { UploadFile } from "antd/es/upload/interface";
 import { ValidationRule } from "antd/lib/form";
 
