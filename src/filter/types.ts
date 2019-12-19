@@ -30,6 +30,7 @@ export type Btn<T = any> = Omit<ButtonProps, "onClick"> & {
   confirmTitle?: string;
   confirmText?: string;
   onClick?: (values?: T) => void;
+  onUpload?: (file: File) => Promise<any>;
   [prop: string]: any;
 };
 

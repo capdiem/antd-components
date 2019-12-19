@@ -234,6 +234,7 @@ const Filter: React.FC<Props> = ({
           confirmText,
           loading,
           disabled,
+          onUpload,
           ...props
         } = item;
         if (mode === "upload") {
@@ -247,7 +248,20 @@ const Filter: React.FC<Props> = ({
           }
 
           return (
-            <Upload disabled={disabled} key={index} {...(props as UploadProps)}>
+            <Upload
+              disabled={disabled}
+              key={index}
+              showUploadList={false}
+              customRequest={({ file, onSuccess, onError }) => {
+                if (!file || !onUpload) return false;
+                onUpload(file)
+                  .then((data) => {
+                    onSuccess(data, file);
+                  })
+                  .catch(onError);
+              }}
+              {...(props as UploadProps)}
+            >
               <Button
                 size={size}
                 type="primary"
