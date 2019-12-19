@@ -1,15 +1,15 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/anchor-has-content */
 /* eslint-disable jsx-a11y/heading-has-content */
-import Button from "antd/es/button";
-import Col from "antd/es/col";
-import Row from "antd/es/row";
-import React, { useEffect, useState } from "react";
+import Button from 'antd/es/button';
+import Col from 'antd/es/col';
+import Row from 'antd/es/row';
+import React, { useEffect, useState } from 'react';
 
-import { Dividers, FormModal, Table } from "../../../src";
-import { TableColumnProps } from "../../../src/table/types";
+import { Dividers, Filter, FormModal, Table } from '../../../src';
+import { TableColumnProps } from '../../../src/table/types';
 // import { Dividers, Table } from '../../../lib';
-import styles from "./index.css";
+import styles from './index.css';
 
 export default function() {
   const [columns, setColumns] = useState<TableColumnProps<any>[]>([]);
@@ -30,6 +30,23 @@ export default function() {
           <Button type="primary" onClick={() => setFormModalVisible(true)}>
             Form Modal
           </Button>
+        </Col>
+        <Col span={6}>
+          <Filter
+            formItemsGroups={[[{ field: 'test', placeholder: 'test' }]]}
+            btns={[
+              {
+                mode: 'upload',
+                accept: '.xlsx, .xls',
+                icon: 'upload',
+                showUploadList: false,
+                onUpload(file) {
+                  console.log('file', file);
+                  return Promise.resolve('test');
+                },
+              },
+            ]}
+          />
         </Col>
       </Row>
       <Row gutter={8}>
