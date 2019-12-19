@@ -128,7 +128,12 @@ const FormModal: React.FC<Props> = ({
 
     if (type === "upload-image" || type === "upload-images" || type === "upload-excel") {
       requiredRule.message = `请上传${label}`;
-    } else if (type === "select" || type === "dynamicSelect") {
+    } else if (
+      type === "select" ||
+      type === "dynamicSelect" ||
+      type === "searchableSelect" ||
+      type === "cascader"
+    ) {
       requiredRule.message = `请选择${label}`;
     }
 
