@@ -24,7 +24,7 @@ import Upload from "antd/es/upload";
 import { CascaderOptionType } from "antd/lib/cascader";
 import { FormComponentProps } from "antd/lib/form";
 import { UploadProps } from "antd/lib/upload";
-import React from "react";
+import React, { Children } from "react";
 
 import { Btn, FilterComponentProps, FilterFormItem } from "./types";
 
@@ -57,9 +57,17 @@ const Filter: React.FC<Props> = ({
     typeof onSearch === "function" && onSearch(getFieldsValue());
   }
 
-  function handleOnReload() {
+  /**
+   * 重置筛选框（可使用onRefReloadBtn触发）
+   * @param query onRefReloadBtn params
+   * @example onRefReloadBtn: ref => customBtnRef = ref
+   * customBtnRef.handleClick(false)
+   */
+  function handleOnReload(query = true) {
     resetFields();
-    typeof onReload === "function" && onReload();
+    if (query) {
+      typeof onReload === "function" && onReload();
+    }
   }
 
   function renderFormItem(item: FilterFormItem<any>, lg: number) {
