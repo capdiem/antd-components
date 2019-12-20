@@ -3,6 +3,7 @@
 /* eslint-disable jsx-a11y/heading-has-content */
 import Button from 'antd/es/button';
 import Col from 'antd/es/col';
+import Divider from 'antd/es/divider';
 import Row from 'antd/es/row';
 import React, { useEffect, useState } from 'react';
 
@@ -23,6 +24,8 @@ export default function() {
     ]);
   }, []);
 
+  let reloadBtnRef: any;
+
   return (
     <div className={styles.normal}>
       <Row gutter={9}>
@@ -34,6 +37,8 @@ export default function() {
         <Col span={6}>
           <Filter
             formItemsGroups={[[{ field: 'test', placeholder: 'test' }]]}
+            onRefReloadBtn={ref => (reloadBtnRef = ref)}
+            onReload={() => console.log('reload')}
             btns={[
               {
                 mode: 'upload',
@@ -47,8 +52,18 @@ export default function() {
               },
             ]}
           />
+          <Button
+            type="dashed"
+            style={{ width: '100%' }}
+            onClick={() => {
+              reloadBtnRef.handleClick(false);
+            }}
+          >
+            reloadBtnRef
+          </Button>
         </Col>
       </Row>
+      <Divider />
       <Row gutter={8}>
         <Col span={4}>
           <h1>Dividers</h1>
