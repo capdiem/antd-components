@@ -63,7 +63,7 @@ const Filter: React.FC<Props> = ({
    * @example onRefReloadBtn: ref => customBtnRef = ref
    * customBtnRef.handleClick(false)
    */
-  function handleOnReload(query = true) {
+  function handleOnReload(query: any = true) {
     resetFields();
     if (query) {
       typeof onReload === "function" && onReload();
@@ -367,7 +367,7 @@ const Filter: React.FC<Props> = ({
                 size={size}
                 type="primary"
                 icon="reload"
-                onClick={handleOnReload}
+                onClick={(e) => handleOnReload(e)}
                 ref={onRefReloadBtn}
               />
             </ButtonGroup>
