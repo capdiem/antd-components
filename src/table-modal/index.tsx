@@ -16,7 +16,7 @@ const TableModal: React.FC<TableModalComponentProps<any, any>> = ({
   header,
 }) => {
   const modalProps: ModalProps = {
-    footer: false,
+    footer: modal.onOk ? undefined : false,
     ...modal,
   };
 
