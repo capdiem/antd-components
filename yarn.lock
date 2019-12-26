@@ -22,7 +22,7 @@
   resolved "http://r.cnpmjs.org/@ant-design/icons-svg/download/@ant-design/icons-svg-4.0.0-alpha.5.tgz#292c235a9be73ccc6109becdd7cb385216cc7c3a"
   integrity sha1-KSwjWpvnPMxhCb7N18s4UhbMfDo=
 
-"@ant-design/icons@^4.0.0-alpha.11":
+"@ant-design/icons@^4.0.0-alpha.11", "@ant-design/icons@^4.0.0-alpha.16":
   version "4.0.0-alpha.16"
   resolved "http://r.cnpmjs.org/@ant-design/icons/download/@ant-design/icons-4.0.0-alpha.16.tgz#0c4678bddc8ff14312f7d3a91ee1ec8caf9afc3b"
   integrity sha1-DEZ4vdyP8UMS99OpHuHsjK+a/Ds=

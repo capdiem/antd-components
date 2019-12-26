@@ -5,13 +5,14 @@ import "antd/es/message/style";
 import "antd/es/select/style";
 import "antd/es/spin/style";
 
-import Icon from "antd/es/icon";
 import Input from "antd/es/input";
 import InputNumber from "antd/es/input-number";
 import message from "antd/es/message";
 import Select from "antd/es/select";
 import Spin from "antd/es/spin";
 import React, { useState } from "react";
+
+import { EditOutlined } from "@ant-design/icons";
 
 export interface SelectOption {
   label: string;
@@ -151,7 +152,7 @@ const EditableText: React.FC<EditableTextComponentProps> = ({
         <div>
           <span>{text}</span>
           <a onClick={() => setEditable(true)} style={{ marginLeft: 4 }}>
-            <Icon type="edit" />
+            <EditOutlined />
           </a>
         </div>
       );

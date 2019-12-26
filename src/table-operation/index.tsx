@@ -5,9 +5,10 @@ import "antd/es/menu/style";
 
 import Button from "antd/es/button";
 import Dropdown from "antd/es/dropdown";
-import Icon from "antd/es/icon";
 import Menu from "antd/es/menu";
 import React from "react";
+
+import { BarsOutlined, DownOutlined } from "@ant-design/icons";
 
 import { Items, TableOperationComponentProps } from "./types";
 
@@ -37,7 +38,7 @@ const TableOperation: React.FC<TableOperationComponentProps> = ({
 
         return (
           <MenuItem onClick={handleOnClick} disabled={disabled} key={i}>
-            {icon && (typeof icon === "string" ? <Icon type={icon} /> : icon)}
+            {icon}
             {content}
           </MenuItem>
         );
@@ -61,8 +62,8 @@ const TableOperation: React.FC<TableOperationComponentProps> = ({
   return (
     <Dropdown overlay={<Menu>{menuItems}</Menu>} trigger={["click"]}>
       <Button size={size} style={rootStyle}>
-        <Icon type="bars" />
-        <Icon type="down" />
+        <BarsOutlined />
+        <DownOutlined />
       </Button>
     </Dropdown>
   );

@@ -5,12 +5,13 @@ import "antd/es/form/style";
 
 import Col from "antd/es/col";
 import Form from "antd/es/form";
-import Icon from "antd/es/icon";
 import Modal from "antd/es/modal";
 import Row from "antd/es/row";
 import Upload, { RcFile } from "antd/es/upload";
 import { FormComponentProps } from "antd/lib/form";
 import React, { useEffect, useState } from "react";
+
+import { UploadOutlined } from "@ant-design/icons";
 
 import { renderItem } from "./helper";
 import { FormItem, FormModalComponentProps } from "./types";
@@ -188,7 +189,7 @@ const FormModal: React.FC<Props> = ({
                   type === "upload-image" &&
                   fileList[field].length > 0 ? null : (
                     <a>
-                      <Icon type="upload" />
+                      <UploadOutlined />
                       <span style={{ marginLeft: 2 }}>上传图片</span>
                     </a>
                   )}
