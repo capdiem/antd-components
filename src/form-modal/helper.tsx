@@ -21,6 +21,8 @@ import { CascaderOptionType } from "antd/lib/cascader";
 import { RcFile, UploadProps } from "antd/lib/upload";
 import React from "react";
 
+import { UploadOutlined } from "@ant-design/icons";
+
 import { PlainItem } from "./types";
 
 const { TextArea } = Input;
@@ -165,7 +167,7 @@ export function renderItem(item: PlainItem) {
     case "upload-excel":
       return (
         <Upload accept=".xlsx, .xls" beforeUpload={beforeUploadExcel} {...(props as UploadProps)}>
-          <Button size={size} icon="upload">
+          <Button size={size} icon={<UploadOutlined />}>
             上传文件
           </Button>
         </Upload>

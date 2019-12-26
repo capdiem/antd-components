@@ -5,6 +5,8 @@ import Modal from "antd/es/modal";
 import AntdTable from "antd/es/table";
 import React, { useState } from "react";
 
+import { FullscreenOutlined } from "@ant-design/icons";
+
 import { TableColumnProps, TableComponentProps } from "./types";
 
 function recursion(columns: TableColumnProps<any>[]) {
@@ -58,7 +60,7 @@ const Table: React.FC<TableComponentProps<any>> = ({
       {fullscreenAbility && (
         <Button
           type="dashed"
-          icon="fullscreen"
+          icon={<FullscreenOutlined />}
           style={{ position: "absolute", zIndex: 1, left: 0 }}
           onClick={() => setFullscreen(true)}
         />

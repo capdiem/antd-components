@@ -8,7 +8,6 @@ import Form from "antd/es/form";
 import Modal from "antd/es/modal";
 import Row from "antd/es/row";
 import Upload, { RcFile } from "antd/es/upload";
-import { FormComponentProps } from "antd/lib/form";
 import React, { useEffect, useState } from "react";
 
 import { UploadOutlined } from "@ant-design/icons";
@@ -16,10 +15,9 @@ import { UploadOutlined } from "@ant-design/icons";
 import { renderItem } from "./helper";
 import { FormItem, FormModalComponentProps } from "./types";
 
-type Props = FormModalComponentProps & FormComponentProps;
+type Props = FormModalComponentProps;
 
 const FormModal: React.FC<Props> = ({
-  form: { getFieldDecorator, validateFields, resetFields },
   title,
   visible,
   tips,
@@ -32,12 +30,13 @@ const FormModal: React.FC<Props> = ({
   formItemStyle,
   size = "default",
   confirmLoading = false,
-  initialData,
+  initialValues,
   onOk,
   onCancel,
   ...modalProps
 }) => {
   const [fileList, setFileList] = useState<any>({});
+  const [form] = Form.useForm();
 
   useEffect(() => {
     const _fileList: any = {};
@@ -45,16 +44,19 @@ const FormModal: React.FC<Props> = ({
     formItems
       .filter((u) => u.type === "upload-image")
       .forEach((u) => {
-        if (u.initialValue) _fileList[u.field] = [u.initialValue];
-        else if (initialData && initialData[u.field]) _fileList[u.field] = [initialData[u.field]];
-        else _fileList[u.field] = [];
+        if (initialValues && initialValues[u.field]) {
+          _fileList[u.field] = [initialValues[u.field]];
+          initialValues[u.field] = [initialValues[u.field]];
+        } else {
+          _fileList[u.field] = [];
+          initialValues[u.field] = [];
+        }
       });
 
     formItems
       .filter((u) => u.type === "upload-images")
       .forEach((u) => {
-        if (u.initialValue) _fileList[u.field] = u.initialValue;
-        else if (initialData && initialData[u.field]) _fileList[u.field] = initialData[u.field];
+        if (initialValues && initialValues[u.field]) _fileList[u.field] = initialValues[u.field];
         else _fileList[u.field] = [];
       });
 
@@ -76,30 +78,22 @@ const FormModal: React.FC<Props> = ({
   };
 
   function handleCancel() {
-    resetFields();
+    form.resetFields();
     onCancel();
   }
 
   function handleOk() {
-    validateFields((err, values) => {
-      if (err) return;
-
-      // return Promise.Resolve meanings request succeeded
-      const promise = onOk({
-        ...values,
-        ...fileList,
-      });
-      if (promise) {
-        promise.then(() => {
-          resetFields();
-        });
-      }
-    });
+    form
+      .validateFields()
+      .then((values) => {
+        onOk({ ...values, ...fileList })?.then(() => form.resetFields());
+      })
+      // eslint-disable-next-line no-console
+      .catch((errors) => console.log("errors", errors));
   }
 
   function renderFormItem(item: FormItem) {
     const {
-      initialValue = undefined,
       type,
       field,
       label,
@@ -136,71 +130,71 @@ const FormModal: React.FC<Props> = ({
       requiredRule.message = `请选择${label}`;
     }
 
-    let value = initialValue;
-    if (initialData && initialValue === undefined) {
-      value = initialData[field];
-    }
-
     return (
       <Col {...colProps}>
-        <Form.Item label={label} {...formItemProps} key={field}>
-          {type === "upload-image" || type === "upload-images"
-            ? getFieldDecorator(field, {
-                initialValue:
-                  fileList[field] && fileList[field].length > 0 ? fileList[field] : undefined,
-                valuePropName: "fileList",
-                getValueFromEvent: (e) => (Array.isArray(e) ? e : e && e.fileList),
-                rules: [requiredRule, ...rules],
-              })(
-                <Upload
-                  accept="image/*"
-                  listType="picture-card"
-                  customRequest={({ file, onSuccess, onError }) => {
-                    if (!file || !onUpload) return false;
+        {type === "upload-image" || type === "upload-images" ? (
+          <Form.Item
+            label={label}
+            key={field}
+            name={field}
+            rules={[requiredRule, ...rules]}
+            valuePropName="fileList"
+            getValueFromEvent={(e) => (Array.isArray(e) ? e : e && e.fileList)}
+            {...formItemProps}
+          >
+            <Upload
+              accept="image/*"
+              listType="picture-card"
+              customRequest={({ file, onSuccess, onError }) => {
+                if (!file || !onUpload) return false;
 
-                    onUpload(file)
-                      .then((data) => {
-                        setFileList((state: any) => {
-                          state[field] = [
-                            ...state[field],
-                            {
-                              ...file,
-                              uid: data.uid,
-                              url: data.url,
-                            },
-                          ];
-
-                          return state;
-                        });
-
-                        onSuccess(data, file);
-                      })
-                      .catch(onError);
-                  }}
-                  onPreview={onPreview}
-                  onRemove={(file) => {
+                onUpload(file)
+                  .then((data) => {
                     setFileList((state: any) => {
-                      state[field] = state[field].filter((u: RcFile) => u.uid !== file.uid);
+                      state[field] = [
+                        ...state[field],
+                        {
+                          ...file,
+                          uid: data.uid,
+                          url: data.url,
+                        },
+                      ];
+
                       return state;
                     });
-                  }}
-                >
-                  {fileList[field] &&
-                  type === "upload-image" &&
-                  fileList[field].length > 0 ? null : (
-                    <a>
-                      <UploadOutlined />
-                      <span style={{ marginLeft: 2 }}>上传图片</span>
-                    </a>
-                  )}
-                </Upload>
-              )
-            : getFieldDecorator(field, {
-                initialValue: value,
-                rules: [requiredRule, ...rules],
-                valuePropName,
-              })(renderItem({ type, field, label, ...props }))}
-        </Form.Item>
+
+                    onSuccess(data, file);
+                  })
+                  .catch(onError);
+              }}
+              onPreview={onPreview}
+              onRemove={(file) => {
+                setFileList((state: any) => {
+                  state[field] = state[field].filter((u: RcFile) => u.uid !== file.uid);
+                  return state;
+                });
+              }}
+            >
+              {fileList[field] && type === "upload-image" && fileList[field].length > 0 ? null : (
+                <a>
+                  <UploadOutlined />
+                  <span style={{ marginLeft: 2 }}>上传图片</span>
+                </a>
+              )}
+            </Upload>
+          </Form.Item>
+        ) : (
+          <Form.Item
+            label={label}
+            key={field}
+            name={field}
+            rules={[requiredRule, ...rules]}
+            valuePropName={valuePropName}
+            {...formItemProps}
+          >
+            {renderItem({ type, field, label, ...props })}
+          </Form.Item>
+        )}
       </Col>
     );
   }
@@ -218,7 +212,7 @@ const FormModal: React.FC<Props> = ({
       onOk={handleOk}
     >
       {tips && <div style={{ marginBottom: 8 }}>{tips}</div>}
-      <Form {...formProps}>
+      <Form form={form} initialValues={initialValues} {...formProps}>
         <Row gutter={8}>
           {formItems
             .filter((u) => u.visible === undefined || u.visible === true)
@@ -229,4 +223,4 @@ const FormModal: React.FC<Props> = ({
   );
 };
 
-export default Form.create<Props>()(FormModal);
+export default FormModal;

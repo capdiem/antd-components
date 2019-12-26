@@ -22,9 +22,10 @@ import Row from "antd/es/row";
 import Select from "antd/es/select";
 import Upload from "antd/es/upload";
 import { CascaderOptionType } from "antd/lib/cascader";
-import { FormComponentProps } from "antd/lib/form";
 import { UploadProps } from "antd/lib/upload";
-import React, { Children } from "react";
+import React from "react";
+
+import { ReloadOutlined, SearchOutlined } from "@ant-design/icons";
 
 import { Btn, FilterComponentProps, FilterFormItem } from "./types";
 
@@ -39,10 +40,9 @@ function computeCell(count: number) {
   return 6;
 }
 
-type Props = FilterComponentProps & FormComponentProps;
+type Props = FilterComponentProps;
 
 const Filter: React.FC<Props> = ({
-  form: { getFieldDecorator, getFieldsValue, resetFields },
   style,
   initialValues = {},
   size = "default",
@@ -53,8 +53,12 @@ const Filter: React.FC<Props> = ({
   onSearch,
   onReload,
 }) => {
+  const [form] = Form.useForm();
+
   function handleOnSearch() {
-    typeof onSearch === "function" && onSearch(getFieldsValue());
+    if (typeof onSearch === "function") {
+      form.validateFields().then((values) => onSearch(values));
+    }
   }
 
   /**
@@ -64,16 +68,16 @@ const Filter: React.FC<Props> = ({
    * customBtnRef.handleClick(false)
    */
   function handleOnReload(query: any = true) {
-    resetFields();
-    if (query) {
-      typeof onReload === "function" && onReload();
+    form.resetFields();
+    if (query && typeof onReload === "function") {
+      onReload();
     }
   }
 
   function renderFormItem(item: FilterFormItem<any>, lg: number) {
     const { type, field, placeholder = "", label, options = [], ...props } = item;
 
-    let element: React.ReactNode;
+    let element: React.ReactElement;
     const colProps = {
       key: field as string,
       style: {
@@ -121,8 +125,8 @@ const Filter: React.FC<Props> = ({
             showSearch
             filterOption={(input, option) =>
               // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-              option.props
-                .children!.toString()
+              option!.props.children
+                .toString()
                 .toLowerCase()
                 .includes(input.toLowerCase())
             }
@@ -204,17 +208,11 @@ const Filter: React.FC<Props> = ({
         break;
     }
 
-    let initialValue = initialValues[field];
-
-    if (type === "cascader") {
-      initialValue = typeof initialValue !== "object" ? [] : initialValue;
-    }
-
     return (
       <Col lg={lg} md={24} sm={24} xs={24} {...colProps}>
-        {getFieldDecorator(field as string, {
-          initialValue,
-        })(element)}
+        <Form.Item name={field as string} noStyle>
+          {element}
+        </Form.Item>
       </Col>
     );
   }
@@ -248,11 +246,11 @@ const Filter: React.FC<Props> = ({
         if (mode === "upload") {
           const style: React.CSSProperties = {};
           if (index === 0 && items.length === 1) {
-            style.borderRadius = 4;
+            style.borderRadius = 2;
           } else if (index === 0 && items.length > 1) {
-            style.borderRadius = "4px 0 0 4px";
+            style.borderRadius = "2px 0 0 2px";
           } else if (index === items.length - 1) {
-            style.borderRadius = "0 4px 4px 0";
+            style.borderRadius = "0 2px 2px 0";
           }
 
           return (
@@ -289,7 +287,7 @@ const Filter: React.FC<Props> = ({
               key={index}
               title={confirmTitle}
               okText={confirmText || "确定"}
-              onConfirm={() => typeof onClick === "function" && onClick(getFieldsValue())}
+              onConfirm={() => typeof onClick === "function" && onClick(form.getFieldsValue())}
               disabled={disabled}
             >
               <Button
@@ -312,7 +310,7 @@ const Filter: React.FC<Props> = ({
             icon={icon}
             loading={loading}
             disabled={disabled}
-            onClick={() => typeof onClick === "function" && onClick(getFieldsValue())}
+            onClick={() => typeof onClick === "function" && onClick(form.getFieldsValue())}
             key={index}
             {...props}
           >
@@ -344,14 +342,14 @@ const Filter: React.FC<Props> = ({
 
   return (
     <div style={rootStyle}>
-      {cols.length > 0 ? (
+      {cols.length && (
         <Row gutter={8} style={formItemsGroupStyle}>
-          {cols}
+          <Form form={form} initialValues={initialValues} style={{ width: "100%" }}>
+            {cols}
+          </Form>
         </Row>
-      ) : (
-        ""
       )}
-      <Row type="flex" justify="end" gutter={4}>
+      <Row justify="end" gutter={4}>
         {btnElementGroups.map((btnElements, index) => (
           <Col key={index}>
             <ButtonGroup style={{ display: "flex" }} size={size}>
@@ -362,11 +360,16 @@ const Filter: React.FC<Props> = ({
         {cols.length > 0 ? (
           <Col>
             <ButtonGroup size={size}>
-              <Button size={size} type="primary" icon="search" onClick={handleOnSearch} />
               <Button
                 size={size}
                 type="primary"
-                icon="reload"
+                icon={<SearchOutlined />}
+                onClick={handleOnSearch}
+              />
+              <Button
+                size={size}
+                type="primary"
+                icon={<ReloadOutlined />}
                 onClick={(e) => handleOnReload(e)}
                 ref={onRefReloadBtn}
               />
@@ -380,4 +383,4 @@ const Filter: React.FC<Props> = ({
   );
 };
 
-export default Form.create<Props>()(Filter);
+export default Filter;

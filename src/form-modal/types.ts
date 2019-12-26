@@ -1,5 +1,5 @@
 import { UploadFile } from "antd/es/upload/interface";
-import { ValidationRule } from "antd/lib/form";
+import { FieldProps } from "rc-field-form/lib/Field";
 
 declare const FormItemTypes: [
   "input",
@@ -44,11 +44,9 @@ export interface PlainItem<T = any> {
   [prop: string]: any;
 }
 
-export interface FormItem<T = any> extends PlainItem<T> {
+export interface FormItem<T = any> extends PlainItem<T>, FieldProps {
   required?: boolean;
-  initialValue?: SimpleUploadFile | any;
   visible?: boolean;
-  rules?: Array<ValidationRule>;
 }
 
 export interface FormModalComponentProps<T = any> {
@@ -63,7 +61,7 @@ export interface FormModalComponentProps<T = any> {
     xs: number;
   };
   maskClosable?: boolean;
-  initialData?: T;
+  initialValues?: T;
   labelCol?: number | {};
   wrapperCol?: number | {};
   hasFeedback?: boolean;
