@@ -4,11 +4,8 @@
 import Button from 'antd/es/button';
 import Col from 'antd/es/col';
 import Divider from 'antd/es/divider';
-import Form from 'antd/es/form';
 import Row from 'antd/es/row';
 import React, { useEffect, useState } from 'react';
-
-import { UploadOutlined } from '@ant-design/icons';
 
 import { Dividers, Filter, FormModal, Table } from '../../../src';
 import { TableColumnProps } from '../../../src/table/types';
@@ -41,13 +38,12 @@ export default function() {
           <Filter
             formItemsGroups={[[{ field: 'test', placeholder: 'test' }]]}
             onRefReloadBtn={ref => (reloadBtnRef = ref)}
-            onSearch={values => console.log('values', values)}
             onReload={() => console.log('reload')}
             btns={[
               {
                 mode: 'upload',
                 accept: '.xlsx, .xls',
-                icon: <UploadOutlined />,
+                icon: 'upload',
                 showUploadList: false,
                 onUpload(file) {
                   console.log('file', file);
@@ -109,29 +105,27 @@ export default function() {
         visible={formModalVisible}
         labelCol={4}
         wrapperCol={20}
-        initialValues={{
-          imageId: [
-            {
-              uid: -1000,
-              name: '主图.png',
-              status: 'done',
-              url:
-                'http://qstbgmall.oss-cn-hangzhou.aliyuncs.com/gms/mainImage/微信图片_20191115111055_191115163314839.png',
-            },
-            {
-              uid: -1001,
-              name: '主图.png',
-              status: 'done',
-              url:
-                'http://qstbgmall.oss-cn-hangzhou.aliyuncs.com/gms/mainImage/微信图片_20191115111055_191115163314839.png',
-            },
-          ],
-        }}
         formItems={[
           {
             type: 'upload-images',
             field: 'imageId',
             label: '图片',
+            initialValue: [
+              {
+                uid: -1000,
+                name: '主图.png',
+                status: 'done',
+                url:
+                  'http://qstbgmall.oss-cn-hangzhou.aliyuncs.com/gms/mainImage/微信图片_20191115111055_191115163314839.png',
+              },
+              {
+                uid: -1001,
+                name: '主图.png',
+                status: 'done',
+                url:
+                  'http://qstbgmall.oss-cn-hangzhou.aliyuncs.com/gms/mainImage/微信图片_20191115111055_191115163314839.png',
+              },
+            ],
             onUpload: () =>
               Promise.resolve({
                 uid: '12345',
