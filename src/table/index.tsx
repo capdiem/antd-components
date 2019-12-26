@@ -2,7 +2,7 @@ import "antd/es/table/style";
 
 import Button from "antd/es/button";
 import Modal from "antd/es/modal";
-import AntdTable from "antd/es/table";
+import AntTable from "antd/es/table";
 import React, { useState } from "react";
 
 import { FullscreenOutlined } from "@ant-design/icons";
@@ -66,7 +66,7 @@ const Table: React.FC<TableComponentProps<any>> = ({
         />
       )}
       {!fullscreen && (
-        <AntdTable {...tableProps} columns={newColumns} rowKey={(item) => getRowKey(item)} />
+        <AntTable {...tableProps} columns={newColumns} rowKey={(item) => getRowKey(item)} />
       )}
       <Modal
         visible={fullscreen}
@@ -78,7 +78,7 @@ const Table: React.FC<TableComponentProps<any>> = ({
         onCancel={() => setFullscreen(false)}
       >
         {fullscreenAbility && (
-          <AntdTable {...tableProps} columns={newColumns} rowKey={(item) => getRowKey(item)} />
+          <AntTable {...tableProps} columns={newColumns} rowKey={(item) => getRowKey(item)} />
         )}
       </Modal>
     </div>

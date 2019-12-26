@@ -124,8 +124,7 @@ const Filter: React.FC<Props> = ({
             allowClear
             showSearch
             filterOption={(input, option) =>
-              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-              option!.props.children
+              option?.props.children
                 .toString()
                 .toLowerCase()
                 .includes(input.toLowerCase())

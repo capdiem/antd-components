@@ -113,8 +113,8 @@ export function renderItem(item: PlainItem) {
           showSearch
           disabled={readonly}
           filterOption={(input, option) =>
-            option.props
-              .children!.toString()
+            option?.props.children
+              .toString()
               .toLowerCase()
               .includes(input.toLowerCase())
           }
