@@ -15,8 +15,6 @@ import React, { useEffect, useState } from "react";
 import { renderItem } from "./helper";
 import { FormItem, FormModalComponentProps } from "./types";
 
-const { Item: FormItem } = Form;
-
 type Props = FormModalComponentProps & FormComponentProps;
 
 const FormModal: React.FC<Props> = ({
@@ -144,7 +142,7 @@ const FormModal: React.FC<Props> = ({
 
     return (
       <Col {...colProps}>
-        <FormItem label={label} {...formItemProps} key={field}>
+        <Form.Item label={label} {...formItemProps} key={field}>
           {type === "upload-image" || type === "upload-images"
             ? getFieldDecorator(field, {
                 initialValue:
@@ -201,7 +199,7 @@ const FormModal: React.FC<Props> = ({
                 rules: [requiredRule, ...rules],
                 valuePropName,
               })(renderItem({ type, field, label, ...props }))}
-        </FormItem>
+        </Form.Item>
       </Col>
     );
   }
