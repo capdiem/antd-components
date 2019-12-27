@@ -3,4 +3,4 @@ if ((Test-Path "lib")) {
   Write-Host "Removed \lib folder successfully!" -ForegroundColor Green
 }
 
-npm publish
+npm publish --tag beta
