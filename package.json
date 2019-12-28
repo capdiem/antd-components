@@ -32,8 +32,8 @@
   },
   "homepage": "https://github.com/capdiem/antd-components#readme",
   "dependencies": {
-    "@ant-design/icons": "^4.0.0-alpha.16",
-    "antd": "^4.0.0-beta.0",
+    "@ant-design/icons": "^4.0.0-alpha.18",
+    "antd": "^4.0.0-beta.1",
     "eslint-plugin-flowtype": "^4.5.2",
     "eslint-plugin-react-hooks": "^2.3.0",
     "radium": "^0.26.0",
