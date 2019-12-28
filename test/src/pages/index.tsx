@@ -7,6 +7,8 @@ import Divider from 'antd/es/divider';
 import Row from 'antd/es/row';
 import React, { useEffect, useState } from 'react';
 
+import { UploadOutlined } from '@ant-design/icons';
+
 import { Dividers, Filter, FormModal, Table } from '../../../src';
 import { TableColumnProps } from '../../../src/table/types';
 // import { Dividers, Table } from '../../../lib';
@@ -36,14 +38,20 @@ export default function() {
         </Col>
         <Col span={6}>
           <Filter
-            formItemsGroups={[[{ field: 'test', placeholder: 'test' }]]}
+            formItemsGroups={[
+              [
+                { field: 'test', placeholder: 'test' },
+                { field: 'test2', placeholder: 'test2' },
+              ],
+            ]}
             onRefReloadBtn={ref => (reloadBtnRef = ref)}
+            onSearch={values => console.log('values', values)}
             onReload={() => console.log('reload')}
             btns={[
               {
                 mode: 'upload',
                 accept: '.xlsx, .xls',
-                icon: 'upload',
+                icon: <UploadOutlined />,
                 showUploadList: false,
                 onUpload(file) {
                   console.log('file', file);
@@ -87,6 +95,7 @@ export default function() {
             columns={columns}
             dataSource={[{ name: 'cyx', age: 25, gender: 'man' }]}
             bordered={true}
+            rowKey="name"
           />
         </Col>
         <Col span={10}>
@@ -98,6 +107,7 @@ export default function() {
             columns={columns}
             dataSource={[{ name: 'cyx', age: 25, gender: 'man' }]}
             bordered={true}
+            rowKey="name"
           />
         </Col>
       </Row>
