@@ -11,7 +11,7 @@ export type TableComponentProps<T> = Omit<TableProps<T>, "rowKey" | "columns" | 
   fullscreenWidth?: string | number;
   rowKey?: keyof T | (keyof T)[] | ((record: T) => string);
   columns?: TableColumnProps<T>[];
-  scroll: {
+  scroll?: {
     x?: number | true | string;
     y?: number | true | string;
     scrollToFirstRowOnChange?: boolean;

@@ -342,11 +342,11 @@ const Filter: React.FC<Props> = ({
   return (
     <div style={rootStyle}>
       {cols.length && (
-        <Row gutter={8} style={formItemsGroupStyle}>
-          <Form form={form} initialValues={initialValues} style={{ width: "100%" }}>
+        <Form form={form} initialValues={initialValues} style={{ width: "100%" }}>
+          <Row gutter={8} style={formItemsGroupStyle}>
             {cols}
-          </Form>
-        </Row>
+          </Row>
+        </Form>
       )}
       <Row justify="end" gutter={4}>
         {btnElementGroups.map((btnElements, index) => (
