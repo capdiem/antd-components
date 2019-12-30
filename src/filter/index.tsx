@@ -81,7 +81,13 @@ const Filter: React.FC<Props> = ({
 
     switch (type) {
       case "textarea":
-        element = <Input.TextArea placeholder={placeholder || label} {...props} />;
+        element = (
+          <Input.TextArea
+            placeholder={placeholder || label}
+            style={{ marginBottom: 0 }}
+            {...props}
+          />
+        );
         break;
       case "inputNumber":
         element = (
@@ -202,7 +208,7 @@ const Filter: React.FC<Props> = ({
     }
 
     return (
-      <Col lg={lg} md={24} sm={24} xs={24} key={field as string}>
+      <Col lg={lg} md={24} sm={24} xs={24} key={field as string} style={{ marginBottom: 4 }}>
         <Form.Item name={field as string} noStyle>
           {element}
         </Form.Item>
