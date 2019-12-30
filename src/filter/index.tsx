@@ -78,12 +78,6 @@ const Filter: React.FC<Props> = ({
     const { type, field, placeholder = "", label, options = [], ...props } = item;
 
     let element: React.ReactElement;
-    const colProps = {
-      key: field as string,
-      style: {
-        marginBottom: 5,
-      },
-    };
 
     switch (type) {
       case "textarea":
@@ -208,7 +202,7 @@ const Filter: React.FC<Props> = ({
     }
 
     return (
-      <Col lg={lg} md={24} sm={24} xs={24} {...colProps}>
+      <Col lg={lg} md={24} sm={24} xs={24} key={field as string}>
         <Form.Item name={field as string} noStyle>
           {element}
         </Form.Item>
