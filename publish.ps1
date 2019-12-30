@@ -61,8 +61,8 @@ if ($tag -ne 'latest') {
 
     [string]$currentVersion = $currentVersionString.Remove(0, $tag.Length + 2)
     $splits = $currentVersion.Split("-$tag.")
-    $incr = $splits[1].ToInt32() + 1
-    $betaVersion = "$($splits[0])-$tag.$incr"
+    [int]$incr = $splits[1]
+    $betaVersion = "$($splits[0])-$tag.$($incr+1)"
   }
   else {
     [string]$latestVersionString = npm.cmd dist-tag ls | Select-String latest
