@@ -265,7 +265,7 @@ const Filter: React.FC<Props> = ({
                   })
                   .catch(onError);
               }}
-              {...(props as UploadProps)}
+              {...(props as any)}
             >
               <Button
                 size={size}
