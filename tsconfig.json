@@ -10,7 +10,7 @@
     "declaration": true,
     "outDir": "lib",
     "rootDir": "src",
-    "strict": true,
+    "strict": false,
     "jsx": "react"
   },
   "exclude": ["lib", "node_modules"],
