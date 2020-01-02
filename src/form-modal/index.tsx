@@ -131,7 +131,7 @@ const FormModal: React.FC<Props> = ({
     }
 
     return (
-      <Col {...colProps}>
+      <Col {...colProps} style={{ marginBottom: 4 }}>
         {type === "upload-image" || type === "upload-images" ? (
           <Form.Item
             label={label}

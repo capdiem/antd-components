@@ -61,7 +61,14 @@ export function renderItem(item: PlainItem) {
 
   switch (type) {
     case "textarea":
-      return <TextArea placeholder={placeholder} disabled={readonly} {...props} />;
+      return (
+        <TextArea
+          placeholder={placeholder}
+          disabled={readonly}
+          style={{ marginBottom: 0 }}
+          {...props}
+        />
+      );
 
     case "inputNumber":
       return (
