@@ -341,7 +341,7 @@ const Filter: React.FC<Props> = ({
 
   return (
     <div style={rootStyle}>
-      {cols.length && (
+      {!!cols.length && (
         <Form form={form} initialValues={initialValues} style={{ width: "100%" }}>
           <Row gutter={8} style={formItemsGroupStyle}>
             {cols}
