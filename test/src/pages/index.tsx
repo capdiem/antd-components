@@ -9,7 +9,7 @@ import React, { useEffect, useState } from 'react';
 
 import { UploadOutlined } from '@ant-design/icons';
 
-import { Dividers, Filter, FormModal, Table } from '../../../src';
+import { Dividers, Filter, FormModal, Table, TableModal } from '../../../src';
 import { TableColumnProps } from '../../../src/table/types';
 // import { Dividers, Table } from '../../../lib';
 import styles from './index.css';
@@ -17,6 +17,7 @@ import styles from './index.css';
 export default function() {
   const [columns, setColumns] = useState<TableColumnProps<any>[]>([]);
   const [formModalVisible, setFormModalVisible] = useState<boolean>(false);
+  const [tableModalVisible, setTableModalVisible] = useState<boolean>(false);
 
   useEffect(() => {
     setColumns([
@@ -69,6 +70,23 @@ export default function() {
           >
             reloadBtnRef
           </Button>
+        </Col>
+        <Col span={6}>
+          <Button type="primary" onClick={() => setTableModalVisible(true)}>
+            Show Table Modal
+          </Button>
+          <TableModal
+            modal={{
+              visible: tableModalVisible,
+              onCancel: () => setTableModalVisible(false),
+            }}
+            table={{
+              columns: columns,
+              dataSource: [{ name: 'cyx', age: 25, gender: 'man' }],
+              bordered: true,
+              rowKey: 'name',
+            }}
+          />
         </Col>
       </Row>
       <Divider />
