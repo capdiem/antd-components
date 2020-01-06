@@ -61,6 +61,12 @@ const FormModal: React.FC<Props> = ({
       });
 
     setFileList(_fileList);
+
+    if (initialValues) {
+      form.setFieldsValue(initialValues);
+    } else {
+      form.resetFields();
+    }
   }, [visible]);
 
   const formProps: any = {};
@@ -78,14 +84,6 @@ const FormModal: React.FC<Props> = ({
   };
 
   function handleCancel() {
-    if (initialValues) {
-      const clearObj = {};
-      Object.keys(initialValues).forEach((u) => (clearObj[u] = undefined));
-      form.setFieldsValue(clearObj);
-    } else {
-      form.resetFields();
-    }
-
     onCancel();
   }
 
