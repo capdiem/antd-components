@@ -78,7 +78,14 @@ const FormModal: React.FC<Props> = ({
   };
 
   function handleCancel() {
-    form.resetFields();
+    if (initialValues) {
+      const clearObj = {};
+      Object.keys(initialValues).forEach((u) => (clearObj[u] = undefined));
+      form.setFieldsValue(clearObj);
+    } else {
+      form.resetFields();
+    }
+
     onCancel();
   }
 
