@@ -7,7 +7,7 @@ import Divider from 'antd/es/divider';
 import Row from 'antd/es/row';
 import React, { useEffect, useState } from 'react';
 
-import { UploadOutlined } from '@ant-design/icons';
+import { PlusOutlined, UploadOutlined } from '@ant-design/icons';
 
 import { Dividers, Filter, FormModal, Table, TableModal } from '../../../src';
 import { TableColumnProps } from '../../../src/table/types';
@@ -17,6 +17,7 @@ import styles from './index.css';
 export default function() {
   const [columns, setColumns] = useState<TableColumnProps<any>[]>([]);
   const [formModalVisible, setFormModalVisible] = useState<boolean>(false);
+  const [formModalVisibleWithoutData, setFormModalVisibleWithoutData] = useState<boolean>(false);
   const [tableModalVisible, setTableModalVisible] = useState<boolean>(false);
 
   useEffect(() => {
@@ -58,6 +59,10 @@ export default function() {
                   console.log('file', file);
                   return Promise.resolve('test');
                 },
+              },
+              {
+                icon: <PlusOutlined />,
+                onClick: () => setFormModalVisibleWithoutData(true),
               },
             ]}
           />
@@ -130,30 +135,41 @@ export default function() {
         </Col>
       </Row>
       <FormModal
-        visible={formModalVisible}
+        visible={formModalVisible || formModalVisibleWithoutData}
         labelCol={4}
         wrapperCol={20}
+        initialValues={
+          formModalVisibleWithoutData
+            ? undefined
+            : {
+                name: 'cyx',
+                imageId: [
+                  {
+                    uid: -1000,
+                    name: '主图.png',
+                    status: 'done',
+                    url:
+                      'http://qstbgmall.oss-cn-hangzhou.aliyuncs.com/gms/mainImage/微信图片_20191115111055_191115163314839.png',
+                  },
+                  {
+                    uid: -1001,
+                    name: '主图.png',
+                    status: 'done',
+                    url:
+                      'http://qstbgmall.oss-cn-hangzhou.aliyuncs.com/gms/mainImage/微信图片_20191115111055_191115163314839.png',
+                  },
+                ],
+              }
+        }
         formItems={[
+          {
+            field: 'name',
+            label: '姓名',
+          },
           {
             type: 'upload-images',
             field: 'imageId',
             label: '图片',
-            initialValue: [
-              {
-                uid: -1000,
-                name: '主图.png',
-                status: 'done',
-                url:
-                  'http://qstbgmall.oss-cn-hangzhou.aliyuncs.com/gms/mainImage/微信图片_20191115111055_191115163314839.png',
-              },
-              {
-                uid: -1001,
-                name: '主图.png',
-                status: 'done',
-                url:
-                  'http://qstbgmall.oss-cn-hangzhou.aliyuncs.com/gms/mainImage/微信图片_20191115111055_191115163314839.png',
-              },
-            ],
             onUpload: () =>
               Promise.resolve({
                 uid: '12345',
@@ -163,7 +179,10 @@ export default function() {
           },
         ]}
         onOk={(values: any) => console.log('values', values)}
-        onCancel={() => setFormModalVisible(false)}
+        onCancel={() => {
+          setFormModalVisible(false);
+          setFormModalVisibleWithoutData(false);
+        }}
       />
     </div>
   );
