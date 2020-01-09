@@ -22,23 +22,16 @@ import Row from "antd/es/row";
 import Select from "antd/es/select";
 import Upload from "antd/es/upload";
 import { CascaderOptionType } from "antd/lib/cascader";
-import { UploadProps } from "antd/lib/upload";
 import React from "react";
 
 import { ReloadOutlined, SearchOutlined } from "@ant-design/icons";
 
+import { computeCell } from "../utils";
 import { Btn, FilterComponentProps, FilterFormItem } from "./types";
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 const { Group: ButtonGroup } = Button;
-
-function computeCell(count: number) {
-  if (count <= 1) return 24;
-  if (count === 2) return 12;
-  if (count === 3) return 8;
-  return 6;
-}
 
 type Props = FilterComponentProps;
 
