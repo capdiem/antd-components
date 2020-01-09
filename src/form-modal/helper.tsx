@@ -1,106 +1,101 @@
-import "antd/es/button/style";
-import "antd/es/cascader/style";
-import "antd/es/date-picker/style";
-import "antd/es/input/style";
-import "antd/es/input-number/style";
-import "antd/es/select/style";
-import "antd/es/upload/style";
-import "antd/es/message/style";
-import "antd/es/switch/style";
+import "antd/lib/button/style";
+import "antd/lib/cascader/style";
+import "antd/lib/date-picker/style";
+import "antd/lib/input/style";
+import "antd/lib/input-number/style";
+import "antd/lib/select/style";
+import "antd/lib/upload/style";
+import "antd/lib/switch/style";
 
-import Button from "antd/es/button";
-import Cascader from "antd/es/cascader";
-import DatePicker from "antd/es/date-picker";
-import Input from "antd/es/input";
-import InputNumber from "antd/es/input-number";
-import message from "antd/es/message";
-import Select from "antd/es/select";
-import Switch from "antd/es/switch";
-import Upload from "antd/es/upload";
-import { CascaderOptionType } from "antd/lib/cascader";
-import { RcFile, UploadProps } from "antd/lib/upload";
+import Button from "antd/lib/button";
+import Cascader, { CascaderProps } from "antd/lib/cascader";
+import { ColProps } from "antd/lib/col";
+import DatePicker from "antd/lib/date-picker";
+import Form from "antd/lib/form";
+import Input, { InputProps, TextAreaProps } from "antd/lib/input";
+import InputNumber, { InputNumberProps } from "antd/lib/input-number";
+import Select from "antd/lib/select";
+import Switch, { SwitchProps } from "antd/lib/switch";
+import Upload from "antd/lib/upload";
 import React from "react";
 
 import { UploadOutlined } from "@ant-design/icons";
 
-import { PlainItem } from "./types";
+import { FormItem, SelectProps, Size, UploadProps } from "./types";
 
 const { TextArea } = Input;
 const { Option } = Select;
 
-export function renderItem(item: PlainItem) {
+export function renderFormItem(
+  item: FormItem,
+  size: Size,
+  style: React.CSSProperties,
+  rules: FormItem["rules"],
+  hasFeedback?: boolean
+) {
   const {
     type,
     field,
     placeholder,
     label,
-    size = "default",
-    options = [],
     readonly = false,
-    showTime = false,
-    ...props
+    valuePropName,
+    props,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    rules: _,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    col,
+    ...itemProps
   } = item;
 
-  function beforeUploadExcel(file: RcFile) {
-    const isXls =
-      file.type === "application/vnd.ms-excel" ||
-      file.type === "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
-      file.type === "application/kset" ||
-      file.type === "application/msexcel" ||
-      file.type === "application/excel" ||
-      file.type === "application/kswps" ||
-      file.type === "application/ksdps" ||
-      (file.type === "" && /xlsx|xls/.test(file.name));
-
-    if (!isXls) {
-      message.error("请上传Excel文件！");
-    }
-
-    return isXls;
-  }
+  let formItem: React.ReactElement;
 
   switch (type) {
-    case "textarea":
-      return (
+    case "textarea": {
+      formItem = (
         <TextArea
           placeholder={placeholder}
           disabled={readonly}
           style={{ marginBottom: 0 }}
-          {...props}
+          {...(props as TextAreaProps)}
         />
       );
-
-    case "inputNumber":
-      return (
+      break;
+    }
+    case "inputNumber": {
+      formItem = (
         <InputNumber
           size={size}
           placeholder={placeholder}
           disabled={readonly}
           style={{ width: "100%" }}
-          {...props}
+          {...(props as InputNumberProps)}
         />
       );
-
-    case "password":
-      return (
+      break;
+    }
+    case "password": {
+      formItem = (
         <Input
           size={size}
           type="password"
           placeholder={placeholder}
           disabled={readonly}
           style={{ width: "100%" }}
-          {...props}
+          {...(props as InputProps)}
         />
       );
-
-    case "select":
-      return (
+      break;
+    }
+    case "select": {
+      const { options, ...etc } = props as SelectProps;
+      formItem = (
         <Select
           size={size}
           placeholder={placeholder}
           disabled={readonly}
           style={{ width: "100%" }}
-          {...props}
+          {...etc}
         >
           {options.map(({ label: _label, value, ...opts }) => (
             <Option key={value} value={value} {...opts}>
@@ -109,9 +104,11 @@ export function renderItem(item: PlainItem) {
           ))}
         </Select>
       );
-
-    case "searchableSelect":
-      return (
+      break;
+    }
+    case "searchableSelect": {
+      const { options, ...etc } = props as SelectProps;
+      formItem = (
         <Select
           placeholder={placeholder || label}
           style={{ width: "100%" }}
@@ -125,7 +122,7 @@ export function renderItem(item: PlainItem) {
               .toLowerCase()
               .includes(input.toLowerCase())
           }
-          {...props}
+          {...etc}
         >
           {options.map(({ label: _label, value }) => (
             <Option key={value} value={value}>
@@ -134,9 +131,11 @@ export function renderItem(item: PlainItem) {
           ))}
         </Select>
       );
-
-    case "dynamicSelect":
-      return (
+      break;
+    }
+    case "dynamicSelect": {
+      const { options, ...etc } = props as SelectProps;
+      formItem = (
         <Select
           showSearch
           allowClear
@@ -148,7 +147,7 @@ export function renderItem(item: PlainItem) {
           placeholder={placeholder}
           disabled={readonly}
           style={{ width: "100%" }}
-          {...props}
+          {...etc}
         >
           {options.map(({ label: _label, value }) => (
             <Option key={value} value={value}>
@@ -157,46 +156,89 @@ export function renderItem(item: PlainItem) {
           ))}
         </Select>
       );
-
-    case "cascader":
-      return (
+      break;
+    }
+    case "cascader": {
+      formItem = (
         <Cascader
           size={size}
           changeOnSelect
-          options={options as CascaderOptionType[]}
           placeholder={placeholder}
           disabled={readonly}
           style={{ width: "100%" }}
-          {...props}
+          {...(props as CascaderProps)}
         />
       );
-
-    case "upload-excel":
-      return (
-        <Upload accept=".xlsx, .xls" beforeUpload={beforeUploadExcel} {...(props as UploadProps)}>
+      break;
+    }
+    case "upload-excel": {
+      const { onUpload, ...uploadProps } = props as UploadProps;
+      formItem = (
+        <Upload
+          accept=".xlsx, .xls"
+          customRequest={({ file, onSuccess, onError }) => {
+            if (file) {
+              onUpload(file)
+                .then((data) => onSuccess(data, file))
+                .catch(onError);
+            }
+          }}
+          {...uploadProps}
+        >
           <Button size={size} icon={<UploadOutlined />}>
             上传文件
           </Button>
         </Upload>
       );
-
-    case "time":
-      return (
+      break;
+    }
+    case "time": {
+      formItem = (
         <DatePicker
           size={size}
           placeholder={placeholder}
           disabled={readonly}
-          showTime={showTime}
           style={{ width: "100%" }}
-          {...props}
+          {...(props as any)}
         />
       );
-
-    case "switch":
-      return <Switch size={size} disabled={readonly} {...props} />;
-
+      break;
+    }
+    case "switch": {
+      formItem = (
+        <Switch
+          size={size === "large" ? "default" : size}
+          disabled={readonly}
+          {...(props as SwitchProps)}
+        />
+      );
+      break;
+    }
     case "input":
-    default:
-      return <Input size={size} placeholder={placeholder} disabled={readonly} {...props} />;
+    default: {
+      formItem = (
+        <Input
+          size={size}
+          placeholder={placeholder}
+          disabled={readonly}
+          {...(props as InputProps)}
+        />
+      );
+    }
   }
+
+  return (
+    <Form.Item
+      label={label}
+      key={field}
+      name={field}
+      valuePropName={valuePropName}
+      rules={rules}
+      hasFeedback={hasFeedback}
+      style={style}
+      {...itemProps}
+    >
+      {formItem}
+    </Form.Item>
+  );
 }
