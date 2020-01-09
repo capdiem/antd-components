@@ -202,7 +202,7 @@ const FormModal: React.FC<Props> = ({
             </Upload>
           </Form.Item>
         ) : (
-          renderCommonFormItem(item, size, formItemStyle, [requiredRule, ...rules], hasFeedback)
+          renderCommonFormItem(item, size, hasFeedback, formItemStyle, [requiredRule, ...rules])
         )}
       </Col>
     );

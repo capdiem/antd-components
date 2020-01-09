@@ -9,7 +9,6 @@ import "antd/lib/switch/style";
 
 import Button from "antd/lib/button";
 import Cascader, { CascaderProps } from "antd/lib/cascader";
-import { ColProps } from "antd/lib/col";
 import DatePicker from "antd/lib/date-picker";
 import Form from "antd/lib/form";
 import Input, { InputProps, TextAreaProps } from "antd/lib/input";
@@ -28,10 +27,10 @@ const { Option } = Select;
 
 export function renderFormItem(
   item: FormItem,
-  size: Size,
-  style: React.CSSProperties,
-  rules: FormItem["rules"],
-  hasFeedback?: boolean
+  size: Size = "default",
+  hasFeedback?: boolean,
+  style?: React.CSSProperties,
+  newRules?: FormItem["rules"]
 ) {
   const {
     type,
@@ -41,8 +40,7 @@ export function renderFormItem(
     readonly = false,
     valuePropName,
     props,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    rules: _,
+    rules,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     col,
     ...itemProps
@@ -233,7 +231,7 @@ export function renderFormItem(
       key={field}
       name={field}
       valuePropName={valuePropName}
-      rules={rules}
+      rules={newRules || rules}
       hasFeedback={hasFeedback}
       style={style}
       {...itemProps}
