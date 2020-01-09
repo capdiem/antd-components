@@ -224,9 +224,11 @@ const FormModal: React.FC<Props> = ({
         {formItemsGroup ? (
           formItemsGroup.map(({ key, formItems, title, ...props }, index) => (
             <div key={key || index}>
-              <Divider orientation="left" {...props}>
-                {title}
-              </Divider>
+              {title && (
+                <Divider orientation="left" {...props}>
+                  {title}
+                </Divider>
+              )}
               <Row gutter={8}>
                 {formItems
                   .filter((u) => u.visible === undefined || u.visible === true)
