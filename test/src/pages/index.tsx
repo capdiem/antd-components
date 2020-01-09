@@ -136,6 +136,7 @@ export default function() {
       </Row>
       <FormModal
         visible={formModalVisible || formModalVisibleWithoutData}
+        layout="vertical"
         labelCol={4}
         wrapperCol={20}
         initialValues={
@@ -143,8 +144,9 @@ export default function() {
             ? undefined
             : {
                 name: 'cyx',
-                imageId: [
+                multipleImageId: [
                   {
+                    id: -1000,
                     uid: -1000,
                     name: '主图.png',
                     status: 'done',
@@ -152,6 +154,7 @@ export default function() {
                       'http://qstbgmall.oss-cn-hangzhou.aliyuncs.com/gms/mainImage/微信图片_20191115111055_191115163314839.png',
                   },
                   {
+                    id: -1001,
                     uid: -1001,
                     name: '主图.png',
                     status: 'done',
@@ -159,23 +162,83 @@ export default function() {
                       'http://qstbgmall.oss-cn-hangzhou.aliyuncs.com/gms/mainImage/微信图片_20191115111055_191115163314839.png',
                   },
                 ],
+                singleImageId: {
+                  id: -1001,
+                  uid: -1001,
+                  name: '主图.png',
+                  status: 'done',
+                  url:
+                    'http://qstbgmall.oss-cn-hangzhou.aliyuncs.com/gms/mainImage/微信图片_20191115111055_191115163314839.png',
+                },
               }
         }
-        formItems={[
+        formItemsGroup={[
           {
-            field: 'name',
-            label: '姓名',
+            key: 'base',
+            title: '基础信息',
+            formItems: [
+              {
+                field: 'name',
+                label: '姓名姓名姓名姓名',
+                col: { lg: 8 },
+              },
+              {
+                type: 'select',
+                field: 'gender',
+                label: '性别',
+                props: {
+                  options: [
+                    { label: 'man', value: 'man' },
+                    { label: 'woman', value: 'woman' },
+                  ],
+                },
+                col: { lg: 24 },
+              },
+            ],
           },
           {
-            type: 'upload-images',
-            field: 'imageId',
-            label: '图片',
-            onUpload: () =>
-              Promise.resolve({
-                uid: '12345',
-                url:
-                  'http://qstbgmall.oss-cn-hangzhou.aliyuncs.com/gms/mainImage/微信图片_20191115111055_191115163314839.png',
-              }),
+            key: 'image',
+            title: '多图片',
+            formItems: [
+              {
+                type: 'upload-images',
+                field: 'multipleImageId',
+                label: '图片',
+                col: { lg: 24 },
+                props: {
+                  onUpload: file =>
+                    Promise.resolve({
+                      id: '12345',
+                      url:
+                        'http://qstbgmall.oss-cn-hangzhou.aliyuncs.com/gms/mainImage/微信图片_20191115111055_191115163314839.png',
+                    }),
+                },
+              },
+              {
+                type: 'upload-image',
+                field: 'singleImageId',
+                label: '图片',
+                col: { lg: 24 },
+                props: {
+                  onUpload: () =>
+                    Promise.resolve({
+                      id: '12345',
+                      url:
+                        'http://qstbgmall.oss-cn-hangzhou.aliyuncs.com/gms/mainImage/微信图片_20191115111055_191115163314839.png',
+                    }),
+                },
+              },
+            ],
+          },
+          {
+            title: 'Extra',
+            formItems: [
+              {
+                type: 'textarea',
+                label: '额外信息',
+                field: 'extra',
+              },
+            ],
           },
         ]}
         onOk={(values: any) => console.log('values', values)}
