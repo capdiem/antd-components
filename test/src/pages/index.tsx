@@ -5,6 +5,7 @@ import Button from 'antd/es/button';
 import Col from 'antd/es/col';
 import Divider from 'antd/es/divider';
 import Row from 'antd/es/row';
+import moment from 'moment';
 import React, { useEffect, useRef, useState } from 'react';
 
 import { PlusOutlined, UploadOutlined } from '@ant-design/icons';
@@ -12,7 +13,6 @@ import { PlusOutlined, UploadOutlined } from '@ant-design/icons';
 import { Dividers, Filter, FormModal, Table, TableModal } from '../../../src';
 import { ReloadBtnRef } from '../../../src/filter/types';
 import { TableColumnProps } from '../../../src/table/types';
-// import { Dividers, Table } from '../../../lib';
 import styles from './index.css';
 
 export default function() {
@@ -44,6 +44,7 @@ export default function() {
             initialValues={{
               test: '123456789',
               test2: '33333333',
+              startDate: moment('2020-01-10 13:12:22'),
             }}
             defaultValues={{
               test2: '2222222',
@@ -53,6 +54,8 @@ export default function() {
                 { field: 'test', placeholder: 'test' },
                 { field: 'test2', placeholder: 'test2' },
               ],
+              [{ field: 'startDate', placeholder: '开始时间', type: 'datePicker' }],
+              [{ field: 'rangeDate', placeholder: '测试', type: 'dateRangePicker' }],
             ]}
             reloadBtnRef={reloadBtnRef}
             onSearch={values => console.log('values', values)}
