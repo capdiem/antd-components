@@ -21,7 +21,7 @@ import Popconfirm, { PopconfirmProps } from "antd/lib/popconfirm";
 import Row from "antd/lib/row";
 import Select from "antd/lib/select";
 import Upload from "antd/lib/upload";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useState } from "react";
 
 import { ReloadOutlined, SearchOutlined } from "@ant-design/icons";
 
@@ -48,6 +48,17 @@ const Filter: React.FC<Props> = ({
 }) => {
   const [form] = Form.useForm();
 
+  /** 对象(壳)，只用于记录字段 */
+  const [shell, setShell] = useState<any>();
+
+  useEffect(() => {
+    const _shell = {};
+    items.forEach((u) => {
+      u.forEach((v) => (_shell[v.field] = null));
+    });
+    setShell(_shell);
+  }, items);
+
   function handleOnSearch() {
     if (typeof onSearch === "function") {
       form.validateFields().then((values) => onSearch(values));
@@ -61,9 +72,7 @@ const Filter: React.FC<Props> = ({
    * reloadBtnRef.handleClick(false)
    */
   function handleOnReload(query: any = true) {
-    const obj = {};
-    Object.keys(initialValues).forEach((u) => (obj[u] = undefined));
-    form.setFieldsValue({ ...obj, ...defaultValues });
+    form.setFieldsValue({ ...shell, ...defaultValues });
 
     if (query && typeof onReload === "function") {
       onReload();
