@@ -5,11 +5,12 @@ import Button from 'antd/es/button';
 import Col from 'antd/es/col';
 import Divider from 'antd/es/divider';
 import Row from 'antd/es/row';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { PlusOutlined, UploadOutlined } from '@ant-design/icons';
 
 import { Dividers, Filter, FormModal, Table, TableModal } from '../../../src';
+import { ReloadBtnRef } from '../../../src/filter/types';
 import { TableColumnProps } from '../../../src/table/types';
 // import { Dividers, Table } from '../../../lib';
 import styles from './index.css';
@@ -28,7 +29,7 @@ export default function() {
     ]);
   }, []);
 
-  let reloadBtnRef: any;
+  const reloadBtnRef = useRef<ReloadBtnRef>(null);
 
   return (
     <div className={styles.normal}>
@@ -40,25 +41,44 @@ export default function() {
         </Col>
         <Col span={6}>
           <Filter
-            formItemsGroups={[
+            initialValues={{
+              test: '123456789',
+              test2: '33333333',
+            }}
+            defaultValues={{
+              test2: '2222222',
+            }}
+            items={[
               [
                 { field: 'test', placeholder: 'test' },
                 { field: 'test2', placeholder: 'test2' },
               ],
             ]}
-            onRefReloadBtn={ref => (reloadBtnRef = ref)}
+            reloadBtnRef={reloadBtnRef}
             onSearch={values => console.log('values', values)}
             onReload={() => console.log('reload')}
             btns={[
               {
                 mode: 'upload',
-                accept: '.xlsx, .xls',
                 icon: <UploadOutlined />,
-                showUploadList: false,
-                onUpload(file) {
+                props: {
+                  accept: '.xlsx, .xls',
+                  showUploadList: false,
+                },
+                onClick(file: File) {
                   console.log('file', file);
                   return Promise.resolve('test');
                 },
+              },
+              {
+                mode: 'confirm',
+                text: 'confirm',
+                type: 'dashed',
+                props: {
+                  title: 'title',
+                  okText: '确认不？',
+                },
+                onClick: (values: any) => console.log('values', values),
               },
               {
                 icon: <PlusOutlined />,
@@ -70,7 +90,7 @@ export default function() {
             type="dashed"
             style={{ width: '100%' }}
             onClick={() => {
-              reloadBtnRef.handleClick(false);
+              reloadBtnRef.current?.handleClick(false);
             }}
           >
             reloadBtnRef
