@@ -7,15 +7,18 @@ import {
   RangePickerDateProps,
   RangePickerProps as AntdRangePickerProps,
 } from "antd/lib/date-picker/generatePicker";
-import { FormProps } from "antd/lib/form/Form";
+import { FormProps as AntdFormProps } from "antd/lib/form/Form";
 import { FormItemProps as AntdFormItemProps } from "antd/lib/form/FormItem";
 import { InputProps, TextAreaProps } from "antd/lib/input";
-import { ModalProps } from "antd/lib/modal";
+import { ModalProps as AntdModalProps } from "antd/lib/modal";
 import { SelectProps as AntdSelectProps } from "antd/lib/select";
 import { SwitchProps } from "antd/lib/switch";
-import { UploadFile, UploadProps as AntdUploadProps } from "antd/lib/upload/interface";
+import {
+  UploadFile as AntdUploadField,
+  UploadProps as AntdUploadProps,
+} from "antd/lib/upload/interface";
 import { Moment } from "moment";
-import { FieldProps } from "rc-field-form/lib/Field";
+import { FieldProps as RcFieldProps } from "rc-field-form/lib/Field";
 import { PickerPanelDateProps } from "rc-picker/lib/PickerPanel";
 
 declare type FormItemType =
@@ -34,12 +37,12 @@ declare type FormItemType =
   | "upload-images";
 export declare type Size = "default" | "small" | "large";
 export declare type SelectOption = { label: string; value: string | number; disabled?: boolean };
-export declare type ConciseUploadFile = Pick<UploadFile, "url"> & {
+export declare type UploadFile = Pick<AntdUploadField, "url"> & {
   id: number | string;
 };
-export declare type ConciseFieldProps = Omit<FieldProps, "name">;
+export declare type FieldProps = Omit<RcFieldProps, "name">;
 export declare type UploadProps = AntdUploadProps & {
-  onUpload?: (file: File) => Promise<ConciseUploadFile>;
+  onUpload?: (file: File) => Promise<UploadFile>;
 };
 export declare type SelectProps = Omit<AntdSelectProps<any>, "options"> & {
   options: Array<SelectOption>;
@@ -125,13 +128,13 @@ export interface FormItemsGroup<VT = any> {
   formItems: Array<FormItem<VT>>;
 }
 
-declare type ConciseModalProps = Omit<ModalProps, "onOk" | "onCancel">;
-declare type ConciseFormProps = Pick<
-  FormProps,
+declare type ModalProps = Omit<AntdModalProps, "onOk" | "onCancel">;
+declare type FormProps = Pick<
+  AntdFormProps,
   "hideRequiredMark" | "colon" | "name" | "layout" | "labelAlign"
 >;
 
-export interface FormModalComponentProps<VT = any> extends ConciseModalProps, ConciseFormProps {
+export interface FormModalComponentProps<VT = any> extends ModalProps, FormProps {
   formItems?: Array<FormItem<VT>>;
   formItemsGroup?: Array<FormItemsGroup<VT>>;
   formItemStyle?: React.CSSProperties;
