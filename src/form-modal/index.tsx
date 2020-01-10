@@ -87,7 +87,6 @@ const FormModal: React.FC<Props> = ({
 
   const formProps: FormProps = {
     form,
-    initialValues,
     hideRequiredMark,
     colon: colon,
     name,
