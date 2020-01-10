@@ -58,7 +58,6 @@ const FormModal: React.FC<Props> = ({
           initialValues[u.field] = [initialValues[u.field]];
         } else {
           obj[u.field] = [];
-          initialValues[u.field] = [];
         }
       });
 
