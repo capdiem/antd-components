@@ -82,10 +82,13 @@ const FormModal: React.FC<Props> = ({
     }
     setFileList(_fileList);
 
+    // work with `form.resetFields()` in handleCancel()
     initialValues ? form.setFieldsValue(initialValues) : form.resetFields();
   }, [visible]);
 
   const formProps: FormProps = {
+    /** do not use initialValues! */
+    // initialValues,
     form,
     hideRequiredMark,
     colon: colon,
@@ -106,6 +109,9 @@ const FormModal: React.FC<Props> = ({
 
   function handleCancel() {
     onCancel();
+
+    // only clear fields value when initialValues === undefined
+    form.resetFields();
   }
 
   function handleOk() {
