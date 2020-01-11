@@ -6,10 +6,12 @@ import "antd/lib/input-number/style";
 import "antd/lib/select/style";
 import "antd/lib/upload/style";
 import "antd/lib/switch/style";
+import "antd/lib/form/style";
 
 import Button from "antd/lib/button";
 import Cascader, { CascaderProps } from "antd/lib/cascader";
 import DatePicker from "antd/lib/date-picker";
+import Form from "antd/lib/form";
 import Input, { InputProps, TextAreaProps } from "antd/lib/input";
 import InputNumber, { InputNumberProps } from "antd/lib/input-number";
 import Select from "antd/lib/select";
@@ -19,12 +21,16 @@ import React from "react";
 
 import { UploadOutlined } from "@ant-design/icons";
 
-import { DataEntryProps, DataEntryType, SelectProps, Size, UploadProps } from "./types";
+import { DataEntryProps, DataEntryType, FormItem, SelectProps, Size, UploadProps } from "./types";
 
 const { TextArea } = Input;
 const { Option } = Select;
 
-function renderDataEntry(type: DataEntryType, props: DataEntryProps, size: Size = "default") {
+function renderDataEntry(
+  props: DataEntryProps,
+  type: DataEntryType = "input",
+  size: Size = "default"
+) {
   let element: React.ReactElement;
 
   switch (type) {
@@ -154,4 +160,46 @@ function renderDataEntry(type: DataEntryType, props: DataEntryProps, size: Size 
   return element;
 }
 
-export { renderDataEntry };
+/**
+ * Render Form Item
+ * @param item
+ * @param size
+ * @param style
+ * @description labelCol and wrapperCol form Form props will not work
+ */
+function renderFormItem(item: FormItem, size: Size = "default", style?: React.CSSProperties) {
+  const {
+    field,
+    label,
+    required,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    col,
+    rules = [],
+    type,
+    placeholder,
+    readonly,
+    props,
+    ...etc
+  } = item;
+
+  /** 生成默认的 required error message */
+  const requiredRule = { required, message: `请输入${label}` };
+  if (type === "upload-image" || type === "upload-images" || type === "upload-excel") {
+    requiredRule.message = `请上传${label}`;
+  } else if (
+    type === "select" ||
+    type === "dynamicSelect" ||
+    type === "searchableSelect" ||
+    type === "cascader"
+  ) {
+    requiredRule.message = `请选择${label}`;
+  }
+
+  return (
+    <Form.Item label={label} name={field} style={style} rules={[requiredRule, ...rules]} {...etc}>
+      {renderDataEntry({ placeholder, disabled: readonly, ...props }, type, size)}
+    </Form.Item>
+  );
+}
+
+export { renderDataEntry, renderFormItem };
