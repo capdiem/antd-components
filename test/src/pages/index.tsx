@@ -195,7 +195,7 @@ export default function() {
                 },
               }
         }
-        formItemsGroup={[
+        formItemsGroups={[
           {
             key: 'base',
             title: '基础信息',

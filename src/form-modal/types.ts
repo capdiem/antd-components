@@ -137,7 +137,7 @@ declare type FormProps = Pick<
 
 export interface FormModalComponentProps<VT = any> extends ModalProps, FormProps {
   formItems?: Array<FormItem<VT>>;
-  formItemsGroup?: Array<FormItemsGroup<VT>>;
+  formItemsGroups?: Array<FormItemsGroup<VT>>;
   formItemStyle?: React.CSSProperties;
   hasFeedback?: boolean;
   initialValues?: VT;

@@ -22,7 +22,7 @@ type Props = FormModalComponentProps;
 const FormModal: React.FC<Props> = ({
   tips,
   formItems,
-  formItemsGroup,
+  formItemsGroups,
   hideRequiredMark = false,
   colon = true,
   name,
@@ -73,8 +73,8 @@ const FormModal: React.FC<Props> = ({
 
   useEffect(() => {
     let _fileList: object = {};
-    if (formItemsGroup) {
-      formItemsGroup.forEach(
+    if (formItemsGroups) {
+      formItemsGroups.forEach(
         ({ formItems }) => (_fileList = { ..._fileList, ...initFileList(formItems) })
       );
     } else {
@@ -220,8 +220,8 @@ const FormModal: React.FC<Props> = ({
     >
       {tips && <div style={{ marginBottom: 12 }}>{tips}</div>}
       <Form {...formProps}>
-        {formItemsGroup ? (
-          formItemsGroup.map(({ key, formItems, title, ...props }, index) => (
+        {formItemsGroups ? (
+          formItemsGroups.map(({ key, formItems, title, ...props }, index) => (
             <div key={key || index}>
               {title && (
                 <Divider orientation="left" {...props}>
