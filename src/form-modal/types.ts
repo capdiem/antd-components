@@ -8,7 +8,7 @@ import {
   RangePickerProps as AntdRangePickerProps,
 } from "antd/lib/date-picker/generatePicker";
 import { FormProps as AntdFormProps } from "antd/lib/form/Form";
-import { FormItemProps as AntdFormItemProps } from "antd/lib/form/FormItem";
+import FormItem, { FormItemProps as AntdFormItemProps } from "antd/lib/form/FormItem";
 import { InputProps, TextAreaProps } from "antd/lib/input";
 import { ModalProps as AntdModalProps } from "antd/lib/modal";
 import { SelectProps as AntdSelectProps } from "antd/lib/select";
@@ -21,7 +21,7 @@ import { Moment } from "moment";
 import { FieldProps as RcFieldProps } from "rc-field-form/lib/Field";
 import { PickerPanelDateProps } from "rc-picker/lib/PickerPanel";
 
-declare type FormItemType =
+export declare type DataEntryType =
   | "input"
   | "inputNumber"
   | "password"
@@ -94,23 +94,24 @@ export declare type RangePickerProps<DateType = Moment> = BasicPickerProps<DateT
   Pick<RangePickerDateProps<DateType>, "showTime">;
 
 export declare type FormItemProps = Partial<Omit<AntdFormItemProps, "fieldKey">>;
+export declare type DataEntryProps =
+  | InputProps
+  | InputNumberProps
+  | TextAreaProps
+  | SelectProps
+  | CascaderProps
+  | SwitchProps
+  | UploadProps
+  | DatePickerProps
+  | YearPickerProps
+  | MonthPickerProps
+  | WeekPickerProps
+  | RangePickerProps;
 
 export interface FormItem<VT = any> extends FormItemProps {
   visible?: boolean;
-  type?: FormItemType;
-  props?:
-    | InputProps
-    | InputNumberProps
-    | TextAreaProps
-    | SelectProps
-    | CascaderProps
-    | SwitchProps
-    | UploadProps
-    | DatePickerProps
-    | YearPickerProps
-    | MonthPickerProps
-    | WeekPickerProps
-    | RangePickerProps;
+  type?: DataEntryType;
+  props?: DataEntryProps;
   label?: string;
   field: Extract<keyof VT, string>;
   placeholder?: string;

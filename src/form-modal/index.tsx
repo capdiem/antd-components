@@ -14,7 +14,7 @@ import React, { useEffect, useState } from "react";
 
 import { UploadOutlined } from "@ant-design/icons";
 
-import { renderFormItem as renderCommonFormItem } from "./helper";
+import { renderDataEntry } from "./helper";
 import { FormItem, FormModalComponentProps, UploadProps } from "./types";
 
 type Props = FormModalComponentProps;
@@ -122,7 +122,18 @@ const FormModal: React.FC<Props> = ({
   }
 
   function renderFormItem(item: FormItem<any>) {
-    const { type, field, label, required = false, rules = [], col, props } = item;
+    const {
+      type,
+      field,
+      label,
+      placeholder,
+      readonly,
+      required = false,
+      rules = [],
+      col,
+      props,
+      ...etc
+    } = item;
 
     const colProps: ColProps = {
       lg: 24,
@@ -161,6 +172,7 @@ const FormModal: React.FC<Props> = ({
             <Upload
               accept="image/*"
               listType="picture-card"
+              disabled={readonly}
               customRequest={({ file, onSuccess, onError }) => {
                 if (!file || !(props as UploadProps).onUpload) return false;
 
@@ -200,7 +212,17 @@ const FormModal: React.FC<Props> = ({
             </Upload>
           </Form.Item>
         ) : (
-          renderCommonFormItem(item, size, hasFeedback, formItemStyle, [requiredRule, ...rules])
+          <Form.Item
+            label={label}
+            key={field}
+            name={field}
+            rules={[requiredRule, ...rules]}
+            style={formItemStyle}
+            hasFeedback={hasFeedback}
+            {...etc}
+          >
+            {renderDataEntry(type, { placeholder, disabled: readonly, ...item.props }, size)}
+          </Form.Item>
         )}
       </Col>
     );
