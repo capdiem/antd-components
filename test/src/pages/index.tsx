@@ -43,9 +43,8 @@ export default function() {
         </Col>
         <Col span={6}>
           <Filter
-            initialValues={{
+            query={{
               test: '123456789',
-              test2: '33333333',
               startDate: moment('2020-01-10 13:12:22'),
             }}
             defaultValues={{
