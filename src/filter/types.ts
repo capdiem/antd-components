@@ -1,21 +1,7 @@
 import { ButtonProps } from "antd/lib/button";
-import { CascaderProps } from "antd/lib/cascader";
-import { InputProps, TextAreaProps } from "antd/lib/input";
-import { InputNumberProps } from "antd/lib/input-number";
 import { PopconfirmProps as AntdPopconfirmProps } from "antd/lib/popconfirm";
-import { SwitchProps } from "antd/lib/switch";
 
-import {
-  DatePickerProps,
-  MonthPickerProps,
-  RangePickerProps,
-  SelectProps,
-  Size,
-  UploadFile,
-  UploadProps,
-  WeekPickerProps,
-  YearPickerProps,
-} from "../form-modal/types";
+import { DataEntryProps, Size, UploadFile, UploadProps } from "../form-modal/types";
 
 declare type FormItemType =
   | "input"
@@ -47,19 +33,7 @@ export interface FilterItem<T = any> {
   placeholder?: string;
   visible?: boolean;
   type?: FormItemType;
-  props?:
-    | InputProps
-    | InputNumberProps
-    | TextAreaProps
-    | SelectProps
-    | CascaderProps
-    | SwitchProps
-    | UploadProps
-    | DatePickerProps
-    | YearPickerProps
-    | MonthPickerProps
-    | WeekPickerProps
-    | RangePickerProps;
+  props?: DataEntryProps;
 }
 
 export declare type Btns<T = any> = Array<Btn<T>>;
@@ -71,8 +45,7 @@ export declare type ReloadBtnRef = {
 
 export interface FilterComponentProps<T = any> {
   style?: React.CSSProperties;
-  /** 初始值，会和默认值合并，优先级大于默认值 */
-  initialValues?: T;
+  query?: T;
   /** 默认值，调用`onReload`后设置的值 */
   defaultValues?: T;
   size?: Size;

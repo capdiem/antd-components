@@ -21,7 +21,7 @@ import Popconfirm, { PopconfirmProps } from "antd/lib/popconfirm";
 import Row from "antd/lib/row";
 import Select from "antd/lib/select";
 import Upload from "antd/lib/upload";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 
 import { ReloadOutlined, SearchOutlined } from "@ant-design/icons";
 
@@ -37,7 +37,7 @@ type Props = FilterComponentProps;
 
 const Filter: React.FC<Props> = ({
   style,
-  initialValues,
+  query,
   defaultValues,
   size = "default",
   items = [],
@@ -48,16 +48,17 @@ const Filter: React.FC<Props> = ({
 }) => {
   const [form] = Form.useForm();
 
-  /** 对象(壳)，只用于记录字段 */
-  const [shell, setShell] = useState<any>();
-
   useEffect(() => {
-    const _shell = {};
-    items.forEach((u) => {
-      u.forEach((v) => (_shell[v.field] = null));
-    });
-    setShell(_shell);
-  }, items);
+    if (query) {
+      if (defaultValues) {
+        const obj = {};
+        Object.keys(defaultValues).forEach((prop) => (obj[prop] = null));
+        form.setFieldsValue({ ...query, ...obj });
+      } else {
+        form.setFieldsValue(query);
+      }
+    }
+  });
 
   function handleOnSearch() {
     if (typeof onSearch === "function") {
@@ -72,7 +73,7 @@ const Filter: React.FC<Props> = ({
    * reloadBtnRef.handleClick(false)
    */
   function handleOnReload(query: any = true) {
-    form.setFieldsValue({ ...shell, ...defaultValues });
+    form.resetFields();
 
     if (query && typeof onReload === "function") {
       onReload();
@@ -348,7 +349,7 @@ const Filter: React.FC<Props> = ({
   return (
     <div style={rootStyle}>
       {!!cols.length && (
-        <Form form={form} initialValues={{ ...defaultValues, ...initialValues }}>
+        <Form form={form} initialValues={defaultValues}>
           <Row gutter={8} style={formItemsGroupStyle}>
             {cols}
           </Row>
