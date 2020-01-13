@@ -5,6 +5,7 @@ import Button from 'antd/es/button';
 import Col from 'antd/es/col';
 import Divider from 'antd/es/divider';
 import Row from 'antd/es/row';
+import { FormInstance } from 'antd/lib/form';
 import moment from 'moment';
 import React, { useEffect, useRef, useState } from 'react';
 
@@ -16,6 +17,7 @@ import { TableColumnProps } from '../../../src/table/types';
 import styles from './index.css';
 
 export default function() {
+  const formRef = useRef<FormInstance>(null);
   const [columns, setColumns] = useState<TableColumnProps<any>[]>([]);
   const [formModalVisible, setFormModalVisible] = useState<boolean>(false);
   const [formModalVisibleWithoutData, setFormModalVisibleWithoutData] = useState<boolean>(false);
@@ -158,6 +160,17 @@ export default function() {
         </Col>
       </Row>
       <FormModal
+        title="Form Modal"
+        tips={
+          <Button
+            type={'dashed'}
+            style={{ width: '100%' }}
+            onClick={() => console.log(formRef.current?.getFieldsValue())}
+          >
+            FormModal Ref getValuesValue
+          </Button>
+        }
+        ref={formRef}
         visible={formModalVisible || formModalVisibleWithoutData}
         layout="vertical"
         labelCol={4}
