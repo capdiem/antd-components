@@ -6,11 +6,11 @@ import "antd/lib/form/style";
 import Col, { ColProps } from "antd/lib/col";
 import Divider from "antd/lib/divider";
 import Form from "antd/lib/form";
-import { FormProps } from "antd/lib/form/Form";
+import { FormInstance, FormProps } from "antd/lib/form/Form";
 import Modal from "antd/lib/modal";
 import Row from "antd/lib/row";
 import Upload, { RcFile } from "antd/lib/upload";
-import React, { useEffect, useState } from "react";
+import React, { forwardRef, useEffect, useState } from "react";
 
 import { UploadOutlined } from "@ant-design/icons";
 
@@ -19,31 +19,33 @@ import { FormItem, FormModalComponentProps, UploadProps } from "./types";
 
 type Props = FormModalComponentProps;
 
-const FormModal: React.FC<Props> = ({
-  tips,
-  formItems,
-  formItemsGroups,
-  hideRequiredMark = false,
-  colon = true,
-  name,
-  layout,
-  labelAlign = "right",
-  labelCol,
-  wrapperCol,
-  hasFeedback = false,
-  formItemStyle = { marginBottom: 0 },
-  initialValues,
-  title,
-  visible,
-  size = "default",
-  confirmLoading = false,
-  maskClosable = false,
-  okButtonProps = {},
-  cancelButtonProps = {},
-  onOk,
-  onCancel,
-  ...modalProps
-}) => {
+const FormModal = forwardRef<FormInstance, Props>((props, ref) => {
+  const {
+    tips,
+    formItems,
+    formItemsGroups,
+    hideRequiredMark = false,
+    colon = true,
+    name,
+    layout,
+    labelAlign = "right",
+    labelCol,
+    wrapperCol,
+    hasFeedback = false,
+    formItemStyle = { marginBottom: 0 },
+    initialValues,
+    title,
+    visible,
+    size = "default",
+    confirmLoading = false,
+    maskClosable = false,
+    okButtonProps = {},
+    cancelButtonProps = {},
+    onOk,
+    onCancel,
+    ...modalProps
+  } = props;
+
   const [fileList, setFileList] = useState<any>({});
   const [form] = Form.useForm();
 
@@ -225,7 +227,7 @@ const FormModal: React.FC<Props> = ({
       onOk={handleOk}
     >
       {tips && <div style={{ marginBottom: 12 }}>{tips}</div>}
-      <Form {...formProps}>
+      <Form ref={ref} {...formProps}>
         {formItemsGroups ? (
           formItemsGroups.map(({ key, formItems, title, ...props }, index) => (
             <div key={key || index}>
@@ -251,6 +253,6 @@ const FormModal: React.FC<Props> = ({
       </Form>
     </Modal>
   );
-};
+});
 
 export default FormModal;

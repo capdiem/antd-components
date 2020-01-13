@@ -7,7 +7,7 @@ import {
   RangePickerDateProps,
   RangePickerProps as AntdRangePickerProps,
 } from "antd/lib/date-picker/generatePicker";
-import { FormProps as AntdFormProps } from "antd/lib/form/Form";
+import { FormInstance, FormProps as AntdFormProps } from "antd/lib/form/Form";
 import FormItem, { FormItemProps as AntdFormItemProps } from "antd/lib/form/FormItem";
 import { InputProps, TextAreaProps } from "antd/lib/input";
 import { ModalProps as AntdModalProps } from "antd/lib/modal";
