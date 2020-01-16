@@ -31,6 +31,7 @@ const FormModal = forwardRef<FormInstance, Props>((props, ref) => {
     labelAlign = "right",
     labelCol,
     wrapperCol,
+    formItemCol,
     hasFeedback = false,
     formItemStyle = { marginBottom: 0 },
     initialValues,
@@ -105,8 +106,9 @@ const FormModal = forwardRef<FormInstance, Props>((props, ref) => {
     formProps.wrapperCol = undefined;
   } else {
     formProps.layout = layout ? layout : size === "small" ? "vertical" : "horizontal";
-    formProps.labelCol = typeof labelCol === "number" ? { span: labelCol } : labelCol;
-    formProps.wrapperCol = typeof wrapperCol === "number" ? { span: wrapperCol } : wrapperCol;
+    if (labelCol) formProps.labelCol = typeof labelCol === "number" ? { span: labelCol } : labelCol;
+    if (wrapperCol)
+      formProps.wrapperCol = typeof wrapperCol === "number" ? { span: wrapperCol } : wrapperCol;
   }
 
   function handleCancel() {
@@ -132,12 +134,21 @@ const FormModal = forwardRef<FormInstance, Props>((props, ref) => {
   function renderFormItem(item: FormItem<any>) {
     const { type, field, label, readonly, required = false, rules = [], col, props } = item;
 
+    let _colProps: ColProps = col || {};
+    if (!col && formItemCol) {
+      if (typeof formItemCol === "number") {
+        _colProps.span = formItemCol;
+      } else {
+        _colProps = formItemCol;
+      }
+    }
+
     const colProps: ColProps = {
-      lg: col?.span ?? 24,
-      md: col?.span ?? 24,
-      sm: col?.span ?? 24,
-      xs: col?.span ?? 24,
-      ...col,
+      lg: _colProps?.span ?? 24,
+      md: _colProps?.span ?? 24,
+      sm: _colProps?.span ?? 24,
+      xs: _colProps?.span ?? 24,
+      ..._colProps,
     };
 
     /** 生成默认的 required error message */

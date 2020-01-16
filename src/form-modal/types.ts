@@ -7,7 +7,7 @@ import {
   RangePickerDateProps,
   RangePickerProps as AntdRangePickerProps,
 } from "antd/lib/date-picker/generatePicker";
-import { FormInstance, FormProps as AntdFormProps } from "antd/lib/form/Form";
+import { FormProps as AntdFormProps } from "antd/lib/form/Form";
 import FormItem, { FormItemProps as AntdFormItemProps } from "antd/lib/form/FormItem";
 import { InputProps, TextAreaProps } from "antd/lib/input";
 import { ModalProps as AntdModalProps } from "antd/lib/modal";
@@ -141,8 +141,9 @@ export interface FormModalComponentProps<VT = any> extends ModalProps, FormProps
   formItemStyle?: React.CSSProperties;
   hasFeedback?: boolean;
   initialValues?: VT;
-  labelCol: ColProps | number;
-  wrapperCol: ColProps | number;
+  labelCol?: ColProps | number;
+  wrapperCol?: ColProps | number;
+  formItemCol?: ColProps | number;
   size?: Size;
   tips?: React.ReactNode;
   onCancel: () => void;
