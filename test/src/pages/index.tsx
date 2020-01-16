@@ -174,6 +174,7 @@ export default function() {
         layout="vertical"
         labelCol={4}
         wrapperCol={20}
+        formItemCol={8}
         initialValues={
           formModalVisibleWithoutData
             ? undefined
@@ -215,7 +216,7 @@ export default function() {
               {
                 field: 'name',
                 label: '姓名姓名姓名姓名',
-                col: { lg: 8 },
+                col: { span: 12 },
               },
               {
                 type: 'select',
@@ -227,7 +228,7 @@ export default function() {
                     { label: 'woman', value: 'woman' },
                   ],
                 },
-                col: { lg: 24 },
+                col: { lg: 12 },
               },
             ],
           },
