@@ -104,7 +104,7 @@ const FormModal = forwardRef<FormInstance, Props>((props, ref) => {
     formProps.labelCol = undefined;
     formProps.wrapperCol = undefined;
   } else {
-    formProps.layout = layout || size === "small" ? "vertical" : "horizontal";
+    formProps.layout = layout ? layout : size === "small" ? "vertical" : "horizontal";
     formProps.labelCol = typeof labelCol === "number" ? { span: labelCol } : labelCol;
     formProps.wrapperCol = typeof wrapperCol === "number" ? { span: wrapperCol } : wrapperCol;
   }
