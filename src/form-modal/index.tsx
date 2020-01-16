@@ -133,10 +133,10 @@ const FormModal = forwardRef<FormInstance, Props>((props, ref) => {
     const { type, field, label, readonly, required = false, rules = [], col, props } = item;
 
     const colProps: ColProps = {
-      lg: 24,
-      md: 24,
-      sm: 24,
-      xs: 24,
+      lg: col?.span ?? 24,
+      md: col?.span ?? 24,
+      sm: col?.span ?? 24,
+      xs: col?.span ?? 24,
       ...col,
     };
 
