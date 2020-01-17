@@ -1,6 +1,6 @@
-import "antd/es/tag/style";
+import "antd/lib/tag/style";
 
-import Tag from "antd/es/tag";
+import Tag from "antd/lib/tag";
 import React from "react";
 
 export interface TagProps {

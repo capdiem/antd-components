@@ -1,11 +1,11 @@
-import "antd/es/icon/style";
-import "antd/es/button/style";
-import "antd/es/dropdown/style";
-import "antd/es/menu/style";
+import "antd/lib/icon/style";
+import "antd/lib/button/style";
+import "antd/lib/dropdown/style";
+import "antd/lib/menu/style";
 
-import Button from "antd/es/button";
-import Dropdown from "antd/es/dropdown";
-import Menu from "antd/es/menu";
+import Button from "antd/lib/button";
+import Dropdown from "antd/lib/dropdown";
+import Menu from "antd/lib/menu";
 import React from "react";
 
 import { BarsOutlined, DownOutlined } from "@ant-design/icons";

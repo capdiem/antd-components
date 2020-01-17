@@ -1,9 +1,11 @@
-import "antd/es/table/style";
+import "antd/lib/table/style";
+import "antd/lib/button/style";
+import "antd/lib/modal/style";
 
-import Button from "antd/es/button";
-import Modal from "antd/es/modal";
-import AntTable from "antd/es/table";
-import { TableProps } from "antd/es/table/Table";
+import Button from "antd/lib/button";
+import Modal from "antd/lib/modal";
+import AntTable from "antd/lib/table";
+import { TableProps } from "antd/lib/table/Table";
 import React, { useState } from "react";
 
 import { FullscreenOutlined } from "@ant-design/icons";

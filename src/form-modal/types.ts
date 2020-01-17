@@ -1,4 +1,3 @@
-import { InputNumberProps } from "antd/es/input-number";
 import { CascaderProps } from "antd/lib/cascader";
 import { ColProps } from "antd/lib/col";
 import {
@@ -10,6 +9,7 @@ import {
 import { FormProps as AntdFormProps } from "antd/lib/form/Form";
 import FormItem, { FormItemProps as AntdFormItemProps } from "antd/lib/form/FormItem";
 import { InputProps, TextAreaProps } from "antd/lib/input";
+import { InputNumberProps } from "antd/lib/input-number";
 import { ModalProps as AntdModalProps } from "antd/lib/modal";
 import { SelectProps as AntdSelectProps } from "antd/lib/select";
 import { SwitchProps } from "antd/lib/switch";

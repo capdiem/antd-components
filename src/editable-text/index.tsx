@@ -1,15 +1,15 @@
-import "antd/es/icon/style";
-import "antd/es/input-number/style";
-import "antd/es/input/style";
-import "antd/es/message/style";
-import "antd/es/select/style";
-import "antd/es/spin/style";
+import "antd/lib/icon/style";
+import "antd/lib/input-number/style";
+import "antd/lib/input/style";
+import "antd/lib/message/style";
+import "antd/lib/select/style";
+import "antd/lib/spin/style";
 
-import Input from "antd/es/input";
-import InputNumber from "antd/es/input-number";
-import message from "antd/es/message";
-import Select from "antd/es/select";
-import Spin from "antd/es/spin";
+import Input from "antd/lib/input";
+import InputNumber from "antd/lib/input-number";
+import message from "antd/lib/message";
+import Select from "antd/lib/select";
+import Spin from "antd/lib/spin";
 import React, { useState } from "react";
 
 import { EditOutlined } from "@ant-design/icons";
