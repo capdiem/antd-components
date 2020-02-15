@@ -13,6 +13,7 @@ import Spin from "antd/lib/spin";
 import React, { useState } from "react";
 
 import { EditOutlined } from "@ant-design/icons";
+import { Size } from "../form-modal/types";
 
 export interface SelectOption {
   label: string;
@@ -24,7 +25,7 @@ export interface EditableTextComponentProps {
   children: string;
   onOk: (value: any) => Promise<any>;
   needOnOkLoading?: boolean;
-  size?: "small" | "default" | "large";
+  size?: Size;
   textType?: "link" | "text";
   itemType?: "input" | "inputNumber" | "select";
   rule?: "string" | "email";
@@ -53,7 +54,7 @@ function validate(rule: string, value: any) {
 const EditableText: React.FC<EditableTextComponentProps> = ({
   children,
   onOk,
-  size = "default",
+  size = "middle",
   textType = "link",
   itemType = "input",
   rule = "string",
@@ -160,7 +161,7 @@ const EditableText: React.FC<EditableTextComponentProps> = ({
   }
 
   return needOnOkLoading ? (
-    <Spin size={size} spinning={spinning}>
+    <Spin size={size === "middle" ? "default" : size} spinning={spinning}>
       {element}
     </Spin>
   ) : (

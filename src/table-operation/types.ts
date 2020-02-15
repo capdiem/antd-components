@@ -1,4 +1,4 @@
-declare const Sizes: ["default", "small", "large"];
+import { Size } from "../form-modal/types";
 
 export interface Item {
   content: React.ReactNode;
@@ -8,7 +8,6 @@ export interface Item {
   onClick: () => void;
 }
 
-type Size = typeof Sizes[number];
 export type Items = Array<Item>;
 
 export interface TableOperationComponentProps {
