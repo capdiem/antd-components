@@ -29,7 +29,7 @@ const { Option } = Select;
 function renderDataEntry(
   props: DataEntryProps,
   type: DataEntryType = "input",
-  size: Size = "default"
+  size: Size = "middle"
 ) {
   let element: React.ReactElement;
 
@@ -148,7 +148,9 @@ function renderDataEntry(
       break;
     }
     case "switch": {
-      element = <Switch size={size === "large" ? "default" : size} {...(props as SwitchProps)} />;
+      element = (
+        <Switch size={size === "small" ? "small" : "default"} {...(props as SwitchProps)} />
+      );
       break;
     }
     case "input":
@@ -167,7 +169,7 @@ function renderDataEntry(
  * @param style
  * @description labelCol and wrapperCol form Form props will not work
  */
-function renderFormItem(item: FormItem, size: Size = "default", style?: React.CSSProperties) {
+function renderFormItem(item: FormItem, size: Size = "middle", style?: React.CSSProperties) {
   const {
     field,
     label,

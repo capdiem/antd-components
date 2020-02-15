@@ -20,6 +20,7 @@ import {
 import { Moment } from "moment";
 import { FieldProps as RcFieldProps } from "rc-field-form/lib/Field";
 import { PickerPanelDateProps } from "rc-picker/lib/PickerPanel";
+import { SizeType } from "antd/lib/config-provider/SizeContext";
 
 export declare type DataEntryType =
   | "input"
@@ -35,7 +36,7 @@ export declare type DataEntryType =
   | "switch"
   | "upload-image"
   | "upload-images";
-export declare type Size = "default" | "small" | "large";
+export declare type Size = SizeType;
 export declare type SelectOption = { label: string; value: string | number; disabled?: boolean };
 export declare type UploadFile = Pick<AntdUploadField, "url"> & {
   id: number | string;
@@ -94,7 +95,8 @@ export declare type RangePickerProps<DateType = Moment> = BasicPickerProps<DateT
   Pick<RangePickerDateProps<DateType>, "showTime">;
 
 export declare type FormItemProps = Partial<Omit<AntdFormItemProps, "fieldKey">>;
-export declare type DataEntryProps =
+
+export declare type SharedDataEntryProps =
   | InputProps
   | InputNumberProps
   | TextAreaProps
@@ -107,6 +109,8 @@ export declare type DataEntryProps =
   | MonthPickerProps
   | WeekPickerProps
   | RangePickerProps;
+
+export declare type DataEntryProps = SharedDataEntryProps & { placeholder?: string };
 
 export interface FormItem<VT = any> extends FormItemProps {
   visible?: boolean;
