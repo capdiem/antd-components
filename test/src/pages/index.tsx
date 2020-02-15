@@ -41,8 +41,9 @@ export default function() {
             Form Modal
           </Button>
         </Col>
-        <Col span={6}>
+        <Col span={12}>
           <Filter
+            mode="simple"
             query={{
               test: '123456789',
               startDate: moment('2020-01-10 13:12:22'),
@@ -53,9 +54,18 @@ export default function() {
             items={[
               [
                 { field: 'test', placeholder: 'test' },
-                { field: 'test2', placeholder: 'test2' },
+                { field: 'test2', placeholder: 'test2', simple: true },
+                {
+                  type: 'select',
+                  field: 'test4',
+                  placeholder: 'test4',
+                  props: {
+                    options: ['1', '2', '3'].map(u => ({ label: u, value: u })),
+                  },
+                },
               ],
-              [{ field: 'startDate', placeholder: '开始时间', type: 'datePicker' }],
+              [{ field: 'test3', placeholder: 'test3' }],
+              [{ field: 'startDate', placeholder: '开始时间', type: 'datePicker', simple: true }],
               [{ field: 'rangeDate', placeholder: '测试', type: 'dateRangePicker' }],
             ]}
             reloadBtnRef={reloadBtnRef}
@@ -77,7 +87,6 @@ export default function() {
               {
                 mode: 'confirm',
                 text: 'confirm',
-                type: 'dashed',
                 props: {
                   title: 'title',
                   okText: '确认不？',

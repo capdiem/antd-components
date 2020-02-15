@@ -21,13 +21,13 @@ import Popconfirm, { PopconfirmProps } from "antd/lib/popconfirm";
 import Row from "antd/lib/row";
 import Select from "antd/lib/select";
 import Upload from "antd/lib/upload";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import { ReloadOutlined, SearchOutlined } from "@ant-design/icons";
 
 import { SelectProps } from "../form-modal/types";
-import { computeCell } from "../utils";
-import { Btn, Btns, BtnsGroups, FilterComponentProps, FilterItem } from "./types";
+import { computeCell, flatten } from "../utils";
+import { Btn, Btns, BtnsGroups, FilterComponentProps, FilterItem, FilterMode } from "./types";
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
@@ -37,6 +37,7 @@ type Props = FilterComponentProps;
 
 const Filter: React.FC<Props> = ({
   style,
+  mode,
   query,
   defaultValues,
   size = "middle",
@@ -47,6 +48,9 @@ const Filter: React.FC<Props> = ({
   onReload,
 }) => {
   const [form] = Form.useForm();
+
+  /** toggle between Simple and Advanced mode */
+  const [filterMode, setFilterMode] = useState<FilterMode>(mode ?? "advanced");
 
   useEffect(() => {
     if (query) {
@@ -80,10 +84,12 @@ const Filter: React.FC<Props> = ({
     }
   }
 
-  function renderFormItem(item: FilterItem<any>, lg: number) {
+  function renderFormItem(item: FilterItem<any>, mode: FilterMode, lg: number) {
     const { type, field, placeholder, label, props, ...itemProps } = item;
 
     let element: React.ReactElement;
+    const style: React.CSSProperties =
+      mode === undefined || mode === "advanced" ? { width: "100%" } : {};
 
     switch (type) {
       case "textarea":
@@ -99,7 +105,7 @@ const Filter: React.FC<Props> = ({
         element = (
           <InputNumber
             placeholder={placeholder || label}
-            style={{ width: "100%" }}
+            style={style}
             size={size}
             {...(props as InputNumberProps)}
           />
@@ -109,7 +115,7 @@ const Filter: React.FC<Props> = ({
         const { options, ...etc } = props as SelectProps;
 
         element = (
-          <Select placeholder={placeholder || label} style={{ width: "100%" }} size={size} {...etc}>
+          <Select placeholder={placeholder || label} style={style} size={size} {...etc}>
             {options.map((u) => (
               <Option key={u.value} value={u.value}>
                 {u.label}
@@ -125,7 +131,7 @@ const Filter: React.FC<Props> = ({
         element = (
           <Select
             placeholder={placeholder || label}
-            style={{ width: "100%" }}
+            style={style}
             size={size}
             allowClear
             showSearch
@@ -159,7 +165,7 @@ const Filter: React.FC<Props> = ({
             defaultActiveFirstOption={false}
             notFoundContent={null}
             placeholder={placeholder || label}
-            style={{ width: "100%" }}
+            style={style}
             {...etc}
           >
             {options.map((u) => (
@@ -177,7 +183,7 @@ const Filter: React.FC<Props> = ({
             size={size}
             changeOnSelect
             placeholder={placeholder || label}
-            style={{ width: "100%" }}
+            style={style}
             {...(props as CascaderProps)}
           />
         );
@@ -187,19 +193,14 @@ const Filter: React.FC<Props> = ({
           <RangePicker
             size={size}
             placeholder={[`${placeholder}开始时间`, `${placeholder}结束时间`]}
-            style={{ width: "100%" }}
+            style={style}
             {...(props as any)}
           />
         );
         break;
       case "datePicker":
         element = (
-          <DatePicker
-            size={size}
-            placeholder={placeholder}
-            style={{ width: "100%" }}
-            {...(props as any)}
-          />
+          <DatePicker size={size} placeholder={placeholder} style={style} {...(props as any)} />
         );
         break;
       case "input":
@@ -210,8 +211,14 @@ const Filter: React.FC<Props> = ({
         break;
     }
 
-    return (
+    return mode === undefined || mode === "advanced" ? (
       <Col lg={lg} md={24} sm={24} xs={24} key={field as string} style={{ marginBottom: 4 }}>
+        <Form.Item name={field as string} noStyle {...itemProps}>
+          {element}
+        </Form.Item>
+      </Col>
+    ) : (
+      <Col style={{ marginBottom: 4 }}>
         <Form.Item name={field as string} noStyle {...itemProps}>
           {element}
         </Form.Item>
@@ -220,12 +227,12 @@ const Filter: React.FC<Props> = ({
   }
 
   const cols: React.ReactNode[] = [];
-  items.forEach((items) => {
+  (filterMode === undefined || filterMode === "advanced" ? items : [items[0]]).forEach((items) => {
     const lg = computeCell(items.length);
     cols.push(
       ...items
         .filter((u) => u.visible === undefined || u.visible)
-        .map((item) => renderFormItem(item, lg))
+        .map((item) => renderFormItem(item, filterMode, lg))
     );
   });
 
@@ -336,7 +343,7 @@ const Filter: React.FC<Props> = ({
   }
 
   const rootStyle: React.CSSProperties = style || {
-    marginBottom: 10,
+    marginBottom: 6,
   };
 
   const formItemsGroupStyle: React.CSSProperties =
@@ -348,40 +355,69 @@ const Filter: React.FC<Props> = ({
 
   return (
     <div style={rootStyle}>
-      {!!cols.length && (
+      {!!cols.length && (filterMode === undefined || filterMode === "advanced") && (
         <Form form={form} initialValues={defaultValues}>
-          <Row gutter={8} style={formItemsGroupStyle}>
+          <Row gutter={4} style={formItemsGroupStyle}>
             {cols}
           </Row>
         </Form>
       )}
-      <Row justify="end" gutter={4}>
-        {btnElementGroups.map((btnElements, index) => (
-          <Col key={index}>
-            <ButtonGroup style={{ display: "flex" }} size={size}>
-              {btnElements}
-            </ButtonGroup>
-          </Col>
-        ))}
-        {cols.length > 0 && (
+      <Row justify="end" gutter={8}>
+        {!!cols.length && filterMode === "simple" && (
           <Col>
-            <ButtonGroup size={size}>
-              <Button
-                size={size}
-                type="primary"
-                icon={<SearchOutlined />}
-                onClick={handleOnSearch}
-              />
-              <Button
-                size={size}
-                type="primary"
-                icon={<ReloadOutlined />}
-                onClick={(e) => handleOnReload(e)}
-                ref={reloadBtnRef as any}
-              />
-            </ButtonGroup>
+            <Form form={form} initialValues={defaultValues}>
+              <Row justify="end" gutter={4}>
+                {cols}
+              </Row>
+            </Form>
           </Col>
         )}
+        <Col>
+          <Row gutter={4}>
+            {btnElementGroups.map((btnElements, index) => (
+              <Col style={{ marginBottom: 4 }}>
+                <ButtonGroup key={index} size={size} style={{ display: "flex" }}>
+                  {btnElements}
+                </ButtonGroup>
+              </Col>
+            ))}
+            {cols.length > 0 && (
+              <>
+                <Col style={{ marginBottom: 4 }}>
+                  <ButtonGroup size={size}>
+                    <Button
+                      size={size}
+                      type="primary"
+                      icon={<SearchOutlined />}
+                      onClick={handleOnSearch}
+                    />
+                    <Button
+                      size={size}
+                      type="primary"
+                      icon={<ReloadOutlined />}
+                      onClick={(e) => handleOnReload(e)}
+                      ref={reloadBtnRef as any}
+                    />
+                  </ButtonGroup>
+                </Col>
+                {mode !== undefined && (
+                  <Col style={{ marginBottom: 4 }}>
+                    <Button
+                      size={size}
+                      style={{ padding: 4 }}
+                      type="link"
+                      onClick={() =>
+                        setFilterMode((prev) => (prev === "advanced" ? "simple" : "advanced"))
+                      }
+                    >
+                      {filterMode === "advanced" ? "简单搜索" : "高级搜索"}
+                    </Button>
+                  </Col>
+                )}
+              </>
+            )}
+          </Row>
+        </Col>
       </Row>
     </div>
   );

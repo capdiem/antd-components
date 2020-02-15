@@ -27,12 +27,16 @@ export type Btn<T = any> = Omit<ButtonProps, "onClick"> & {
   onClick?: ((values?: T) => void) | ((file: File) => Promise<UploadFile>);
 };
 
+export declare type FilterMode = "simple" | "advanced";
+
 export interface FilterItem<T = any> {
   label?: string;
   field: keyof T;
   placeholder?: string;
   visible?: boolean;
   type?: FormItemType;
+  /** 当启用简单/高级搜索时有效 */
+  simple?: boolean;
   props?: DataEntryProps;
 }
 
@@ -45,6 +49,8 @@ export declare type ReloadBtnRef = {
 
 export interface FilterComponentProps<T = any> {
   style?: React.CSSProperties;
+  /** 不填或为undefined时不会显示高级搜索toggle按钮 */
+  mode?: FilterMode;
   query?: T;
   /** 默认值，调用`onReload`后设置的值 */
   defaultValues?: T;
