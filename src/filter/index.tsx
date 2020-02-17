@@ -62,7 +62,7 @@ const Filter: React.FC<Props> = ({
         form.setFieldsValue(query);
       }
     }
-  });
+  }, [query, defaultValues]);
 
   function handleOnSearch() {
     if (typeof onSearch === "function") {
