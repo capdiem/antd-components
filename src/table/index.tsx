@@ -29,6 +29,7 @@ function recursion(columns: TableColumnProps<any>[]) {
 const Table: React.FC<TableComponentProps<any>> = ({
   fullscreen: fullscreenAbility,
   fullscreenWidth = "95%",
+  fullscreenButtonProps = {},
   rowKey,
   columns,
   ...tableProps
@@ -62,10 +63,11 @@ const Table: React.FC<TableComponentProps<any>> = ({
     <div style={{ position: "relative" }}>
       {fullscreenAbility && (
         <Button
-          type="dashed"
+          type="link"
           icon={<FullscreenOutlined />}
-          style={{ position: "absolute", zIndex: 1, left: 0 }}
+          style={{ position: "absolute", zIndex: 1, right: 0 }}
           onClick={() => setFullscreen(true)}
+          {...fullscreenButtonProps}
         />
       )}
       {!fullscreen && (
