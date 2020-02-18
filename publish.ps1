@@ -56,7 +56,7 @@ else {
 
     $selectedChoice = $Host.UI.PromptForChoice("Select update way", "请选择此版本的改动程度，选择后会在上个版本号对应的节点加一：`r`n主版本号：当你做了不兼容的 API 修改`r`n次版本号：当你做了向下兼容的功能性新增`r`n修订号：当你做了向下兼容的问题修正`r`n测试增量：测试版本号加一", $options, 2)
 
-    [string]$currentVersionString = npm.cmd dist-tag ls "@capdiem/antd-components" | Select-String $tag
+    [string]$currentVersionString = npm.cmd dist-tag ls "@capdiem/antd-components" | Select-String "$tag`:"
 
     if ($selectedChoice -eq 3) {
       if ($null -eq $currentVersionString) {
