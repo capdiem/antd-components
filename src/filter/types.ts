@@ -51,6 +51,7 @@ export interface FilterComponentProps<T = any> {
   style?: React.CSSProperties;
   /** 不填或为undefined时不会显示高级搜索toggle按钮 */
   mode?: FilterMode;
+  onModeChange?: (mode: FilterMode) => void;
   query?: T;
   /** 默认值，调用`onReload`后设置的值 */
   defaultValues?: T;

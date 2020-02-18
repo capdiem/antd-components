@@ -44,6 +44,7 @@ export default function() {
         <Col span={12}>
           <Filter
             mode="simple"
+            onModeChange={mode => console.log('mode', mode)}
             query={{
               test: '123456789',
               startDate: moment('2020-01-10 13:12:22'),

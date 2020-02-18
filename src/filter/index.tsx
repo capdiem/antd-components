@@ -38,6 +38,7 @@ type Props = FilterComponentProps;
 const Filter: React.FC<Props> = ({
   style,
   mode,
+  onModeChange,
   query,
   defaultValues,
   size = "middle",
@@ -406,9 +407,12 @@ const Filter: React.FC<Props> = ({
                       size={size}
                       style={{ padding: 4 }}
                       type="link"
-                      onClick={() =>
-                        setFilterMode((prev) => (prev === "advanced" ? "simple" : "advanced"))
-                      }
+                      onClick={() => {
+                        const toggledMode = filterMode === "advanced" ? "simple" : "advanced";
+
+                        setFilterMode(toggledMode);
+                        onModeChange && onModeChange(toggledMode);
+                      }}
                     >
                       {filterMode === "advanced" ? "简单搜索" : "高级搜索"}
                     </Button>
