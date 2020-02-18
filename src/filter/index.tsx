@@ -219,7 +219,7 @@ const Filter: React.FC<Props> = ({
         </Form.Item>
       </Col>
     ) : (
-      <Col style={{ marginBottom: 4 }}>
+      <Col key={field as string} style={{ marginBottom: 4 }}>
         <Form.Item name={field as string} noStyle {...itemProps}>
           {element}
         </Form.Item>
