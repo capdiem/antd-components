@@ -13,6 +13,7 @@ import { InputNumberProps } from "antd/lib/input-number";
 import { ModalProps as AntdModalProps } from "antd/lib/modal";
 import { SelectProps as AntdSelectProps } from "antd/lib/select";
 import { SwitchProps } from "antd/lib/switch";
+import { TreeSelectProps } from "antd/lib/tree-select";
 import {
   UploadFile as AntdUploadField,
   UploadProps as AntdUploadProps,
@@ -29,6 +30,7 @@ export declare type DataEntryType =
   | "select"
   | "searchableSelect"
   | "dynamicSelect"
+  | "treeSelect"
   | "time"
   | "cascader"
   | "upload-excel"
@@ -48,7 +50,6 @@ export declare type UploadProps = AntdUploadProps & {
 export declare type SelectProps = Omit<AntdSelectProps<any>, "options"> & {
   options: Array<SelectOption>;
 };
-
 declare type PickerSharedProps<DateType> = Pick<
   PickerProps<DateType>,
   | "allowClear"
@@ -101,6 +102,7 @@ export declare type SharedDataEntryProps =
   | InputNumberProps
   | TextAreaProps
   | SelectProps
+  | TreeSelectProps<any>
   | CascaderProps
   | SwitchProps
   | UploadProps

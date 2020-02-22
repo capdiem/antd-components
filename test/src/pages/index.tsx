@@ -274,6 +274,31 @@ export default function() {
                     }),
                 },
               },
+              {
+                type: 'treeSelect',
+                field: 'tree',
+                label: '树选择',
+                props: {
+                  treeData: [
+                    {
+                      title: '1',
+                      key: '1',
+                      children: [
+                        { title: '1-1', key: '1-1' },
+                        { title: '1-2', key: '1-2', children: [] },
+                      ],
+                    },
+                    {
+                      title: '2',
+                      key: '2',
+                      children: [
+                        { title: '2-1', key: '2-1' },
+                        { title: '2-2', key: '2-2', children: [] },
+                      ],
+                    },
+                  ],
+                },
+              },
             ],
           },
           {

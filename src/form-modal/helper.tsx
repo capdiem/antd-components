@@ -7,6 +7,7 @@ import "antd/lib/select/style";
 import "antd/lib/upload/style";
 import "antd/lib/switch/style";
 import "antd/lib/form/style";
+import "antd/lib/tree-select/style";
 
 import Button from "antd/lib/button";
 import Cascader, { CascaderProps } from "antd/lib/cascader";
@@ -22,6 +23,7 @@ import React from "react";
 import { UploadOutlined } from "@ant-design/icons";
 
 import { DataEntryProps, DataEntryType, FormItem, SelectProps, Size, UploadProps } from "./types";
+import TreeSelect, { TreeSelectProps } from "antd/lib/tree-select";
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -108,6 +110,12 @@ function renderDataEntry(
             </Option>
           ))}
         </Select>
+      );
+      break;
+    }
+    case "treeSelect": {
+      element = (
+        <TreeSelect size={size} style={{ width: "100%" }} {...(props as TreeSelectProps<any>)} />
       );
       break;
     }
