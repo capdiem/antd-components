@@ -185,7 +185,7 @@ export default function() {
         labelCol={4}
         wrapperCol={20}
         formItemCol={8}
-        initialValues={
+        defaultValues={
           formModalVisibleWithoutData
             ? undefined
             : {

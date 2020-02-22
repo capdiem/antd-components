@@ -35,6 +35,7 @@ const FormModal = forwardRef<FormInstance, Props>((props, ref) => {
     hasFeedback = false,
     formItemStyle = { marginBottom: 0 },
     initialValues,
+    defaultValues,
     title,
     visible,
     size = "middle",
@@ -50,15 +51,15 @@ const FormModal = forwardRef<FormInstance, Props>((props, ref) => {
   const [fileList, setFileList] = useState<any>({});
   const [form] = Form.useForm();
 
-  function initFileList(items: FormItem[]) {
+  function initFileList(items: FormItem[], values: any) {
     const obj: object = {};
 
     items
       .filter((u) => u.type === "upload-image")
       .forEach((u) => {
-        if (initialValues && initialValues[u.field]) {
-          obj[u.field] = [initialValues[u.field]];
-          initialValues[u.field] = [initialValues[u.field]];
+        if (values && values[u.field]) {
+          obj[u.field] = [values[u.field]];
+          values[u.field] = [values[u.field]];
         } else {
           obj[u.field] = [];
         }
@@ -67,7 +68,7 @@ const FormModal = forwardRef<FormInstance, Props>((props, ref) => {
     items
       .filter((u) => u.type === "upload-images")
       .forEach((u) => {
-        if (initialValues && initialValues[u.field]) obj[u.field] = initialValues[u.field];
+        if (values && values[u.field]) obj[u.field] = values[u.field];
         else obj[u.field] = [];
       });
 
@@ -78,15 +79,22 @@ const FormModal = forwardRef<FormInstance, Props>((props, ref) => {
     let _fileList: object = {};
     if (formItemsGroups) {
       formItemsGroups.forEach(
-        ({ formItems }) => (_fileList = { ..._fileList, ...initFileList(formItems) })
+        ({ formItems }) =>
+          (_fileList = { ..._fileList, ...initFileList(formItems, initialValues || defaultValues) })
       );
     } else {
-      _fileList = initFileList(formItems);
+      _fileList = initFileList(formItems, initialValues || defaultValues);
     }
     setFileList(_fileList);
 
     // work with `form.resetFields()` in handleCancel()
-    initialValues ? form.setFieldsValue(initialValues) : form.resetFields();
+    if (initialValues) {
+      form.setFieldsValue(initialValues);
+    } else if (defaultValues) {
+      form.setFieldsValue(defaultValues);
+    } else {
+      form.resetFields();
+    }
   }, [visible]);
 
   const formProps: FormProps = {
