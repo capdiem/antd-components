@@ -22,6 +22,7 @@ import { Moment } from "moment";
 import { FieldProps as RcFieldProps } from "rc-field-form/lib/Field";
 import { PickerPanelDateProps } from "rc-picker/lib/PickerPanel";
 import { SizeType } from "antd/lib/config-provider/SizeContext";
+import { OptionData } from "rc-select/lib/interface";
 
 export declare type DataEntryType =
   | "input"
@@ -39,7 +40,7 @@ export declare type DataEntryType =
   | "upload-image"
   | "upload-images";
 export declare type Size = SizeType;
-export declare type SelectOption = { label: string; value: string | number; disabled?: boolean };
+
 export declare type UploadFile = Pick<AntdUploadField, "url"> & {
   id: number | string;
 };
@@ -48,7 +49,7 @@ export declare type UploadProps = AntdUploadProps & {
   onUpload?: (file: File) => Promise<UploadFile>;
 };
 export declare type SelectProps = Omit<AntdSelectProps<any>, "options"> & {
-  options: Array<SelectOption>;
+  options: OptionData[];
 };
 declare type PickerSharedProps<DateType> = Pick<
   PickerProps<DateType>,
