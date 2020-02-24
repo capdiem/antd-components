@@ -15,22 +15,37 @@ import React, { useState } from "react";
 import { EditOutlined } from "@ant-design/icons";
 import { Size } from "../form-modal/types";
 
-export interface SelectOption {
-  label: string;
-  value: any;
-  disabled?: boolean;
-}
+import { InputProps as AntdInputProps } from "antd/lib/input";
+import { InputNumberProps as AntdInputNumberProps } from "antd/lib/input-number";
+import { SelectProps as FromModalSelectProps } from "../form-modal/types";
+
+declare type InputProps = Omit<
+  AntdInputProps,
+  "onChange" | "value" | "size" | "onBlur" | "onPressEnter" | "autoFocus"
+>;
+
+declare type InputNumberProps = Omit<
+  AntdInputNumberProps,
+  "onChange" | "value" | "size" | "onBlur" | "onPressEnter" | "autoFocus"
+>;
+
+declare type SelectProps = Omit<
+  FromModalSelectProps,
+  "size" | "onBlur" | "onSelect" | "value" | "autoFocus"
+>;
+
+export declare type SharedDataEntryProps = InputProps | InputNumberProps | SelectProps;
 
 export interface EditableTextComponentProps {
   children: string;
   onOk: (value: any) => Promise<any>;
   needOnOkLoading?: boolean;
   size?: Size;
-  textType?: "link" | "text";
-  itemType?: "input" | "inputNumber" | "select";
+  style?: "link" | "text";
+  type?: "input" | "inputNumber" | "select";
   rule?: "string" | "email";
-  options?: SelectOption[];
-  [prop: string]: any;
+  rootStyle?: React.CSSProperties;
+  props?: SharedDataEntryProps;
 }
 
 const Option = Select.Option;
@@ -55,31 +70,29 @@ const EditableText: React.FC<EditableTextComponentProps> = ({
   children,
   onOk,
   size = "middle",
-  textType = "link",
-  itemType = "input",
+  style = "link",
+  type = "input",
   rule = "string",
-  options = [],
   needOnOkLoading = true,
-  ...props
+  rootStyle,
+  props,
 }) => {
   const [editable, setEditable] = useState(false);
   const [itemValue, setItemValue] = useState(children);
   const [text, setText] = useState(children);
   const [spinning, setSpinning] = useState(false);
 
-  function onBlur(e: any) {
-    const value = e.target.value.trim();
-
-    if (validate(rule, value)) {
+  function onBlur() {
+    if (validate(rule, itemValue)) {
       setEditable(false);
       setSpinning(true);
 
-      const promise = onOk(value);
+      const promise = onOk(itemValue);
       // eslint-disable-next-line @typescript-eslint/no-misused-promises
       if (promise) {
         promise
           .then(() => {
-            setText(value);
+            setText(itemValue);
             setSpinning(false);
           })
           .catch(() => {
@@ -91,18 +104,14 @@ const EditableText: React.FC<EditableTextComponentProps> = ({
     }
   }
 
-  function onChange(e: any) {
-    setItemValue(e.target.value);
-  }
-
-  function onSelect(value: any) {
+  function onChange(value: any) {
     setItemValue(value);
   }
 
   let element: React.ReactElement;
 
   if (editable) {
-    if (itemType === "inputNumber") {
+    if (type === "inputNumber") {
       element = (
         <InputNumber
           size={size}
@@ -111,19 +120,20 @@ const EditableText: React.FC<EditableTextComponentProps> = ({
           value={Number(itemValue) || 0}
           onChange={onChange}
           autoFocus
-          {...props}
+          {...(props as InputNumberProps)}
         />
       );
-    } else if (itemType === "select") {
+    } else if (type === "select") {
+      const { options, ...etc } = props as SelectProps;
       element = (
         <Select
           size={size}
           style={{ width: "100%" }}
           onBlur={onBlur}
-          onSelect={onSelect}
+          onChange={onChange}
           value={itemValue}
           autoFocus
-          {...props}
+          {...etc}
         >
           {options.map(({ label, value, disabled = false }) => (
             <Option value={value} key={value} disabled={disabled}>
@@ -141,16 +151,20 @@ const EditableText: React.FC<EditableTextComponentProps> = ({
           value={itemValue}
           onChange={onChange}
           autoFocus
-          {...props}
+          {...(props as InputProps)}
         />
       );
     }
   } else {
-    if (textType === "link") {
-      element = <a onClick={() => setEditable(true)}>{text}</a>;
+    if (style === "link") {
+      element = (
+        <div style={rootStyle}>
+          <a onClick={() => setEditable(true)}>{text}</a>
+        </div>
+      );
     } else {
       element = (
-        <div>
+        <div style={rootStyle}>
           <span>{text}</span>
           <a onClick={() => setEditable(true)} style={{ marginLeft: 4 }}>
             <EditOutlined />

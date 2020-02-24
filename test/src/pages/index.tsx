@@ -11,7 +11,7 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import { PlusOutlined, UploadOutlined } from '@ant-design/icons';
 
-import { Dividers, Filter, FormModal, Table, TableModal } from '../../../src';
+import { Dividers, Filter, FormModal, Table, TableModal, EditableText } from '../../../src';
 import { ReloadBtnRef } from '../../../src/filter/types';
 import { TableColumnProps } from '../../../src/table/types';
 import styles from './index.css';
@@ -26,8 +26,29 @@ export default function() {
   useEffect(() => {
     setColumns([
       { dataIndex: 'name', title: '名称' },
-      { dataIndex: 'age', title: '年龄' },
-      { dataIndex: 'gender', title: '性别' },
+      {
+        dataIndex: 'age',
+        title: '年龄',
+        render: v => (
+          <EditableText type="inputNumber" style="link" onOk={value => console.log(value)}>
+            {v}
+          </EditableText>
+        ),
+      },
+      {
+        dataIndex: 'gender',
+        title: '性别',
+        render: v => (
+          <EditableText
+            type="select"
+            style="text"
+            props={{ options: ['woman', 'man'].map(u => ({ label: u, value: u })) }}
+            onOk={value => console.log(value)}
+          >
+            {v}
+          </EditableText>
+        ),
+      },
     ]);
   }, []);
 
