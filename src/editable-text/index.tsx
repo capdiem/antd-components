@@ -10,7 +10,7 @@ import InputNumber from "antd/lib/input-number";
 import message from "antd/lib/message";
 import Select from "antd/lib/select";
 import Spin from "antd/lib/spin";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { EditOutlined } from "@ant-design/icons";
 import { Size } from "../form-modal/types";
@@ -36,14 +36,20 @@ declare type SelectProps = Omit<
 
 export declare type SharedDataEntryProps = InputProps | InputNumberProps | SelectProps;
 
+export declare type Type = "input" | "inputNumber" | "select";
+export declare type Rule = "string" | "email";
+export declare type Style = "link" | "text";
+export declare type Value = string | number;
+
 export interface EditableTextComponentProps {
-  children: string;
+  children: Value;
+  initialValue: Value;
   onOk: (value: any) => Promise<any>;
   needOnOkLoading?: boolean;
   size?: Size;
-  style?: "link" | "text";
-  type?: "input" | "inputNumber" | "select";
-  rule?: "string" | "email";
+  style?: Style;
+  type?: Type;
+  rule?: Rule;
   rootStyle?: React.CSSProperties;
   props?: SharedDataEntryProps;
 }
@@ -67,7 +73,7 @@ function validate(rule: string, value: any) {
 }
 
 const EditableText: React.FC<EditableTextComponentProps> = ({
-  children,
+  initialValue,
   onOk,
   size = "middle",
   style = "link",
@@ -78,21 +84,35 @@ const EditableText: React.FC<EditableTextComponentProps> = ({
   props,
 }) => {
   const [editable, setEditable] = useState(false);
-  const [itemValue, setItemValue] = useState(children);
-  const [text, setText] = useState(children);
+  const [value, setValue] = useState(initialValue);
   const [spinning, setSpinning] = useState(false);
 
+  const [children, setChildren] = useState<React.ReactNode>();
+
+  function setChildrenByType(value: Value, type: Type) {
+    if (type === "inputNumber" || type === "input") {
+      setChildren(value);
+    } else {
+      const item = (props as SelectProps).options.find((u) => u.value == value);
+      setChildren(item.label);
+    }
+  }
+
+  useEffect(() => {
+    setChildrenByType(initialValue, type);
+  }, []);
+
   function onBlur() {
-    if (validate(rule, itemValue)) {
+    if (validate(rule, value)) {
       setEditable(false);
       setSpinning(true);
 
-      const promise = onOk(itemValue);
+      const promise = onOk(value);
       // eslint-disable-next-line @typescript-eslint/no-misused-promises
       if (promise) {
         promise
           .then(() => {
-            setText(itemValue);
+            setChildrenByType(value, type);
             setSpinning(false);
           })
           .catch(() => {
@@ -105,7 +125,7 @@ const EditableText: React.FC<EditableTextComponentProps> = ({
   }
 
   function onChange(value: any) {
-    setItemValue(value);
+    setValue(value);
   }
 
   let element: React.ReactElement;
@@ -117,7 +137,7 @@ const EditableText: React.FC<EditableTextComponentProps> = ({
           size={size}
           onBlur={onBlur}
           onPressEnter={onBlur}
-          value={Number(itemValue) || 0}
+          value={Number(value) || 0}
           onChange={onChange}
           autoFocus
           {...(props as InputNumberProps)}
@@ -131,7 +151,7 @@ const EditableText: React.FC<EditableTextComponentProps> = ({
           style={{ width: "100%" }}
           onBlur={onBlur}
           onChange={onChange}
-          value={itemValue}
+          value={value}
           autoFocus
           {...etc}
         >
@@ -148,7 +168,7 @@ const EditableText: React.FC<EditableTextComponentProps> = ({
           size={size}
           onBlur={onBlur}
           onPressEnter={onBlur}
-          value={itemValue}
+          value={value}
           onChange={onChange}
           autoFocus
           {...(props as InputProps)}
@@ -159,13 +179,13 @@ const EditableText: React.FC<EditableTextComponentProps> = ({
     if (style === "link") {
       element = (
         <div style={rootStyle}>
-          <a onClick={() => setEditable(true)}>{text}</a>
+          <a onClick={() => setEditable(true)}>{children}</a>
         </div>
       );
     } else {
       element = (
         <div style={rootStyle}>
-          <span>{text}</span>
+          <span>{children}</span>
           <a onClick={() => setEditable(true)} style={{ marginLeft: 4 }}>
             <EditOutlined />
           </a>

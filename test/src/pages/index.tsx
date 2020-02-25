@@ -30,9 +30,12 @@ export default function() {
         dataIndex: 'age',
         title: '年龄',
         render: v => (
-          <EditableText type="inputNumber" style="link" onOk={value => console.log(value)}>
-            {v}
-          </EditableText>
+          <EditableText
+            type="inputNumber"
+            style="link"
+            initialValue={v}
+            onOk={value => console.log(value)}
+          />
         ),
       },
       {
@@ -42,11 +45,15 @@ export default function() {
           <EditableText
             type="select"
             style="text"
-            props={{ options: ['woman', 'man'].map(u => ({ label: u, value: u })) }}
+            props={{
+              options: [
+                { label: 'M', value: 'man' },
+                { label: 'W', value: 'woman' },
+              ],
+            }}
+            initialValue={v}
             onOk={value => console.log(value)}
-          >
-            {v}
-          </EditableText>
+          />
         ),
       },
     ]);
