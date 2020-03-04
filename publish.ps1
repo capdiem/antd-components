@@ -24,7 +24,7 @@ Write-Host 'Validating...' -ForegroundColor Yellow
 [string]$currentBranchString = git.ps1 branch --list | Select-String "^\*"
 [string]$currentBranch = $currentBranchString.Remove(0, 2)
 
-if (($currentBranch -eq $prodBranch) -and ($tag -ne 'latest' -or $tag -ne 'custom')) {
+if (($currentBranch -eq $prodBranch) -and ($tag -ne 'latest')) {
   Write-Host "The branch is $currentBranch (a production branch) but your input tag is $tag, it is not recommend to publish a development package from production branch." -ForegroundColor Red
   return
 }
