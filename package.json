@@ -32,8 +32,8 @@
   },
   "homepage": "https://github.com/capdiem/antd-components#readme",
   "dependencies": {
-    "@ant-design/icons": "^4.0.0-rc.0",
-    "antd": "^4.0.0-rc.4",
+    "@ant-design/icons": "^4.0.2",
+    "antd": "^4.0.0",
     "radium": "^0.26.0",
     "react": "^16.12.0",
     "react-dom": "^16.12.0"
