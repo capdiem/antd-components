@@ -18,9 +18,9 @@ function recursion(columns: TableColumnProps<any>[]) {
     .map((item) => {
       if (item.children) {
         item.children = recursion(item.children);
-      } else if (!item.align) {
-        item.align = "center";
       }
+
+      item.align = item.align || "center";
 
       return item;
     });

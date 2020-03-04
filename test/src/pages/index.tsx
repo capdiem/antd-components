@@ -11,7 +11,7 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import { PlusOutlined, UploadOutlined } from '@ant-design/icons';
 
-import { Dividers, Filter, FormModal, Table, TableModal, EditableText } from '../../../src';
+import { Dividers, EditableText, Filter, FormModal, Table, TableModal } from '../../../src';
 import { ReloadBtnRef } from '../../../src/filter/types';
 import { TableColumnProps } from '../../../src/table/types';
 import styles from './index.css';
@@ -25,36 +25,42 @@ export default function() {
 
   useEffect(() => {
     setColumns([
-      { dataIndex: 'name', title: '名称' },
+      { key: 'requiredInfo', title: '必填信息', children: [{ dataIndex: 'name', title: '姓名' }] },
       {
-        dataIndex: 'age',
-        title: '年龄',
-        render: v => (
-          <EditableText
-            type="inputNumber"
-            style="link"
-            initialValue={v}
-            onOk={value => console.log(value)}
-          />
-        ),
-      },
-      {
-        dataIndex: 'gender',
-        title: '性别',
-        render: v => (
-          <EditableText
-            type="select"
-            style="text"
-            props={{
-              options: [
-                { label: 'M', value: 'man' },
-                { label: 'W', value: 'woman' },
-              ],
-            }}
-            initialValue={v}
-            onOk={value => console.log(value)}
-          />
-        ),
+        title: '基础信息',
+        key: 'basicInfo',
+        children: [
+          {
+            dataIndex: 'age',
+            title: '年龄',
+            render: v => (
+              <EditableText
+                type="inputNumber"
+                style="link"
+                initialValue={v}
+                onOk={value => console.log(value)}
+              />
+            ),
+          },
+          {
+            dataIndex: 'gender',
+            title: '性别',
+            render: v => (
+              <EditableText
+                type="select"
+                style="text"
+                props={{
+                  options: [
+                    { label: 'M', value: 'man' },
+                    { label: 'W', value: 'woman' },
+                  ],
+                }}
+                initialValue={v}
+                onOk={value => console.log(value)}
+              />
+            ),
+          },
+        ],
       },
     ]);
   }, []);
