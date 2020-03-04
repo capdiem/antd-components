@@ -1,5 +1,6 @@
 import { CascaderProps } from "antd/lib/cascader";
 import { ColProps } from "antd/lib/col";
+import {} from "antd/lib/config-provider";
 import {
   PickerDateProps,
   PickerProps,
@@ -21,7 +22,6 @@ import {
 import { Moment } from "moment";
 import { FieldProps as RcFieldProps } from "rc-field-form/lib/Field";
 import { PickerPanelDateProps } from "rc-picker/lib/PickerPanel";
-import { SizeType } from "antd/lib/config-provider/SizeContext";
 import { OptionData } from "rc-select/lib/interface";
 
 export declare type DataEntryType =
@@ -39,7 +39,7 @@ export declare type DataEntryType =
   | "switch"
   | "upload-image"
   | "upload-images";
-export declare type Size = SizeType;
+export declare type Size = "large" | "default" | "small";
 
 export declare type UploadFile = Pick<AntdUploadField, "url"> & {
   id: number | string;

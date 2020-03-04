@@ -5,19 +5,16 @@ import "antd/lib/message/style";
 import "antd/lib/select/style";
 import "antd/lib/spin/style";
 
-import Input from "antd/lib/input";
-import InputNumber from "antd/lib/input-number";
+import Input, { InputProps as AntdInputProps } from "antd/lib/input";
+import InputNumber, { InputNumberProps as AntdInputNumberProps } from "antd/lib/input-number";
 import message from "antd/lib/message";
 import Select from "antd/lib/select";
 import Spin from "antd/lib/spin";
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import { EditOutlined } from "@ant-design/icons";
-import { Size } from "../form-modal/types";
 
-import { InputProps as AntdInputProps } from "antd/lib/input";
-import { InputNumberProps as AntdInputNumberProps } from "antd/lib/input-number";
-import { SelectProps as FromModalSelectProps } from "../form-modal/types";
+import { SelectProps as FromModalSelectProps, Size } from "../form-modal/types";
 
 declare type InputProps = Omit<
   AntdInputProps,
@@ -75,7 +72,7 @@ function validate(rule: string, value: any) {
 const EditableText: React.FC<EditableTextComponentProps> = ({
   initialValue,
   onOk,
-  size = "middle",
+  size = "default",
   style = "link",
   type = "input",
   rule = "string",
@@ -195,7 +192,7 @@ const EditableText: React.FC<EditableTextComponentProps> = ({
   }
 
   return needOnOkLoading ? (
-    <Spin size={size === "middle" ? "default" : size} spinning={spinning}>
+    <Spin size={size} spinning={spinning}>
       {element}
     </Spin>
   ) : (

@@ -17,13 +17,13 @@ import Input, { InputProps, TextAreaProps } from "antd/lib/input";
 import InputNumber, { InputNumberProps } from "antd/lib/input-number";
 import Select from "antd/lib/select";
 import Switch, { SwitchProps } from "antd/lib/switch";
+import TreeSelect, { TreeSelectProps } from "antd/lib/tree-select";
 import Upload from "antd/lib/upload";
 import React from "react";
 
 import { UploadOutlined } from "@ant-design/icons";
 
 import { DataEntryProps, DataEntryType, FormItem, SelectProps, Size, UploadProps } from "./types";
-import TreeSelect, { TreeSelectProps } from "antd/lib/tree-select";
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -31,7 +31,7 @@ const { Option } = Select;
 function renderDataEntry(
   props: DataEntryProps,
   type: DataEntryType = "input",
-  size: Size = "middle"
+  size: Size = "default"
 ) {
   let element: React.ReactElement;
 
@@ -177,7 +177,7 @@ function renderDataEntry(
  * @param style
  * @description labelCol and wrapperCol form Form props will not work
  */
-function renderFormItem(item: FormItem, size: Size = "middle", style?: React.CSSProperties) {
+function renderFormItem(item: FormItem, size: Size = "default", style?: React.CSSProperties) {
   const {
     field,
     label,
