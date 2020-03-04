@@ -1,6 +1,6 @@
-import "antd/es/tooltip/style";
+import "antd/lib/tooltip/style";
 
-import Tooltip from "antd/es/tooltip";
+import Tooltip from "antd/lib/tooltip";
 import React from "react";
 
 export interface SubstringTextComponentProps {

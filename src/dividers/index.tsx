@@ -1,6 +1,6 @@
-import "antd/es/divider/style";
+import "antd/lib/divider/style";
 
-import Divider, { DividerProps } from "antd/es/divider";
+import Divider, { DividerProps } from "antd/lib/divider";
 import Radium from "radium";
 import React from "react";
 
@@ -27,7 +27,7 @@ const Dividers: React.FC<DividerComponentProps> = ({
   const _style: React.CSSProperties =
     type === "vertical" ? { display: "flex", justifyContent: "center" } : {};
 
-  const _rowStyle: Radium.StyleProps['rules'] = {
+  const _rowStyle: Radium.StyleProps["rules"] = {
     ":hover": {
       opacity: 0.7,
     },

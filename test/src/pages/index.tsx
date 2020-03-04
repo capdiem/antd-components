@@ -5,26 +5,61 @@ import Button from 'antd/es/button';
 import Col from 'antd/es/col';
 import Divider from 'antd/es/divider';
 import Row from 'antd/es/row';
-import React, { useEffect, useState } from 'react';
+import { FormInstance } from 'antd/lib/form';
+import moment from 'moment';
+import React, { useEffect, useRef, useState } from 'react';
 
-import { Dividers, Filter, FormModal, Table } from '../../../src';
+import { PlusOutlined, UploadOutlined } from '@ant-design/icons';
+
+import { Dividers, Filter, FormModal, Table, TableModal, EditableText } from '../../../src';
+import { ReloadBtnRef } from '../../../src/filter/types';
 import { TableColumnProps } from '../../../src/table/types';
-// import { Dividers, Table } from '../../../lib';
 import styles from './index.css';
 
 export default function() {
+  const formRef = useRef<FormInstance>(null);
   const [columns, setColumns] = useState<TableColumnProps<any>[]>([]);
   const [formModalVisible, setFormModalVisible] = useState<boolean>(false);
+  const [formModalVisibleWithoutData, setFormModalVisibleWithoutData] = useState<boolean>(false);
+  const [tableModalVisible, setTableModalVisible] = useState<boolean>(false);
 
   useEffect(() => {
     setColumns([
       { dataIndex: 'name', title: '名称' },
-      { dataIndex: 'age', title: '年龄' },
-      { dataIndex: 'gender', title: '性别' },
+      {
+        dataIndex: 'age',
+        title: '年龄',
+        render: v => (
+          <EditableText
+            type="inputNumber"
+            style="link"
+            initialValue={v}
+            onOk={value => console.log(value)}
+          />
+        ),
+      },
+      {
+        dataIndex: 'gender',
+        title: '性别',
+        render: v => (
+          <EditableText
+            type="select"
+            style="text"
+            props={{
+              options: [
+                { label: 'M', value: 'man' },
+                { label: 'W', value: 'woman' },
+              ],
+            }}
+            initialValue={v}
+            onOk={value => console.log(value)}
+          />
+        ),
+      },
     ]);
   }, []);
 
-  let reloadBtnRef: any;
+  const reloadBtnRef = useRef<ReloadBtnRef>(null);
 
   return (
     <div className={styles.normal}>
@@ -34,21 +69,62 @@ export default function() {
             Form Modal
           </Button>
         </Col>
-        <Col span={6}>
+        <Col span={12}>
           <Filter
-            formItemsGroups={[[{ field: 'test', placeholder: 'test' }]]}
-            onRefReloadBtn={ref => (reloadBtnRef = ref)}
+            mode="simple"
+            onModeChange={mode => console.log('mode', mode)}
+            query={{
+              test: '123456789',
+              startDate: moment('2020-01-10 13:12:22'),
+            }}
+            defaultValues={{
+              test2: '2222222',
+            }}
+            items={[
+              [
+                { field: 'test', placeholder: 'test' },
+                { field: 'test2', placeholder: 'test2', simple: true },
+                {
+                  type: 'select',
+                  field: 'test4',
+                  placeholder: 'test4',
+                  props: {
+                    options: ['1', '2', '3'].map(u => ({ label: u, value: u })),
+                  },
+                },
+              ],
+              [{ field: 'test3', placeholder: 'test3' }],
+              [{ field: 'startDate', placeholder: '开始时间', type: 'datePicker', simple: true }],
+              [{ field: 'rangeDate', placeholder: '测试', type: 'dateRangePicker' }],
+            ]}
+            reloadBtnRef={reloadBtnRef}
+            onSearch={values => console.log('values', values)}
             onReload={() => console.log('reload')}
             btns={[
               {
                 mode: 'upload',
-                accept: '.xlsx, .xls',
-                icon: 'upload',
-                showUploadList: false,
-                onUpload(file) {
+                icon: <UploadOutlined />,
+                props: {
+                  accept: '.xlsx, .xls',
+                  showUploadList: false,
+                },
+                onClick(file: File) {
                   console.log('file', file);
                   return Promise.resolve('test');
                 },
+              },
+              {
+                mode: 'confirm',
+                text: 'confirm',
+                props: {
+                  title: 'title',
+                  okText: '确认不？',
+                },
+                onClick: (values: any) => console.log('values', values),
+              },
+              {
+                icon: <PlusOutlined />,
+                onClick: () => setFormModalVisibleWithoutData(true),
               },
             ]}
           />
@@ -56,11 +132,28 @@ export default function() {
             type="dashed"
             style={{ width: '100%' }}
             onClick={() => {
-              reloadBtnRef.handleClick(false);
+              reloadBtnRef.current?.handleClick(false);
             }}
           >
             reloadBtnRef
           </Button>
+        </Col>
+        <Col span={6}>
+          <Button type="primary" onClick={() => setTableModalVisible(true)}>
+            Show Table Modal
+          </Button>
+          <TableModal
+            modal={{
+              visible: tableModalVisible,
+              onCancel: () => setTableModalVisible(false),
+            }}
+            table={{
+              columns: columns,
+              dataSource: [{ name: 'cyx', age: 25, gender: 'man' }],
+              bordered: true,
+              rowKey: 'name',
+            }}
+          />
         </Col>
       </Row>
       <Divider />
@@ -87,6 +180,7 @@ export default function() {
             columns={columns}
             dataSource={[{ name: 'cyx', age: 25, gender: 'man' }]}
             bordered={true}
+            rowKey="name"
           />
         </Col>
         <Col span={10}>
@@ -98,44 +192,159 @@ export default function() {
             columns={columns}
             dataSource={[{ name: 'cyx', age: 25, gender: 'man' }]}
             bordered={true}
+            rowKey="name"
           />
         </Col>
       </Row>
       <FormModal
-        visible={formModalVisible}
+        title="Form Modal"
+        tips={
+          <Button
+            type={'dashed'}
+            style={{ width: '100%' }}
+            onClick={() => console.log(formRef.current?.getFieldsValue())}
+          >
+            FormModal Ref getValuesValue
+          </Button>
+        }
+        ref={formRef}
+        visible={formModalVisible || formModalVisibleWithoutData}
+        layout="vertical"
         labelCol={4}
         wrapperCol={20}
-        formItems={[
+        formItemCol={8}
+        defaultValues={
+          formModalVisibleWithoutData
+            ? undefined
+            : {
+                name: 'cyx',
+                multipleImageId: [
+                  {
+                    id: -1000,
+                    uid: -1000,
+                    name: '主图.png',
+                    status: 'done',
+                    url:
+                      'http://qstbgmall.oss-cn-hangzhou.aliyuncs.com/gms/mainImage/微信图片_20191115111055_191115163314839.png',
+                  },
+                  {
+                    id: -1001,
+                    uid: -1001,
+                    name: '主图.png',
+                    status: 'done',
+                    url:
+                      'http://qstbgmall.oss-cn-hangzhou.aliyuncs.com/gms/mainImage/微信图片_20191115111055_191115163314839.png',
+                  },
+                ],
+                singleImageId: {
+                  id: -1001,
+                  uid: -1001,
+                  name: '主图.png',
+                  status: 'done',
+                  url:
+                    'http://qstbgmall.oss-cn-hangzhou.aliyuncs.com/gms/mainImage/微信图片_20191115111055_191115163314839.png',
+                },
+              }
+        }
+        formItemsGroups={[
           {
-            type: 'upload-images',
-            field: 'imageId',
-            label: '图片',
-            initialValue: [
+            key: 'base',
+            title: '基础信息',
+            formItems: [
               {
-                uid: -1000,
-                name: '主图.png',
-                status: 'done',
-                url:
-                  'http://qstbgmall.oss-cn-hangzhou.aliyuncs.com/gms/mainImage/微信图片_20191115111055_191115163314839.png',
+                field: 'name',
+                label: '姓名姓名姓名姓名',
+                col: { span: 12 },
               },
               {
-                uid: -1001,
-                name: '主图.png',
-                status: 'done',
-                url:
-                  'http://qstbgmall.oss-cn-hangzhou.aliyuncs.com/gms/mainImage/微信图片_20191115111055_191115163314839.png',
+                type: 'select',
+                field: 'gender',
+                label: '性别',
+                props: {
+                  options: [
+                    { label: 'man', value: 'man' },
+                    { label: 'woman', value: 'woman' },
+                  ],
+                },
+                col: { lg: 12 },
               },
             ],
-            onUpload: () =>
-              Promise.resolve({
-                uid: '12345',
-                url:
-                  'http://qstbgmall.oss-cn-hangzhou.aliyuncs.com/gms/mainImage/微信图片_20191115111055_191115163314839.png',
-              }),
+          },
+          {
+            key: 'image',
+            title: '多图片',
+            formItems: [
+              {
+                type: 'upload-images',
+                field: 'multipleImageId',
+                label: '图片',
+                col: { lg: 24 },
+                props: {
+                  onUpload: file =>
+                    Promise.resolve({
+                      id: '12345',
+                      url:
+                        'http://qstbgmall.oss-cn-hangzhou.aliyuncs.com/gms/mainImage/微信图片_20191115111055_191115163314839.png',
+                    }),
+                },
+              },
+              {
+                type: 'upload-image',
+                field: 'singleImageId',
+                label: '图片',
+                col: { lg: 24 },
+                props: {
+                  onUpload: () =>
+                    Promise.resolve({
+                      id: '12345',
+                      url:
+                        'http://qstbgmall.oss-cn-hangzhou.aliyuncs.com/gms/mainImage/微信图片_20191115111055_191115163314839.png',
+                    }),
+                },
+              },
+              {
+                type: 'treeSelect',
+                field: 'tree',
+                label: '树选择',
+                props: {
+                  treeData: [
+                    {
+                      title: '1',
+                      key: '1',
+                      children: [
+                        { title: '1-1', key: '1-1' },
+                        { title: '1-2', key: '1-2', children: [] },
+                      ],
+                    },
+                    {
+                      title: '2',
+                      key: '2',
+                      children: [
+                        { title: '2-1', key: '2-1' },
+                        { title: '2-2', key: '2-2', children: [] },
+                      ],
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+          {
+            title: 'Extra',
+            formItems: [
+              {
+                type: 'textarea',
+                label: '额外信息',
+                field: 'extra',
+              },
+            ],
           },
         ]}
         onOk={(values: any) => console.log('values', values)}
-        onCancel={() => setFormModalVisible(false)}
+        onCancel={() => {
+          setFormModalVisible(false);
+          setFormModalVisibleWithoutData(false);
+        }}
       />
     </div>
   );

@@ -1,131 +1,166 @@
-import "antd/es/modal/style";
-import "antd/es/row/style";
-import "antd/es/col/style";
-import "antd/es/form/style";
+import "antd/lib/modal/style";
+import "antd/lib/row/style";
+import "antd/lib/col/style";
+import "antd/lib/form/style";
 
-import Col from "antd/es/col";
-import Form from "antd/es/form";
-import Icon from "antd/es/icon";
-import Modal from "antd/es/modal";
-import Row from "antd/es/row";
-import Upload, { RcFile } from "antd/es/upload";
-import { FormComponentProps } from "antd/lib/form";
-import React, { useEffect, useState } from "react";
+import Col, { ColProps } from "antd/lib/col";
+import Divider from "antd/lib/divider";
+import Form from "antd/lib/form";
+import { FormInstance, FormProps } from "antd/lib/form/Form";
+import Modal from "antd/lib/modal";
+import Row from "antd/lib/row";
+import Upload, { RcFile } from "antd/lib/upload";
+import React, { forwardRef, useEffect, useState } from "react";
 
-import { renderItem } from "./helper";
-import { FormItem, FormModalComponentProps } from "./types";
+import { UploadOutlined } from "@ant-design/icons";
 
-const { Item: FormItem } = Form;
+import * as helper from "./helper";
+import { FormItem, FormModalComponentProps, UploadProps } from "./types";
 
-type Props = FormModalComponentProps & FormComponentProps;
+type Props = FormModalComponentProps;
 
-const FormModal: React.FC<Props> = ({
-  form: { getFieldDecorator, validateFields, resetFields },
-  title,
-  visible,
-  tips,
-  formItems = [],
-  formItemCol = {},
-  labelCol,
-  wrapperCol,
-  maskClosable = false,
-  hasFeedback = true,
-  formItemStyle,
-  size = "default",
-  confirmLoading = false,
-  initialData,
-  onOk,
-  onCancel,
-  ...modalProps
-}) => {
+const FormModal = forwardRef<FormInstance, Props>((props, ref) => {
+  const {
+    tips,
+    formItems,
+    formItemsGroups,
+    hideRequiredMark = false,
+    colon = true,
+    name,
+    layout,
+    labelAlign = "right",
+    labelCol,
+    wrapperCol,
+    formItemCol,
+    hasFeedback = false,
+    formItemStyle = { marginBottom: 0 },
+    initialValues,
+    defaultValues,
+    title,
+    visible,
+    size = "middle",
+    confirmLoading = false,
+    maskClosable = false,
+    okButtonProps = {},
+    cancelButtonProps = {},
+    onOk,
+    onCancel,
+    ...modalProps
+  } = props;
+
   const [fileList, setFileList] = useState<any>({});
+  const [form] = Form.useForm();
 
-  useEffect(() => {
-    const _fileList: any = {};
+  function initFileList(items: FormItem[], values: any) {
+    const obj: object = {};
 
-    formItems
+    items
       .filter((u) => u.type === "upload-image")
       .forEach((u) => {
-        if (u.initialValue) _fileList[u.field] = [u.initialValue];
-        else if (initialData && initialData[u.field]) _fileList[u.field] = [initialData[u.field]];
-        else _fileList[u.field] = [];
+        if (values && values[u.field]) {
+          obj[u.field] = [values[u.field]];
+          values[u.field] = [values[u.field]];
+        } else {
+          obj[u.field] = [];
+        }
       });
 
-    formItems
+    items
       .filter((u) => u.type === "upload-images")
       .forEach((u) => {
-        if (u.initialValue) _fileList[u.field] = u.initialValue;
-        else if (initialData && initialData[u.field]) _fileList[u.field] = initialData[u.field];
-        else _fileList[u.field] = [];
+        if (values && values[u.field]) obj[u.field] = values[u.field];
+        else obj[u.field] = [];
       });
 
-    setFileList(_fileList);
-  }, [visible]);
-
-  const formProps: any = {};
-  if (size === "small") {
-    formProps.layout = "vertical";
-  } else {
-    formProps.layout = "horizontal";
-    formProps.labelCol = typeof labelCol === "number" ? { span: labelCol } : labelCol;
-    formProps.wrapperCol = typeof wrapperCol === "number" ? { span: wrapperCol } : wrapperCol;
+    return obj;
   }
 
-  const formItemProps = {
-    hasFeedback,
-    style: formItemStyle || { marginBottom: 0 },
+  useEffect(() => {
+    let _fileList: object = {};
+    if (formItemsGroups) {
+      formItemsGroups.forEach(
+        ({ formItems }) =>
+          (_fileList = { ..._fileList, ...initFileList(formItems, initialValues || defaultValues) })
+      );
+    } else {
+      _fileList = initFileList(formItems, initialValues || defaultValues);
+    }
+    setFileList(_fileList);
+
+    // work with `form.resetFields()` in handleCancel()
+    if (initialValues) {
+      form.setFieldsValue(initialValues);
+    } else if (defaultValues) {
+      form.setFieldsValue(defaultValues);
+    } else {
+      form.resetFields();
+    }
+  }, [visible]);
+
+  const formProps: FormProps = {
+    /** do not use initialValues! */
+    // initialValues,
+    form,
+    hideRequiredMark,
+    colon: colon,
+    name,
+    labelAlign,
   };
 
+  /** `layout`为vertical时将`labelCol`和`wrapperCol`强制设置为24 */
+  if (layout && layout === "vertical") {
+    formProps.layout = layout;
+    formProps.labelCol = undefined;
+    formProps.wrapperCol = undefined;
+  } else {
+    formProps.layout = layout ? layout : size === "small" ? "vertical" : "horizontal";
+    if (labelCol) formProps.labelCol = typeof labelCol === "number" ? { span: labelCol } : labelCol;
+    if (wrapperCol)
+      formProps.wrapperCol = typeof wrapperCol === "number" ? { span: wrapperCol } : wrapperCol;
+  }
+
   function handleCancel() {
-    resetFields();
     onCancel();
+
+    // only clear fields value when initialValues === undefined
+    form.resetFields();
   }
 
   function handleOk() {
-    validateFields((err, values) => {
-      if (err) return;
-
-      // return Promise.Resolve meanings request succeeded
-      const promise = onOk({
-        ...values,
-        ...fileList,
-      });
-      if (promise) {
-        promise.then(() => {
-          resetFields();
-        });
-      }
-    });
+    form
+      .validateFields()
+      .then((values) => {
+        const result = onOk({ ...values, ...fileList });
+        if (result) {
+          result.then(() => form.resetFields());
+        }
+      })
+      // eslint-disable-next-line no-console
+      .catch((errors) => console.log("errors", errors));
   }
 
-  function renderFormItem(item: FormItem) {
-    const {
-      initialValue = undefined,
-      type,
-      field,
-      label,
-      required = false,
-      rules = [],
-      valuePropName = "value",
-      onUpload,
-      onPreview,
-      ...props
-    } = item;
+  function renderFormItem(item: FormItem<any>) {
+    const { type, field, label, readonly, required = false, rules = [], col, props } = item;
 
-    const colProps = {
-      key: field,
-      lg: 24,
-      md: 24,
-      sm: 24,
-      xs: 24,
-      ...formItemCol,
+    let _colProps: ColProps = col || {};
+    if (!col && formItemCol) {
+      if (typeof formItemCol === "number") {
+        _colProps.span = formItemCol;
+      } else {
+        _colProps = formItemCol;
+      }
+    }
+
+    const colProps: ColProps = {
+      lg: _colProps?.span ?? 24,
+      md: _colProps?.span ?? 24,
+      sm: _colProps?.span ?? 24,
+      xs: _colProps?.span ?? 24,
+      ..._colProps,
     };
 
-    const requiredRule = {
-      required,
-      message: `请输入${label}`,
-    };
-
+    /** 生成默认的 required error message */
+    const requiredRule = { required, message: `请输入${label}` };
     if (type === "upload-image" || type === "upload-images" || type === "upload-excel") {
       requiredRule.message = `请上传${label}`;
     } else if (
@@ -137,97 +172,106 @@ const FormModal: React.FC<Props> = ({
       requiredRule.message = `请选择${label}`;
     }
 
-    let value = initialValue;
-    if (initialData && initialValue === undefined) {
-      value = initialData[field];
-    }
-
     return (
-      <Col {...colProps}>
-        <FormItem label={label} {...formItemProps} key={field}>
-          {type === "upload-image" || type === "upload-images"
-            ? getFieldDecorator(field, {
-                initialValue:
-                  fileList[field] && fileList[field].length > 0 ? fileList[field] : undefined,
-                valuePropName: "fileList",
-                getValueFromEvent: (e) => (Array.isArray(e) ? e : e && e.fileList),
-                rules: [requiredRule, ...rules],
-              })(
-                <Upload
-                  accept="image/*"
-                  listType="picture-card"
-                  customRequest={({ file, onSuccess, onError }) => {
-                    if (!file || !onUpload) return false;
+      <Col {...colProps} key={field} style={{ marginBottom: 8 }}>
+        {type === "upload-image" || type === "upload-images" ? (
+          <Form.Item
+            label={label}
+            key={field}
+            name={field}
+            rules={[requiredRule, ...rules]}
+            valuePropName="fileList"
+            getValueFromEvent={(e) => (Array.isArray(e) ? e : e && e.fileList)}
+            hasFeedback={hasFeedback}
+            style={{ ...formItemStyle, flexWrap: "unset" }}
+          >
+            <Upload
+              accept="image/*"
+              listType="picture-card"
+              disabled={readonly}
+              customRequest={({ file, onSuccess, onError }) => {
+                if (!file || !(props as UploadProps).onUpload) return false;
 
-                    onUpload(file)
-                      .then((data) => {
-                        setFileList((state: any) => {
-                          state[field] = [
-                            ...state[field],
-                            {
-                              ...file,
-                              uid: data.uid,
-                              url: data.url,
-                            },
-                          ];
+                (props as UploadProps)
+                  .onUpload(file)
+                  .then((data) => {
+                    setFileList((state: any) => ({
+                      ...state,
+                      [field]: [
+                        ...state[field],
+                        {
+                          ...file,
+                          id: data.id,
+                          url: data.url,
+                        },
+                      ],
+                    }));
 
-                          return state;
-                        });
-
-                        onSuccess(data, file);
-                      })
-                      .catch(onError);
-                  }}
-                  onPreview={onPreview}
-                  onRemove={(file) => {
-                    setFileList((state: any) => {
-                      state[field] = state[field].filter((u: RcFile) => u.uid !== file.uid);
-                      return state;
-                    });
-                  }}
-                >
-                  {fileList[field] &&
-                  type === "upload-image" &&
-                  fileList[field].length > 0 ? null : (
-                    <a>
-                      <Icon type="upload" />
-                      <span style={{ marginLeft: 2 }}>上传图片</span>
-                    </a>
-                  )}
-                </Upload>
-              )
-            : getFieldDecorator(field, {
-                initialValue: value,
-                rules: [requiredRule, ...rules],
-                valuePropName,
-              })(renderItem({ type, field, label, ...props }))}
-        </FormItem>
+                    onSuccess(data, file);
+                  })
+                  .catch(onError);
+              }}
+              onPreview={(props as UploadProps).onPreview}
+              onRemove={(file) => {
+                setFileList((state: any) => ({
+                  ...state,
+                  [field]: state[field].filter((u: RcFile) => u.uid !== file.uid),
+                }));
+              }}
+            >
+              {fileList[field] && type === "upload-image" && fileList[field].length > 0 ? null : (
+                <div>
+                  <UploadOutlined />
+                  <span style={{ marginLeft: 2 }}>上传图片</span>
+                </div>
+              )}
+            </Upload>
+          </Form.Item>
+        ) : (
+          helper.renderFormItem(item, size, formItemStyle)
+        )}
       </Col>
     );
   }
-
   return (
     <Modal
       title={title}
       visible={visible}
       confirmLoading={confirmLoading}
-      okButtonProps={{ size }}
-      cancelButtonProps={{ size }}
+      okButtonProps={{ size, ...okButtonProps }}
+      cancelButtonProps={{ size, ...cancelButtonProps }}
       maskClosable={maskClosable}
       {...modalProps}
       onCancel={handleCancel}
       onOk={handleOk}
     >
-      {tips && <div style={{ marginBottom: 8 }}>{tips}</div>}
-      <Form {...formProps}>
-        <Row gutter={8}>
-          {formItems
-            .filter((u) => u.visible === undefined || u.visible === true)
-            .map((item) => renderFormItem(item))}
-        </Row>
+      {tips && <div style={{ marginBottom: 12 }}>{tips}</div>}
+      <Form ref={ref} {...formProps}>
+        {formItemsGroups ? (
+          formItemsGroups.map(({ key, formItems, title, ...props }, index) => (
+            <div key={key || index}>
+              {title && (
+                <Divider orientation="left" {...props}>
+                  {title}
+                </Divider>
+              )}
+              <Row gutter={8}>
+                {formItems
+                  .filter((u) => u.visible === undefined || u.visible === true)
+                  .map((u) => renderFormItem(u))}
+              </Row>
+            </div>
+          ))
+        ) : (
+          <Row gutter={8}>
+            {(formItems || [])
+              .filter((u) => u.visible === undefined || u.visible === true)
+              .map((u) => renderFormItem(u))}
+          </Row>
+        )}
       </Form>
     </Modal>
   );
-};
+});
 
-export default Form.create<Props>()(FormModal);
+export default FormModal;

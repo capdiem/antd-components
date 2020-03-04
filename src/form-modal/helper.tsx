@@ -1,98 +1,61 @@
-import "antd/es/button/style";
-import "antd/es/cascader/style";
-import "antd/es/date-picker/style";
-import "antd/es/input/style";
-import "antd/es/input-number/style";
-import "antd/es/select/style";
-import "antd/es/upload/style";
-import "antd/es/message/style";
-import "antd/es/switch/style";
+import "antd/lib/button/style";
+import "antd/lib/cascader/style";
+import "antd/lib/date-picker/style";
+import "antd/lib/input/style";
+import "antd/lib/input-number/style";
+import "antd/lib/select/style";
+import "antd/lib/upload/style";
+import "antd/lib/switch/style";
+import "antd/lib/form/style";
+import "antd/lib/tree-select/style";
 
-import Button from "antd/es/button";
-import Cascader from "antd/es/cascader";
-import DatePicker from "antd/es/date-picker";
-import Input from "antd/es/input";
-import InputNumber from "antd/es/input-number";
-import message from "antd/es/message";
-import Select from "antd/es/select";
-import Switch from "antd/es/switch";
-import Upload from "antd/es/upload";
-import { CascaderOptionType } from "antd/lib/cascader";
-import { RcFile, UploadProps } from "antd/lib/upload";
+import Button from "antd/lib/button";
+import Cascader, { CascaderProps } from "antd/lib/cascader";
+import DatePicker from "antd/lib/date-picker";
+import Form from "antd/lib/form";
+import Input, { InputProps, TextAreaProps } from "antd/lib/input";
+import InputNumber, { InputNumberProps } from "antd/lib/input-number";
+import Select from "antd/lib/select";
+import Switch, { SwitchProps } from "antd/lib/switch";
+import Upload from "antd/lib/upload";
 import React from "react";
 
-import { PlainItem } from "./types";
+import { UploadOutlined } from "@ant-design/icons";
+
+import { DataEntryProps, DataEntryType, FormItem, SelectProps, Size, UploadProps } from "./types";
+import TreeSelect, { TreeSelectProps } from "antd/lib/tree-select";
 
 const { TextArea } = Input;
 const { Option } = Select;
 
-export function renderItem(item: PlainItem) {
-  const {
-    type,
-    field,
-    placeholder,
-    label,
-    size = "default",
-    options = [],
-    readonly = false,
-    showTime = false,
-    ...props
-  } = item;
-
-  function beforeUploadExcel(file: RcFile) {
-    const isXls =
-      file.type === "application/vnd.ms-excel" ||
-      file.type === "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
-      file.type === "application/kset" ||
-      file.type === "application/msexcel" ||
-      file.type === "application/excel" ||
-      file.type === "application/kswps" ||
-      file.type === "application/ksdps" ||
-      (file.type === "" && /xlsx|xls/.test(file.name));
-
-    if (!isXls) {
-      message.error("请上传Excel文件！");
-    }
-
-    return isXls;
-  }
+function renderDataEntry(
+  props: DataEntryProps,
+  type: DataEntryType = "input",
+  size: Size = "middle"
+) {
+  let element: React.ReactElement;
 
   switch (type) {
-    case "textarea":
-      return <TextArea placeholder={placeholder} disabled={readonly} {...props} />;
-
-    case "inputNumber":
-      return (
-        <InputNumber
-          size={size}
-          placeholder={placeholder}
-          disabled={readonly}
-          style={{ width: "100%" }}
-          {...props}
-        />
+    case "textarea": {
+      element = <TextArea style={{ marginBottom: 0 }} {...(props as TextAreaProps)} />;
+      break;
+    }
+    case "inputNumber": {
+      element = (
+        <InputNumber size={size} style={{ width: "100%" }} {...(props as InputNumberProps)} />
       );
-
-    case "password":
-      return (
-        <Input
-          size={size}
-          type="password"
-          placeholder={placeholder}
-          disabled={readonly}
-          style={{ width: "100%" }}
-          {...props}
-        />
+      break;
+    }
+    case "password": {
+      element = (
+        <Input size={size} type="password" style={{ width: "100%" }} {...(props as InputProps)} />
       );
-
-    case "select":
-      return (
-        <Select
-          size={size}
-          placeholder={placeholder}
-          disabled={readonly}
-          style={{ width: "100%" }}
-          {...props}
-        >
+      break;
+    }
+    case "select": {
+      const { options, ...etc } = props as SelectProps;
+      element = (
+        <Select size={size} style={{ width: "100%" }} {...etc}>
           {options.map(({ label: _label, value, ...opts }) => (
             <Option key={value} value={value} {...opts}>
               {_label}
@@ -100,23 +63,23 @@ export function renderItem(item: PlainItem) {
           ))}
         </Select>
       );
-
-    case "searchableSelect":
-      return (
+      break;
+    }
+    case "searchableSelect": {
+      const { options, ...etc } = props as SelectProps;
+      element = (
         <Select
-          placeholder={placeholder || label}
           style={{ width: "100%" }}
           size={size}
           allowClear
           showSearch
-          disabled={readonly}
           filterOption={(input, option) =>
-            option.props
-              .children!.toString()
+            option?.props.children
+              .toString()
               .toLowerCase()
               .includes(input.toLowerCase())
           }
-          {...props}
+          {...etc}
         >
           {options.map(({ label: _label, value }) => (
             <Option key={value} value={value}>
@@ -125,9 +88,11 @@ export function renderItem(item: PlainItem) {
           ))}
         </Select>
       );
-
-    case "dynamicSelect":
-      return (
+      break;
+    }
+    case "dynamicSelect": {
+      const { options, ...etc } = props as SelectProps;
+      element = (
         <Select
           showSearch
           allowClear
@@ -136,10 +101,8 @@ export function renderItem(item: PlainItem) {
           filterOption={false}
           defaultActiveFirstOption={false}
           notFoundContent={null}
-          placeholder={placeholder}
-          disabled={readonly}
           style={{ width: "100%" }}
-          {...props}
+          {...etc}
         >
           {options.map(({ label: _label, value }) => (
             <Option key={value} value={value}>
@@ -148,46 +111,105 @@ export function renderItem(item: PlainItem) {
           ))}
         </Select>
       );
-
-    case "cascader":
-      return (
+      break;
+    }
+    case "treeSelect": {
+      element = (
+        <TreeSelect size={size} style={{ width: "100%" }} {...(props as TreeSelectProps<any>)} />
+      );
+      break;
+    }
+    case "cascader": {
+      element = (
         <Cascader
           size={size}
           changeOnSelect
-          options={options as CascaderOptionType[]}
-          placeholder={placeholder}
-          disabled={readonly}
           style={{ width: "100%" }}
-          {...props}
+          {...(props as CascaderProps)}
         />
       );
-
-    case "upload-excel":
-      return (
-        <Upload accept=".xlsx, .xls" beforeUpload={beforeUploadExcel} {...(props as UploadProps)}>
-          <Button size={size} icon="upload">
+      break;
+    }
+    case "upload-excel": {
+      const { onUpload, ...uploadProps } = props as UploadProps;
+      element = (
+        <Upload
+          accept=".xlsx, .xls"
+          customRequest={({ file, onSuccess, onError }) => {
+            if (file) {
+              onUpload(file)
+                .then((data) => onSuccess(data, file))
+                .catch(onError);
+            }
+          }}
+          {...uploadProps}
+        >
+          <Button size={size} icon={<UploadOutlined />}>
             上传文件
           </Button>
         </Upload>
       );
-
-    case "time":
-      return (
-        <DatePicker
-          size={size}
-          placeholder={placeholder}
-          disabled={readonly}
-          showTime={showTime}
-          style={{ width: "100%" }}
-          {...props}
-        />
+      break;
+    }
+    case "time": {
+      element = <DatePicker size={size} style={{ width: "100%" }} {...(props as any)} />;
+      break;
+    }
+    case "switch": {
+      element = (
+        <Switch size={size === "small" ? "small" : "default"} {...(props as SwitchProps)} />
       );
-
-    case "switch":
-      return <Switch size={size} disabled={readonly} {...props} />;
-
+      break;
+    }
     case "input":
-    default:
-      return <Input size={size} placeholder={placeholder} disabled={readonly} {...props} />;
+    default: {
+      element = <Input size={size} {...(props as InputProps)} />;
+    }
   }
+
+  return element;
 }
+
+/**
+ * Render Form Item
+ * @param item
+ * @param size
+ * @param style
+ * @description labelCol and wrapperCol form Form props will not work
+ */
+function renderFormItem(item: FormItem, size: Size = "middle", style?: React.CSSProperties) {
+  const {
+    field,
+    label,
+    required,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    col,
+    rules = [],
+    type,
+    placeholder,
+    readonly,
+    props,
+    ...etc
+  } = item;
+
+  /** 生成默认的 required error message */
+  const requiredRule = { required, message: `请输入${label}` };
+  if (type === "upload-image" || type === "upload-images" || type === "upload-excel") {
+    requiredRule.message = `请上传${label}`;
+  } else if (
+    type === "select" ||
+    type === "dynamicSelect" ||
+    type === "searchableSelect" ||
+    type === "cascader"
+  ) {
+    requiredRule.message = `请选择${label}`;
+  }
+
+  return (
+    <Form.Item label={label} name={field} style={style} rules={[requiredRule, ...rules]} {...etc}>
+      {renderDataEntry({ placeholder, disabled: readonly, ...props }, type, size)}
+    </Form.Item>
+  );
+}
+
+export { renderDataEntry, renderFormItem };

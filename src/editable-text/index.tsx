@@ -1,34 +1,57 @@
-import "antd/es/icon/style";
-import "antd/es/input-number/style";
-import "antd/es/input/style";
-import "antd/es/message/style";
-import "antd/es/select/style";
-import "antd/es/spin/style";
+import "antd/lib/icon/style";
+import "antd/lib/input-number/style";
+import "antd/lib/input/style";
+import "antd/lib/message/style";
+import "antd/lib/select/style";
+import "antd/lib/spin/style";
 
-import Icon from "antd/es/icon";
-import Input from "antd/es/input";
-import InputNumber from "antd/es/input-number";
-import message from "antd/es/message";
-import Select from "antd/es/select";
-import Spin from "antd/es/spin";
-import React, { useState } from "react";
+import Input from "antd/lib/input";
+import InputNumber from "antd/lib/input-number";
+import message from "antd/lib/message";
+import Select from "antd/lib/select";
+import Spin from "antd/lib/spin";
+import React, { useState, useEffect } from "react";
 
-export interface SelectOption {
-  label: string;
-  value: any;
-  disabled?: boolean;
-}
+import { EditOutlined } from "@ant-design/icons";
+import { Size } from "../form-modal/types";
+
+import { InputProps as AntdInputProps } from "antd/lib/input";
+import { InputNumberProps as AntdInputNumberProps } from "antd/lib/input-number";
+import { SelectProps as FromModalSelectProps } from "../form-modal/types";
+
+declare type InputProps = Omit<
+  AntdInputProps,
+  "onChange" | "value" | "size" | "onBlur" | "onPressEnter" | "autoFocus"
+>;
+
+declare type InputNumberProps = Omit<
+  AntdInputNumberProps,
+  "onChange" | "value" | "size" | "onBlur" | "onPressEnter" | "autoFocus"
+>;
+
+declare type SelectProps = Omit<
+  FromModalSelectProps,
+  "size" | "onBlur" | "onSelect" | "value" | "autoFocus"
+>;
+
+export declare type SharedDataEntryProps = InputProps | InputNumberProps | SelectProps;
+
+export declare type Type = "input" | "inputNumber" | "select";
+export declare type Rule = "string" | "email";
+export declare type Style = "link" | "text";
+export declare type Value = string | number;
 
 export interface EditableTextComponentProps {
-  children: string;
+  children: Value;
+  initialValue: Value;
   onOk: (value: any) => Promise<any>;
   needOnOkLoading?: boolean;
-  size?: "small" | "default" | "large";
-  textType?: "link" | "text";
-  itemType?: "input" | "inputNumber" | "select";
-  rule?: "string" | "email";
-  options?: SelectOption[];
-  [prop: string]: any;
+  size?: Size;
+  style?: Style;
+  type?: Type;
+  rule?: Rule;
+  rootStyle?: React.CSSProperties;
+  props?: SharedDataEntryProps;
 }
 
 const Option = Select.Option;
@@ -50,24 +73,36 @@ function validate(rule: string, value: any) {
 }
 
 const EditableText: React.FC<EditableTextComponentProps> = ({
-  children,
+  initialValue,
   onOk,
-  size = "default",
-  textType = "link",
-  itemType = "input",
+  size = "middle",
+  style = "link",
+  type = "input",
   rule = "string",
-  options = [],
   needOnOkLoading = true,
-  ...props
+  rootStyle,
+  props,
 }) => {
   const [editable, setEditable] = useState(false);
-  const [itemValue, setItemValue] = useState(children);
-  const [text, setText] = useState(children);
+  const [value, setValue] = useState(initialValue);
   const [spinning, setSpinning] = useState(false);
 
-  function onBlur(e: any) {
-    const value = e.target.value.trim();
+  const [children, setChildren] = useState<React.ReactNode>();
 
+  function setChildrenByType(value: Value, type: Type) {
+    if (type === "inputNumber" || type === "input") {
+      setChildren(value);
+    } else {
+      const item = (props as SelectProps).options.find((u) => u.value == value);
+      setChildren(item.label);
+    }
+  }
+
+  useEffect(() => {
+    setChildrenByType(initialValue, type);
+  }, []);
+
+  function onBlur() {
     if (validate(rule, value)) {
       setEditable(false);
       setSpinning(true);
@@ -77,7 +112,7 @@ const EditableText: React.FC<EditableTextComponentProps> = ({
       if (promise) {
         promise
           .then(() => {
-            setText(value);
+            setChildrenByType(value, type);
             setSpinning(false);
           })
           .catch(() => {
@@ -89,39 +124,36 @@ const EditableText: React.FC<EditableTextComponentProps> = ({
     }
   }
 
-  function onChange(e: any) {
-    setItemValue(e.target.value);
-  }
-
-  function onSelect(value: any) {
-    setItemValue(value);
+  function onChange(value: any) {
+    setValue(value);
   }
 
   let element: React.ReactElement;
 
   if (editable) {
-    if (itemType === "inputNumber") {
+    if (type === "inputNumber") {
       element = (
         <InputNumber
           size={size}
           onBlur={onBlur}
           onPressEnter={onBlur}
-          value={Number(itemValue) || 0}
+          value={Number(value) || 0}
           onChange={onChange}
           autoFocus
-          {...props}
+          {...(props as InputNumberProps)}
         />
       );
-    } else if (itemType === "select") {
+    } else if (type === "select") {
+      const { options, ...etc } = props as SelectProps;
       element = (
         <Select
           size={size}
           style={{ width: "100%" }}
           onBlur={onBlur}
-          onSelect={onSelect}
-          value={itemValue}
+          onChange={onChange}
+          value={value}
           autoFocus
-          {...props}
+          {...etc}
         >
           {options.map(({ label, value, disabled = false }) => (
             <Option value={value} key={value} disabled={disabled}>
@@ -136,22 +168,26 @@ const EditableText: React.FC<EditableTextComponentProps> = ({
           size={size}
           onBlur={onBlur}
           onPressEnter={onBlur}
-          value={itemValue}
+          value={value}
           onChange={onChange}
           autoFocus
-          {...props}
+          {...(props as InputProps)}
         />
       );
     }
   } else {
-    if (textType === "link") {
-      element = <a onClick={() => setEditable(true)}>{text}</a>;
+    if (style === "link") {
+      element = (
+        <div style={rootStyle}>
+          <a onClick={() => setEditable(true)}>{children}</a>
+        </div>
+      );
     } else {
       element = (
-        <div>
-          <span>{text}</span>
+        <div style={rootStyle}>
+          <span>{children}</span>
           <a onClick={() => setEditable(true)} style={{ marginLeft: 4 }}>
-            <Icon type="edit" />
+            <EditOutlined />
           </a>
         </div>
       );
@@ -159,7 +195,7 @@ const EditableText: React.FC<EditableTextComponentProps> = ({
   }
 
   return needOnOkLoading ? (
-    <Spin size={size} spinning={spinning}>
+    <Spin size={size === "middle" ? "default" : size} spinning={spinning}>
       {element}
     </Spin>
   ) : (

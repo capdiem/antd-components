@@ -1,76 +1,160 @@
-import { UploadFile } from "antd/es/upload/interface";
-import { ValidationRule } from "antd/lib/form";
+import { CascaderProps } from "antd/lib/cascader";
+import { ColProps } from "antd/lib/col";
+import {
+  PickerDateProps,
+  PickerProps,
+  RangePickerDateProps,
+  RangePickerProps as AntdRangePickerProps,
+} from "antd/lib/date-picker/generatePicker";
+import { FormProps as AntdFormProps } from "antd/lib/form/Form";
+import FormItem, { FormItemProps as AntdFormItemProps } from "antd/lib/form/FormItem";
+import { InputProps, TextAreaProps } from "antd/lib/input";
+import { InputNumberProps } from "antd/lib/input-number";
+import { ModalProps as AntdModalProps } from "antd/lib/modal";
+import { SelectProps as AntdSelectProps } from "antd/lib/select";
+import { SwitchProps } from "antd/lib/switch";
+import { TreeSelectProps } from "antd/lib/tree-select";
+import {
+  UploadFile as AntdUploadField,
+  UploadProps as AntdUploadProps,
+} from "antd/lib/upload/interface";
+import { Moment } from "moment";
+import { FieldProps as RcFieldProps } from "rc-field-form/lib/Field";
+import { PickerPanelDateProps } from "rc-picker/lib/PickerPanel";
+import { SizeType } from "antd/lib/config-provider/SizeContext";
+import { OptionData } from "rc-select/lib/interface";
 
-declare const FormItemTypes: [
-  "input",
-  "inputNumber",
-  "password",
-  "select",
-  "searchableSelect",
-  "dynamicSelect",
-  "time",
-  "cascader",
-  "upload-excel",
-  "textarea",
-  "switch",
-  "upload-image",
-  "upload-images"
-];
+export declare type DataEntryType =
+  | "input"
+  | "inputNumber"
+  | "password"
+  | "select"
+  | "searchableSelect"
+  | "dynamicSelect"
+  | "treeSelect"
+  | "time"
+  | "cascader"
+  | "upload-excel"
+  | "textarea"
+  | "switch"
+  | "upload-image"
+  | "upload-images";
+export declare type Size = SizeType;
 
-declare const Sizes: ["default", "small", "large"];
+export declare type UploadFile = Pick<AntdUploadField, "url"> & {
+  id: number | string;
+};
+export declare type FieldProps = Omit<RcFieldProps, "name">;
+export declare type UploadProps = AntdUploadProps & {
+  onUpload?: (file: File) => Promise<UploadFile>;
+};
+export declare type SelectProps = Omit<AntdSelectProps<any>, "options"> & {
+  options: OptionData[];
+};
+declare type PickerSharedProps<DateType> = Pick<
+  PickerProps<DateType>,
+  | "allowClear"
+  | "autoFocus"
+  | "className"
+  | "disabled"
+  | "dropdownClassName"
+  | "getPopupContainer"
+  | "open"
+  | "placeholder"
+  | "popupStyle"
+  | "suffixIcon"
+  | "onOpenChange"
+  | "onPanelChange"
+  | "picker"
+  | "defaultValue"
+  | "defaultPickerValue"
+  | "disabledDate"
+  | "locale"
+  | "mode"
+  | "style"
+  | "dateRender"
+>;
 
-type FormItemType = typeof FormItemTypes[number];
-type Size = typeof Sizes[number];
-type SelectOption = { label: string; value: string | number; disabled?: boolean };
-type FormItems<T> = Array<FormItem<T>>;
-type SimpleUploadFile = Required<Pick<UploadFile, "uid" | "url">>;
+declare type BasicPickerProps<DateType> = PickerSharedProps<DateType> &
+  Pick<
+    PickerDateProps<DateType>,
+    "defaultValue" | "defaultPickerValue" | "format" | "renderExtraFooter" | "value" | "onChange"
+  >;
 
-export interface PlainItemGroup<T = any> {
-  key: string;
-  title: React.ReactNode;
-  items: PlainItem<T>[];
-}
+export declare type YearPickerProps<DateType = Moment> = BasicPickerProps<DateType>;
+export declare type MonthPickerProps<DateType = Moment> = BasicPickerProps<DateType>;
+export declare type WeekPickerProps<DateType = Moment> = BasicPickerProps<DateType>;
+export declare type DatePickerProps<DateType = Moment> = BasicPickerProps<DateType> &
+  Pick<
+    PickerPanelDateProps<DateType>,
+    "disabledTime" | "showTime" | "showToday" | "onOk" | "onPanelChange"
+  >;
+export declare type RangePickerProps<DateType = Moment> = BasicPickerProps<DateType> &
+  Pick<
+    AntdRangePickerProps<DateType>,
+    "allowEmpty" | "disabled" | "disabledTime" | "ranges" | "separator" | "onCalendarChange"
+  > &
+  Pick<RangePickerDateProps<DateType>, "showTime">;
 
-export interface PlainItem<T = any> {
-  type?: FormItemType;
-  label: string;
-  field: Extract<keyof T, string>;
-  placeholder?: string;
-  options?: Array<SelectOption>;
-  readonly?: boolean;
-  showTime?: boolean;
-  onUpload?: (file: File) => Promise<{ uid: string; url: string }>;
-  onPreview?: (file: UploadFile<any>) => void;
-  [prop: string]: any;
-}
+export declare type FormItemProps = Partial<Omit<AntdFormItemProps, "fieldKey">>;
 
-export interface FormItem<T = any> extends PlainItem<T> {
-  required?: boolean;
-  initialValue?: SimpleUploadFile | any;
+export declare type SharedDataEntryProps =
+  | InputProps
+  | InputNumberProps
+  | TextAreaProps
+  | SelectProps
+  | TreeSelectProps<any>
+  | CascaderProps
+  | SwitchProps
+  | UploadProps
+  | DatePickerProps
+  | YearPickerProps
+  | MonthPickerProps
+  | WeekPickerProps
+  | RangePickerProps;
+
+export declare type DataEntryProps = SharedDataEntryProps & { placeholder?: string };
+
+export interface FormItem<VT = any> extends FormItemProps {
   visible?: boolean;
-  rules?: Array<ValidationRule>;
+  type?: DataEntryType;
+  props?: DataEntryProps;
+  label?: string;
+  field: Extract<keyof VT, string>;
+  placeholder?: string;
+  required?: boolean;
+  readonly?: boolean;
+  col?: ColProps;
 }
 
-export interface FormModalComponentProps<T = any> {
+export interface FormItemsGroup<VT = any> {
+  key?: string;
   title?: React.ReactNode;
-  tips?: React.ReactNode;
-  visible: boolean;
-  formItems: FormItems<T>;
-  formItemCol?: {
-    lg: number;
-    md: number;
-    sm: number;
-    xs: number;
-  };
-  maskClosable?: boolean;
-  initialData?: T;
-  labelCol?: number | {};
-  wrapperCol?: number | {};
+  orientation?: "left" | "right" | "center";
+  dashed?: boolean;
+  style?: React.CSSProperties;
+  formItems: Array<FormItem<VT>>;
+}
+
+declare type ModalProps = Omit<AntdModalProps, "onOk" | "onCancel">;
+declare type FormProps = Pick<
+  AntdFormProps,
+  "hideRequiredMark" | "colon" | "name" | "layout" | "labelAlign"
+>;
+
+export interface FormModalComponentProps<VT = any> extends ModalProps, FormProps {
+  formItems?: Array<FormItem<VT>>;
+  formItemsGroups?: Array<FormItemsGroup<VT>>;
+  formItemStyle?: React.CSSProperties;
   hasFeedback?: boolean;
-  formItemStyle?: {};
-  confirmLoading?: boolean;
+  initialValues?: VT;
+  /** use defaultValues as initialValues if initialValues do not exists and defaultValues exists */
+  defaultValues?: VT;
+  labelCol?: ColProps | number;
+  wrapperCol?: ColProps | number;
+  formItemCol?: ColProps | number;
   size?: Size;
-  onOk: (values: any) => Promise<any> | undefined;
+  tips?: React.ReactNode;
   onCancel: () => void;
-  [prop: string]: any;
+  onOk: (values: any) => Promise<any> | void;
 }

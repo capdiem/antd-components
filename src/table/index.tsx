@@ -1,9 +1,14 @@
-import "antd/es/table/style";
+import "antd/lib/table/style";
+import "antd/lib/button/style";
+import "antd/lib/modal/style";
 
-import Button from "antd/es/button";
-import Modal from "antd/es/modal";
-import AntdTable from "antd/es/table";
+import Button from "antd/lib/button";
+import Modal from "antd/lib/modal";
+import AntTable from "antd/lib/table";
+import { TableProps } from "antd/lib/table/Table";
 import React, { useState } from "react";
+
+import { FullscreenOutlined } from "@ant-design/icons";
 
 import { TableColumnProps, TableComponentProps } from "./types";
 
@@ -24,6 +29,7 @@ function recursion(columns: TableColumnProps<any>[]) {
 const Table: React.FC<TableComponentProps<any>> = ({
   fullscreen: fullscreenAbility,
   fullscreenWidth = "95%",
+  fullscreenButtonProps = {},
   rowKey,
   columns,
   ...tableProps
@@ -57,14 +63,19 @@ const Table: React.FC<TableComponentProps<any>> = ({
     <div style={{ position: "relative" }}>
       {fullscreenAbility && (
         <Button
-          type="dashed"
-          icon="fullscreen"
-          style={{ position: "absolute", zIndex: 1, left: 0 }}
+          type="link"
+          icon={<FullscreenOutlined />}
+          style={{ position: "absolute", zIndex: 1, right: 0 }}
           onClick={() => setFullscreen(true)}
+          {...fullscreenButtonProps}
         />
       )}
       {!fullscreen && (
-        <AntdTable {...tableProps} columns={newColumns} rowKey={(item) => getRowKey(item)} />
+        <AntTable
+          {...(tableProps as TableProps<any>)}
+          columns={newColumns}
+          rowKey={(item) => getRowKey(item)}
+        />
       )}
       <Modal
         visible={fullscreen}
@@ -76,7 +87,11 @@ const Table: React.FC<TableComponentProps<any>> = ({
         onCancel={() => setFullscreen(false)}
       >
         {fullscreenAbility && (
-          <AntdTable {...tableProps} columns={newColumns} rowKey={(item) => getRowKey(item)} />
+          <AntTable
+            {...(tableProps as TableProps<any>)}
+            columns={newColumns}
+            rowKey={(item) => getRowKey(item)}
+          />
         )}
       </Modal>
     </div>
