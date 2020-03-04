@@ -18,7 +18,7 @@ const TableOperation: React.FC<TableOperationComponentProps> = ({
   style,
   items = [],
   itemGroups = [],
-  size = "middle",
+  size = "default",
 }) => {
   if (items.length > 0) {
     itemGroups.push(items);
