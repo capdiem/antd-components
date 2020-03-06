@@ -9,7 +9,7 @@ import { FormInstance } from 'antd/lib/form';
 import moment from 'moment';
 import React, { useEffect, useRef, useState } from 'react';
 
-import { PlusOutlined, UploadOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined, PlusOutlined, UploadOutlined } from '@ant-design/icons';
 
 import { Dividers, EditableText, Filter, FormModal, Table, TableModal } from '../../../src';
 import { ReloadBtnRef } from '../../../src/filter/types';
@@ -22,6 +22,16 @@ export default function() {
   const [formModalVisible, setFormModalVisible] = useState<boolean>(false);
   const [formModalVisibleWithoutData, setFormModalVisibleWithoutData] = useState<boolean>(false);
   const [tableModalVisible, setTableModalVisible] = useState<boolean>(false);
+
+  const dividersSample = (
+    <Dividers
+      type="vertical"
+      rows={[
+        { label: '编辑', icon: <EditOutlined /> },
+        { label: '删除', icon: <DeleteOutlined /> },
+      ]}
+    />
+  );
 
   useEffect(() => {
     setColumns([
@@ -61,6 +71,12 @@ export default function() {
             ),
           },
         ],
+      },
+      {
+        title: '操作',
+        key: 'actions',
+        width: 150,
+        render: () => dividersSample,
       },
     ]);
   }, []);
@@ -166,7 +182,10 @@ export default function() {
       <Row gutter={8}>
         <Col span={4}>
           <h1>Dividers</h1>
+          <h3>row as React.ReactNode</h3>
           <Dividers rows={[<a key="1">Action 1</a>, <a key="2">Action 2</a>]} type="vertical" />
+          <h3>row as Row</h3>
+          {dividersSample}
         </Col>
         <Col span={10}>
           <div>
