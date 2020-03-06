@@ -6,10 +6,10 @@
     "test": "umi test"
   },
   "dependencies": {
-    "@ant-design/icons": "^4.0.0-rc.0",
-    "antd": "^4.0.0-rc.4",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6"
+    "@ant-design/icons": "^4.0.2",
+    "antd": "^4.0.1",
+    "react": "^16.13.0",
+    "react-dom": "^16.13.0"
   },
   "devDependencies": {
     "@types/jest": "^23.3.12",
