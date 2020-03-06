@@ -23,7 +23,7 @@ export interface DividerComponentProps {
   rowStyle?: React.CSSProperties;
 }
 
-function isRow(row: Row | React.ReactNode): row is Row {
+function isRow(row: Row | React.ReactNode = {}): row is Row {
   return (row as Row).label !== undefined;
 }
 
