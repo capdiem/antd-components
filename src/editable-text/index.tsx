@@ -72,7 +72,7 @@ function validate(rule: string, value: any) {
 const EditableText: React.FC<EditableTextComponentProps> = ({
   initialValue,
   onOk,
-  size = "default",
+  size = "middle",
   style = "link",
   type = "input",
   rule = "string",
@@ -192,7 +192,7 @@ const EditableText: React.FC<EditableTextComponentProps> = ({
   }
 
   return needOnOkLoading ? (
-    <Spin size={size} spinning={spinning}>
+    <Spin size={size === "middle" ? "default" : size} spinning={spinning}>
       {element}
     </Spin>
   ) : (

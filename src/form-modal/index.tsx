@@ -38,7 +38,7 @@ const FormModal = forwardRef<FormInstance, Props>((props, ref) => {
     defaultValues,
     title,
     visible,
-    size = "default",
+    size = "middle",
     confirmLoading = false,
     maskClosable = false,
     okButtonProps = {},

@@ -41,7 +41,7 @@ const Filter: React.FC<Props> = ({
   onModeChange,
   query,
   defaultValues,
-  size = "default",
+  size = "middle",
   items = [],
   btns = [],
   reloadBtnRef,

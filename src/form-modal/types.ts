@@ -39,7 +39,7 @@ export declare type DataEntryType =
   | "switch"
   | "upload-image"
   | "upload-images";
-export declare type Size = "large" | "default" | "small";
+export declare type Size = "large" | "middle" | "small";
 
 export declare type UploadFile = Pick<AntdUploadField, "url"> & {
   id: number | string;

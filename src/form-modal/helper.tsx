@@ -31,7 +31,7 @@ const { Option } = Select;
 function renderDataEntry(
   props: DataEntryProps,
   type: DataEntryType = "input",
-  size: Size = "default"
+  size: Size = "middle"
 ) {
   let element: React.ReactElement;
 
@@ -177,7 +177,7 @@ function renderDataEntry(
  * @param style
  * @description labelCol and wrapperCol form Form props will not work
  */
-function renderFormItem(item: FormItem, size: Size = "default", style?: React.CSSProperties) {
+function renderFormItem(item: FormItem, size: Size = "middle", style?: React.CSSProperties) {
   const {
     field,
     label,
