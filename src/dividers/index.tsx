@@ -104,7 +104,9 @@ const Dividers: React.FC<DividerComponentProps> = ({
       const node = (
         <a onClick={row.onClick}>
           {sizeType !== "label" && row.icon}
-          {sizeType !== "icon" && <span style={{ marginLeft }}>{row.label}</span>}
+          {sizeType !== "icon" && (
+            <span style={{ marginLeft: sizeType === "full" ? marginLeft : 0 }}>{row.label}</span>
+          )}
         </a>
       );
 
