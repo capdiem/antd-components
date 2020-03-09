@@ -68,6 +68,7 @@ const SubstringText: React.FC<SubstringTextComponentProps> = ({
     WebkitBoxOrient: "vertical",
     overflow: "hidden",
     margin: "-4px 0px",
+    overflowWrap: "anywhere",
     ...rowStyle,
   };
 
