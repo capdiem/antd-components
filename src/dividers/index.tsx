@@ -1,4 +1,5 @@
 import "antd/lib/divider/style";
+import "antd/lib/tooltip/style";
 
 import Divider, { DividerProps } from "antd/lib/divider";
 import Tooltip from "antd/lib/tooltip";
