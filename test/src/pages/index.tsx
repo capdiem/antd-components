@@ -51,7 +51,7 @@ export default function() {
             dataIndex: 'name',
             title: '姓名',
             width: 100,
-            render: v => <SubstringText text={v} type="dotted" rowLineClamp={1} />,
+            render: v => <SubstringText text={[v, v, v, v]} type="dotted" rowLineClamp={1} />,
           },
         ],
       },
@@ -225,7 +225,7 @@ export default function() {
           </div>
           <Table
             columns={columns}
-            dataSource={[{ name: null, age: 25, gender: 'man' }]}
+            dataSource={[{ name: 'Today is nice!!!!!!!', age: 25, gender: 'man' }]}
             scroll={{ x: 350 }}
             bordered={true}
             rowKey="name"

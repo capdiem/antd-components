@@ -63,10 +63,11 @@ const SubstringText: React.FC<SubstringTextComponentProps> = ({
   }
 
   const baseRowStyle: React.CSSProperties = {
-    display: "-webkit-box",
+    display: "-webkit-inline-box",
     WebkitLineClamp: rowLineClamp,
     WebkitBoxOrient: "vertical",
     overflow: "hidden",
+    margin: "-4px 0px",
     ...rowStyle,
   };
 
