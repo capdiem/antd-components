@@ -26,16 +26,19 @@ const SubstringText: React.FC<SubstringTextComponentProps> = ({
   maxRowCount = 2,
   rowStyle,
 }) => {
-  // const [rowStringWidth, setRowStringWidth] = useState<number[]>([]);
   const [size, divRef] = useSize<HTMLDivElement>();
   const rowStringWidthRef = useRef<{ content: string; px: number }[]>([]);
   const [rowEllipsis, setRowEllipsis] = useState<{ content: string; ellipsis: boolean }[]>([]);
 
   useEffect(() => {
-    if (text instanceof Array) {
-      rowStringWidthRef.current = text.map((u) => ({ content: u, px: stringWidth(u) * 7 }));
+    const initValue = text || [];
+
+    if (initValue instanceof Array) {
+      rowStringWidthRef.current = initValue
+        .filter((u) => u)
+        .map((u) => ({ content: u, px: stringWidth(u) * 7 }));
     } else {
-      rowStringWidthRef.current = [{ content: text, px: stringWidth(text) * 7 }];
+      rowStringWidthRef.current = [{ content: initValue, px: stringWidth(initValue) * 7 }];
     }
   });
 
