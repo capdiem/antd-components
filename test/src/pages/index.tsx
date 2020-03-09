@@ -11,7 +11,15 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import { DeleteOutlined, EditOutlined, PlusOutlined, UploadOutlined } from '@ant-design/icons';
 
-import { Dividers, EditableText, Filter, FormModal, Table, TableModal } from '../../../src';
+import {
+  Dividers,
+  EditableText,
+  Filter,
+  FormModal,
+  SubstringText,
+  Table,
+  TableModal,
+} from '../../../src';
 import { ReloadBtnRef } from '../../../src/filter/types';
 import { TableColumnProps } from '../../../src/table/types';
 import styles from './index.css';
@@ -35,7 +43,18 @@ export default function() {
 
   useEffect(() => {
     setColumns([
-      { key: 'requiredInfo', title: '必填信息', children: [{ dataIndex: 'name', title: '姓名' }] },
+      {
+        key: 'requiredInfo',
+        title: '必填信息',
+        children: [
+          {
+            dataIndex: 'name',
+            title: '姓名',
+            width: 100,
+            render: v => <SubstringText text={[v, v]} type="dotted" rowLineClamp={1} />,
+          },
+        ],
+      },
       {
         title: '基础信息',
         key: 'basicInfo',
@@ -43,6 +62,7 @@ export default function() {
           {
             dataIndex: 'age',
             title: '年龄',
+            width: 85,
             render: v => (
               <EditableText
                 type="inputNumber"
@@ -55,6 +75,7 @@ export default function() {
           {
             dataIndex: 'gender',
             title: '性别',
+            width: 85,
             render: v => (
               <EditableText
                 type="select"
@@ -75,7 +96,7 @@ export default function() {
       {
         title: '操作',
         key: 'actions',
-        width: 150,
+        width: 80,
         render: () => dividersSample,
       },
     ]);
@@ -172,6 +193,7 @@ export default function() {
             table={{
               columns: columns,
               dataSource: [{ name: 'cyx', age: 25, gender: 'man' }],
+              scroll: { x: 350 },
               bordered: true,
               rowKey: 'name',
             }}
@@ -203,7 +225,8 @@ export default function() {
           </div>
           <Table
             columns={columns}
-            dataSource={[{ name: 'cyx', age: 25, gender: 'man' }]}
+            dataSource={[{ name: '这是一个测试截断字符串', age: 25, gender: 'man' }]}
+            scroll={{ x: 350 }}
             bordered={true}
             rowKey="name"
           />
@@ -215,7 +238,8 @@ export default function() {
           <Table
             fullscreen={true}
             columns={columns}
-            dataSource={[{ name: 'cyx', age: 25, gender: 'man' }]}
+            dataSource={[{ name: '这是一个测试截断字符串', age: 25, gender: 'man' }]}
+            scroll={{ x: 350 }}
             bordered={true}
             rowKey="name"
           />

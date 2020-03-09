@@ -1,24 +1,20 @@
 import "antd/lib/tooltip/style";
 
 import Tooltip from "antd/lib/tooltip";
-import React from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import stringWidth from "string-width";
+
+import { EllipsisOutlined } from "@ant-design/icons";
+import useSize from "@umijs/hooks/lib/useSize";
 
 export interface SubstringTextComponentProps {
   text: string | string[];
   textStyle?: React.CSSProperties;
   type?: "link" | "dotted";
-  /**
-   * 每行最大长度
-   */
-  width: number;
-  /**
-   * 是否全为英文字符
-   */
-  az?: "all" | "mixed" | "none";
-  /**
-   * 显示行数
-   */
-  rows?: number;
+  /** 每条数据多少行开启截取，默认一行 */
+  rowLineClamp?: number;
+  /** 最多显示条数，默认三条 */
+  maxRowCount?: number;
   rowStyle?: React.CSSProperties;
 }
 
@@ -26,37 +22,48 @@ const SubstringText: React.FC<SubstringTextComponentProps> = ({
   text,
   textStyle = {},
   type = "dotted",
-  width,
-  az = "none",
-  rows = 1,
+  rowLineClamp = 1,
+  maxRowCount = 2,
   rowStyle,
 }) => {
-  if (!text || !width) {
-    return <span>{text}</span>;
-  }
+  // const [rowStringWidth, setRowStringWidth] = useState<number[]>([]);
+  const [size, divRef] = useSize<HTMLDivElement>();
+  const rowStringWidthRef = useRef<{ content: string; px: number }[]>([]);
+  const [rowEllipsis, setRowEllipsis] = useState<{ content: string; ellipsis: boolean }[]>([]);
 
-  // TODO: 只能提示
+  useEffect(() => {
+    if (text instanceof Array) {
+      rowStringWidthRef.current = text.map((u) => ({ content: u, px: stringWidth(u) * 7 }));
+    } else {
+      rowStringWidthRef.current = [{ content: text, px: stringWidth(text) * 7 }];
+    }
+  });
 
-  /**
-   * fontSize default set 14px
-   * 14:  每个中文所占的像素值
-   * 1.7: 如果全部为英文字符（非中文字符）则再乘以1.7
-   * 1.3: 如果中英文混合 则乘以1.3
-   */
-  const limit =
-    Number(((Number(width) / 14) * (az === "all" ? 1.7 : az === "mixed" ? 1.3 : 1)).toFixed()) *
-    rows;
+  useMemo(() => {
+    setRowEllipsis(
+      rowStringWidthRef.current.map((u) => ({
+        content: u.content,
+        ellipsis: u.px > size.width * rowLineClamp,
+      }))
+    );
+  }, [size.width]);
 
-  function getTitle(content: string) {
-    return (
-      <div style={{ overflow: "auto", maxHeight: "50vh", fontSize: "smaller", ...textStyle }}>
+  function getTitle(contents: string[]) {
+    return contents.map((content, index) => (
+      <div
+        style={{ overflow: "auto", maxHeight: "50vh", fontSize: "smaller", ...textStyle }}
+        key={index}
+      >
         {content}
       </div>
-    );
+    ));
   }
 
   const baseRowStyle: React.CSSProperties = {
-    wordBreak: "break-all",
+    display: "-webkit-box",
+    WebkitLineClamp: rowLineClamp,
+    WebkitBoxOrient: "vertical",
+    overflow: "hidden",
     ...rowStyle,
   };
 
@@ -66,59 +73,54 @@ const SubstringText: React.FC<SubstringTextComponentProps> = ({
     cursor: "default",
   };
 
-  if (text instanceof Array) {
-    if (text.length <= 5) {
-      return text.some((u) => u.length > limit) ? (
-        <Tooltip title={getTitle(text.join("\n"))}>
-          {text.map((item, index) => {
-            const sub = item.length > limit ? item.substring(0, limit - 1) + "..." : item;
+  const linkStyle: React.CSSProperties = {
+    color: "#1890ff",
+    textDecoration: "none",
+    backgroundColor: "transparent",
+    outline: "none",
+    transition: "color 0.3s",
+    cursor: "default",
+  };
 
-            return (
-              <div key={index} style={baseRowStyle}>
-                {type === "link" ? <a>{sub}</a> : <span style={dottedStyle}>{sub}</span>}
+  return (
+    <div ref={divRef}>
+      {rowEllipsis.length > maxRowCount || rowEllipsis.some((u) => u.ellipsis) ? (
+        <Tooltip title={getTitle(rowEllipsis.map((u) => u.content))}>
+          {rowEllipsis
+            .filter((_, index) => index < maxRowCount)
+            .map((item, index) => (
+              <div
+                style={{ ...baseRowStyle, ...(type === "link" ? linkStyle : dottedStyle) }}
+                key={index}
+              >
+                {item.content}
               </div>
-            );
-          })}
+            ))}
+          {rowEllipsis.length > maxRowCount && (
+            <div>
+              <EllipsisOutlined style={type === "link" ? linkStyle : dottedStyle} />
+            </div>
+          )}
         </Tooltip>
       ) : (
-        <span>
-          {text.map((u, i) => (
-            <div key={i} style={baseRowStyle}>
-              {u}
-            </div>
-          ))}
-        </span>
-      );
-    }
-
-    return (
-      <Tooltip title={getTitle(text.join("\n"))}>
-        {text
-          .filter((_, i) => i < 5)
-          .map((item, index) => {
-            const sub = item.length > limit ? item.substring(0, limit - 1) + "..." : item;
-
-            return (
-              <div key={index} style={baseRowStyle}>
-                {type === "link" ? <a>{sub}</a> : <span style={dottedStyle}>{sub}</span>}
-              </div>
-            );
-          })}
-        . . .
-      </Tooltip>
-    );
-  } else if ((text && text.length) > limit) {
-    const sub = text.substring(0, limit - 1) + "...";
-    return (
-      <Tooltip title={getTitle(text)}>
-        <div style={baseRowStyle}>
-          {type === "link" ? <a>{sub}</a> : <span style={dottedStyle}>{sub}</span>}
-        </div>
-      </Tooltip>
-    );
-  } else {
-    return <span>{text}</span>;
-  }
+        rowEllipsis.map((item, index) => (
+          <div
+            style={{
+              ...baseRowStyle,
+              ...(rowEllipsis.some((u) => u.ellipsis)
+                ? type === "link"
+                  ? linkStyle
+                  : dottedStyle
+                : {}),
+            }}
+            key={index}
+          >
+            {item.content}
+          </div>
+        ))
+      )}
+    </div>
+  );
 };
 
 export default SubstringText;
