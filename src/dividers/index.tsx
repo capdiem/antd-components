@@ -47,27 +47,51 @@ const Dividers: React.FC<DividerComponentProps> = ({
       let iconPx = 0;
       let labelPx = 0;
       let fullPx = 0;
-      (rows as Row[]).forEach((u, i) => {
-        /** icon width */
-        if (u.icon) {
-          iconPx += 14;
-          if (i > 0) iconPx += 17;
 
-          fullPx += 14;
-        }
+      if (type === "vertical") {
+        (rows as Row[]).forEach((u, i) => {
+          /** icon width */
+          if (u.icon) {
+            iconPx += 14;
+            if (i > 0) iconPx += 17;
 
-        /** divider width */
-        if (i > 0) {
-          labelPx += 17;
-          fullPx += 17;
-        }
+            fullPx += 14;
+          }
 
-        // TODO: 如果样式修改了fontSize，将不是7px。需要限制修改fontSize。
-        /** single character width is 7 when font size is 14px */
-        const px = stringWidth(u.label) * 7;
-        labelPx += px;
-        fullPx += px + marginLeft;
-      });
+          /** divider width */
+          if (i > 0) {
+            labelPx += 17;
+            fullPx += 17;
+          }
+
+          // TODO: 如果样式修改了fontSize，将不是7px。需要限制修改fontSize。
+          /** single character width is 7 when font size is 14px */
+          const px = stringWidth(u.label) * 7;
+          labelPx += px;
+          fullPx += px + marginLeft;
+        });
+      } else {
+        const rowPxs = (rows as Row[]).map((u) => {
+          let i = 0;
+          let l = 0;
+          let f = 0;
+          if (u.icon) {
+            i += 14;
+            f += 14;
+          }
+
+          l += stringWidth(u.label) * 7;
+          f += l + marginLeft;
+
+          return [i, l, f, i + l + f];
+        });
+
+        rowPxs.sort((a, b) => a[3] - b[3]);
+        const maxPx = rowPxs.pop();
+        iconPx = maxPx[0];
+        labelPx = maxPx[1];
+        fullPx = maxPx[2];
+      }
 
       widthRef.current.icon = iconPx;
       widthRef.current.label = labelPx;

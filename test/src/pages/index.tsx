@@ -9,7 +9,13 @@ import { FormInstance } from 'antd/lib/form';
 import moment from 'moment';
 import React, { useEffect, useRef, useState } from 'react';
 
-import { DeleteOutlined, EditOutlined, PlusOutlined, UploadOutlined } from '@ant-design/icons';
+import {
+  DeleteOutlined,
+  EditOutlined,
+  FastBackwardFilled,
+  PlusOutlined,
+  UploadOutlined,
+} from '@ant-design/icons';
 
 import {
   Dividers,
@@ -36,6 +42,17 @@ export default function() {
       type="vertical"
       rows={[
         { label: '编辑', icon: <EditOutlined /> },
+        { label: '删除', icon: <DeleteOutlined /> },
+      ]}
+    />
+  );
+
+  const horDividersSample = (
+    <Dividers
+      type="horizontal"
+      dividerVisible={false}
+      rows={[
+        { label: '编辑信息', icon: <EditOutlined /> },
         { label: '删除', icon: <DeleteOutlined /> },
       ]}
     />
@@ -96,8 +113,8 @@ export default function() {
       {
         title: '操作',
         key: 'actions',
-        width: 80,
-        render: () => dividersSample,
+        width: 50,
+        render: () => horDividersSample,
       },
     ]);
   }, []);
@@ -206,8 +223,10 @@ export default function() {
           <h1>Dividers</h1>
           <h3>row as React.ReactNode</h3>
           <Dividers rows={[<a key="1">Action 1</a>, <a key="2">Action 2</a>]} type="vertical" />
-          <h3>row as Row</h3>
+          <h3>vertical row as Row</h3>
           {dividersSample}
+          <h3>horizontal row as Row</h3>
+          {horDividersSample}
         </Col>
         <Col span={10}>
           <div>
