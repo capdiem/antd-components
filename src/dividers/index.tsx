@@ -12,6 +12,7 @@ import useSize from "@umijs/hooks/lib/useSize";
 export interface Row {
   label: string;
   icon?: React.ReactNode;
+  visible?: boolean;
   onClick?: () => void;
 }
 
@@ -49,27 +50,29 @@ const Dividers: React.FC<DividerComponentProps> = ({
       let fullPx = 0;
 
       if (type === "vertical") {
-        (rows as Row[]).forEach((u, i) => {
-          /** icon width */
-          if (u.icon) {
-            iconPx += 14;
-            if (i > 0) iconPx += 17;
+        (rows as Row[])
+          .filter((u) => Object.keys(u).indexOf("visible") === -1 || u.visible)
+          .forEach((u, i) => {
+            /** icon width */
+            if (u.icon) {
+              iconPx += 14;
+              if (i > 0) iconPx += 17;
 
-            fullPx += 14;
-          }
+              fullPx += 14;
+            }
 
-          /** divider width */
-          if (i > 0) {
-            labelPx += 17;
-            fullPx += 17;
-          }
+            /** divider width */
+            if (i > 0) {
+              labelPx += 17;
+              fullPx += 17;
+            }
 
-          // TODO: 如果样式修改了fontSize，将不是7px。需要限制修改fontSize。
-          /** single character width is 7 when font size is 14px */
-          const px = stringWidth(u.label) * 7;
-          labelPx += px;
-          fullPx += px + marginLeft;
-        });
+            // TODO: 如果样式修改了fontSize，将不是7px。需要限制修改fontSize。
+            /** single character width is 7 when font size is 14px */
+            const px = stringWidth(u.label) * 7;
+            labelPx += px;
+            fullPx += px + marginLeft;
+          });
       } else {
         const rowPxs = (rows as Row[]).map((u) => {
           let i = 0;
