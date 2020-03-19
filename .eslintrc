@@ -1,20 +1,21 @@
 {
   "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint"],
+  "plugins": ["@typescript-eslint", "react-hooks"],
   "parserOptions": {
-    "project": "./tsconfig.json"
+    "project": "./tsconfig.json",
+    "sourceType": "module"
   },
   "extends": [
-    "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:@typescript-eslint/recommended-requiring-type-checking",
     "prettier",
     "prettier/@typescript-eslint"
   ],
   "rules": {
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/explicit-function-return-type": "off",
-    "no-console": "error"
+    "no-console": "error",
+
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn"
   }
 }
