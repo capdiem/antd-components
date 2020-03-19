@@ -26,16 +26,14 @@ import React, { useEffect, useState } from "react";
 import { ReloadOutlined, SearchOutlined } from "@ant-design/icons";
 
 import { SelectProps } from "../form-modal/types";
-import { computeCell, flatten } from "../utils";
+import { computeCell } from "../utils";
 import { Btn, Btns, BtnsGroups, FilterComponentProps, FilterItem, FilterMode } from "./types";
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 const { Group: ButtonGroup } = Button;
 
-type Props = FilterComponentProps;
-
-const Filter: React.FC<Props> = ({
+const Filter: React.FC<FilterComponentProps<any>> = ({
   style,
   mode,
   onModeChange,
@@ -63,7 +61,7 @@ const Filter: React.FC<Props> = ({
         form.setFieldsValue(query);
       }
     }
-  }, [query, defaultValues]);
+  }, []);
 
   function handleOnSearch() {
     if (typeof onSearch === "function") {

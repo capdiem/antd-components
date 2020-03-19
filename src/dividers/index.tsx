@@ -100,7 +100,7 @@ const Dividers: React.FC<DividerComponentProps> = ({
       widthRef.current.label = labelPx;
       widthRef.current.full = fullPx;
     }
-  });
+  }, []);
 
   useMemo(() => {
     if (widthRef.current.full) {
