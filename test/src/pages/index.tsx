@@ -85,7 +85,7 @@ export default function() {
                 type="inputNumber"
                 style="link"
                 initialValue={v}
-                onOk={value => console.log(value)}
+                onOk={value => Promise.resolve(() => console.log(value))}
               />
             ),
           },
@@ -104,7 +104,7 @@ export default function() {
                   ],
                 }}
                 initialValue={v}
-                onOk={value => console.log(value)}
+                onOk={value => Promise.resolve(() => console.log(value))}
               />
             ),
           },
