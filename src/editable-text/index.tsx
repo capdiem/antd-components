@@ -10,7 +10,7 @@ import InputNumber, { InputNumberProps as AntdInputNumberProps } from "antd/lib/
 import message from "antd/lib/message";
 import Select from "antd/lib/select";
 import Spin from "antd/lib/spin";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import { EditOutlined } from "@ant-design/icons";
 
@@ -69,6 +69,12 @@ function validate(rule: string, value: any) {
   }
 }
 
+function formatAndReturnValue(value: Value, type: Type, props?: SharedDataEntryProps) {
+  return type === "select"
+    ? (props as SelectProps).options.find((u) => u.value == value)?.label
+    : value;
+}
+
 const EditableText: React.FC<EditableTextComponentProps> = ({
   initialValue,
   onOk,
@@ -84,20 +90,9 @@ const EditableText: React.FC<EditableTextComponentProps> = ({
   const [value, setValue] = useState(initialValue);
   const [spinning, setSpinning] = useState(false);
 
-  const [children, setChildren] = useState<React.ReactNode>();
-
-  function setChildrenByType(value: Value, type: Type) {
-    if (type === "inputNumber" || type === "input") {
-      setChildren(value);
-    } else {
-      const item = (props as SelectProps).options.find((u) => u.value == value);
-      setChildren(item.label);
-    }
-  }
-
-  useEffect(() => {
-    setChildrenByType(initialValue, type);
-  }, []);
+  const [children, setChildren] = useState<React.ReactNode>(() =>
+    formatAndReturnValue(initialValue, type, props)
+  );
 
   function onBlur() {
     if (validate(rule, value)) {
@@ -109,7 +104,7 @@ const EditableText: React.FC<EditableTextComponentProps> = ({
       if (promise) {
         promise
           .then(() => {
-            setChildrenByType(value, type);
+            setChildren(formatAndReturnValue(value, type, props));
             setSpinning(false);
           })
           .catch(() => {
