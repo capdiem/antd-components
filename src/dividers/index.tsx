@@ -25,8 +25,8 @@ export interface DividerComponentProps {
   rowStyle?: React.CSSProperties;
 }
 
-function isRow(row: Row | React.ReactNode = {}): row is Row {
-  return (row as Row).label !== undefined;
+function isRow(row: Row | React.ReactNode): row is Row {
+  return Boolean(row) && (row as Row).label !== undefined;
 }
 
 const marginLeft = 4;
