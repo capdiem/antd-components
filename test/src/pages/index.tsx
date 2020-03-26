@@ -49,10 +49,10 @@ export default function() {
 
   const horDividersSample = (
     <Dividers
-      type="horizontal"
-      dividerVisible={false}
+      type="vertical"
+      dividerVisible={true}
       rows={[
-        { label: '编辑信息', icon: <EditOutlined /> },
+        { label: '编辑信息', icon: <EditOutlined />, disabled: true },
         { label: '删除', icon: <DeleteOutlined /> },
       ]}
     />

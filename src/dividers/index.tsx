@@ -1,6 +1,8 @@
 import "antd/lib/divider/style";
 import "antd/lib/tooltip/style";
+import "antd/lib/button/style";
 
+import Button from "antd/lib/button";
 import Divider, { DividerProps } from "antd/lib/divider";
 import Tooltip from "antd/lib/tooltip";
 import Radium from "radium";
@@ -13,6 +15,7 @@ export interface Row {
   label: string;
   icon?: React.ReactNode;
   visible?: boolean;
+  disabled?: boolean;
   onClick?: () => void;
 }
 
@@ -130,12 +133,17 @@ const Dividers: React.FC<DividerComponentProps> = ({
   function renderRow(row: React.ReactNode | Row) {
     if (isRow(row)) {
       const node = (
-        <a onClick={row.onClick}>
+        <Button
+          onClick={row.onClick}
+          type="link"
+          style={{ padding: 0, height: "inherit", borderWidth: 0 }}
+          disabled={row.disabled}
+        >
           {sizeType !== "label" && row.icon}
           {sizeType !== "icon" && (
             <span style={{ marginLeft: sizeType === "full" ? marginLeft : 0 }}>{row.label}</span>
           )}
-        </a>
+        </Button>
       );
 
       return sizeType === "icon" ? <Tooltip title={row.label}>{node}</Tooltip> : node;
