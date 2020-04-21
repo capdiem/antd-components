@@ -163,7 +163,7 @@ const Dividers: React.FC<DividerComponentProps> = ({
   return (
     <div style={{ textAlign: "center", ..._style, ...style }} ref={divRef}>
       {rows
-        .filter((row) => !!row)
+        .filter((row) => !!row && (Object.keys(row).indexOf("visible") === -1 || row["visible"]))
         .map((row, index) => {
           return (
             <div key={index}>
