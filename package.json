@@ -1,6 +1,6 @@
 {
   "name": "@capdiem/antd-components",
-  "version": "4.1.8",
+  "version": "4.1.9",
   "description": "Custom components which based on Antd Design",
   "main": "lib/index.js",
   "module": "lib/index.js",
