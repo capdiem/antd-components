@@ -52,7 +52,7 @@ export default function() {
       type="vertical"
       dividerVisible={true}
       rows={[
-        { label: '编辑信息', icon: <EditOutlined />, disabled: true },
+        { label: '编辑信息', disabled: true },
         { label: '删除', icon: <DeleteOutlined /> },
       ]}
     />
@@ -113,7 +113,7 @@ export default function() {
       {
         title: '操作',
         key: 'actions',
-        width: 50,
+        width: 120,
         render: () => horDividersSample,
       },
     ]);
@@ -122,8 +122,8 @@ export default function() {
   const reloadBtnRef = useRef<ReloadBtnRef>(null);
 
   return (
-    <div className={styles.normal}>
-      <Row gutter={9}>
+    <div>
+      <Row gutter={8}>
         <Col span={6}>
           <Button type="primary" onClick={() => setFormModalVisible(true)}>
             Form Modal
@@ -219,7 +219,7 @@ export default function() {
       </Row>
       <Divider />
       <Row gutter={8}>
-        <Col span={4}>
+        <Col span={6}>
           <h1>Dividers</h1>
           <h3>row as React.ReactNode</h3>
           <Dividers rows={[<a key="1">Action 1</a>, <a key="2">Action 2</a>]} type="vertical" />
@@ -228,6 +228,9 @@ export default function() {
           <h3>horizontal row as Row</h3>
           {horDividersSample}
         </Col>
+      </Row>
+      <Divider />
+      <Row gutter={8}>
         <Col span={10}>
           <div>
             <h1 style={{ display: 'inline-block', marginRight: 10 }}>Table</h1>
@@ -250,7 +253,7 @@ export default function() {
             rowKey="name"
           />
         </Col>
-        <Col span={10}>
+        <Col span={14}>
           <div>
             <h1>Table with fullscreen</h1>
           </div>
@@ -264,6 +267,7 @@ export default function() {
           />
         </Col>
       </Row>
+
       <FormModal
         title="Form Modal"
         tips={
