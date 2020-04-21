@@ -132,21 +132,29 @@ const Dividers: React.FC<DividerComponentProps> = ({
 
   function renderRow(row: React.ReactNode | Row) {
     if (isRow(row)) {
-      const node = (
+      const node = (type: string) => (
         <Button
           onClick={row.onClick}
           type="link"
           style={{ padding: 0, height: "inherit", borderWidth: 0 }}
           disabled={row.disabled}
         >
-          {sizeType !== "label" && row.icon}
-          {sizeType !== "icon" && (
-            <span style={{ marginLeft: sizeType === "full" ? marginLeft : 0 }}>{row.label}</span>
+          {type !== "label" && row.icon}
+          {type !== "icon" && (
+            <span style={{ marginLeft: type === "full" ? marginLeft : 0 }}>{row.label}</span>
           )}
         </Button>
       );
 
-      return sizeType === "icon" ? <Tooltip title={row.label}>{node}</Tooltip> : node;
+      if (sizeType === "icon") {
+        if (row.icon) {
+          return <Tooltip title={row.label}>{node(sizeType)}</Tooltip>;
+        } else {
+          return node("label");
+        }
+      } else {
+        return node(sizeType);
+      }
     } else {
       return row;
     }
