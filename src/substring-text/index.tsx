@@ -1,7 +1,7 @@
 import "antd/lib/tooltip/style";
 
 import Tooltip from "antd/lib/tooltip";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import stringWidth from "string-width";
 
 import { EllipsisOutlined } from "@ant-design/icons";
@@ -27,29 +27,27 @@ const SubstringText: React.FC<SubstringTextComponentProps> = ({
   rowStyle,
 }) => {
   const [size, divRef] = useSize<HTMLDivElement>();
-  const rowStringWidthRef = useRef<{ content: string; px: number }[]>([]);
   const [rowEllipsis, setRowEllipsis] = useState<{ content: string; ellipsis: boolean }[]>([]);
 
   useEffect(() => {
     const initValue = text || [];
+    let rowStringWidths = [];
 
     if (initValue instanceof Array) {
-      rowStringWidthRef.current = initValue
+      rowStringWidths = initValue
         .filter((u) => u)
         .map((u) => ({ content: u, px: stringWidth(u) * 7 }));
     } else {
-      rowStringWidthRef.current = [{ content: initValue, px: stringWidth(initValue) * 7 }];
+      rowStringWidths = [{ content: initValue, px: stringWidth(initValue) * 7 }];
     }
-  });
 
-  useMemo(() => {
     setRowEllipsis(
-      rowStringWidthRef.current.map((u) => ({
+      rowStringWidths.map((u) => ({
         content: u.content,
         ellipsis: u.px > size.width * rowLineClamp,
       }))
     );
-  }, [size.width]);
+  }, [text, size.width, rowLineClamp]);
 
   function getTitle(contents: string[]) {
     return contents.map((content, index) => (
