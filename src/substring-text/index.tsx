@@ -50,14 +50,18 @@ const SubstringText: React.FC<SubstringTextComponentProps> = ({
   }, [text, size.width, rowLineClamp]);
 
   function getTitle(contents: string[]) {
-    return contents.map((content, index) => (
-      <div
-        style={{ overflow: "auto", maxHeight: "50vh", fontSize: "smaller", ...textStyle }}
-        key={index}
-      >
-        {content}
+    return (
+      <div style={{ maxHeight: "50vh", overflow: "auto" }}>
+        {contents.map((content, index) => (
+          <div
+            style={{ overflow: "auto", maxHeight: "50vh", fontSize: "smaller", ...textStyle }}
+            key={index}
+          >
+            {content}
+          </div>
+        ))}
       </div>
-    ));
+    );
   }
 
   const baseRowStyle: React.CSSProperties = {
