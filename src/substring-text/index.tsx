@@ -23,7 +23,7 @@ const SubstringText: React.FC<SubstringTextComponentProps> = ({
   textStyle = {},
   type = "dotted",
   rowLineClamp = 1,
-  maxRowCount = 2,
+  maxRowCount = 3,
   rowStyle,
 }) => {
   const [size, divRef] = useSize<HTMLDivElement>();
@@ -85,12 +85,16 @@ const SubstringText: React.FC<SubstringTextComponentProps> = ({
     cursor: "default",
   };
 
+  const greaterThanMaxRowCount = rowEllipsis.length > maxRowCount;
+
   return (
     <div ref={divRef}>
-      {rowEllipsis.length > maxRowCount || rowEllipsis.some((u) => u.ellipsis) ? (
+      {greaterThanMaxRowCount || rowEllipsis.some((u) => u.ellipsis) ? (
         <Tooltip title={getTitle(rowEllipsis.map((u) => u.content))}>
           {rowEllipsis
-            .filter((_, index) => index < maxRowCount)
+            .filter((_, index) =>
+              greaterThanMaxRowCount ? index < maxRowCount - 1 : index < maxRowCount
+            ) // -1 because the last line is ellipsis
             .map((item, index) => (
               <div
                 style={{ ...baseRowStyle, ...(type === "link" ? linkStyle : dottedStyle) }}
