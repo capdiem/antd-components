@@ -99,8 +99,8 @@ const SubstringText: React.FC<SubstringTextComponentProps> = ({
                 {item.content}
               </div>
             ))}
-          {rowEllipsis.length > maxRowCount && (
-            <div>
+          {greaterThanMaxRowCount && (
+            <div style={rowStyle}>
               <EllipsisOutlined style={type === "link" ? linkStyle : dottedStyle} />
             </div>
           )}
