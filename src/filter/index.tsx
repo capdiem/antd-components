@@ -42,6 +42,8 @@ const Filter: React.FC<FilterComponentProps<any>> = ({
   size = "middle",
   items = [],
   btns = [],
+  searchText,
+  reloadText,
   reloadBtnRef,
   onSearch,
   onReload,
@@ -389,14 +391,18 @@ const Filter: React.FC<FilterComponentProps<any>> = ({
                       type="primary"
                       icon={<SearchOutlined />}
                       onClick={handleOnSearch}
-                    />
+                    >
+                      {searchText}
+                    </Button>
                     <Button
                       size={size}
                       type="primary"
                       icon={<ReloadOutlined />}
                       onClick={(e) => handleOnReload(e)}
                       ref={reloadBtnRef as any}
-                    />
+                    >
+                      {reloadText}
+                    </Button>
                   </ButtonGroup>
                 </Col>
                 {mode !== undefined && (

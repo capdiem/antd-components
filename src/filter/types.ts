@@ -58,6 +58,8 @@ export interface FilterComponentProps<T = any> {
   size?: Size;
   items?: Array<FilterItems<T>>;
   btns?: Btns | BtnsGroups;
+  searchText?: string;
+  reloadText?: string;
   onSearch?: (values?: T) => void;
   onReload?: () => void;
   reloadBtnRef?: React.RefObject<ReloadBtnRef> | React.MutableRefObject<ReloadBtnRef>;
