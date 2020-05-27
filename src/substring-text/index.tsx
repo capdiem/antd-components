@@ -95,38 +95,41 @@ const SubstringText: React.FC<SubstringTextComponentProps> = ({
     <div ref={divRef}>
       {greaterThanMaxRowCount || rowEllipsis.some((u) => u.ellipsis) ? (
         <Tooltip title={getTitle(rowEllipsis.map((u) => u.content))}>
-          {rowEllipsis
-            .filter((_, index) =>
-              greaterThanMaxRowCount ? index < maxRowCount - 1 : index < maxRowCount
-            ) // -1 because the last line is ellipsis
-            .map((item, index) => (
-              <div
-                style={{ ...baseRowStyle, ...(type === "link" ? linkStyle : dottedStyle) }}
-                key={index}
-              >
-                {item.content}
+          <>
+            {rowEllipsis
+              .filter((_, index) =>
+                greaterThanMaxRowCount ? index < maxRowCount - 1 : index < maxRowCount
+              ) // -1 because the last line is ellipsis
+              .map((item, index) => (
+                <div key={index}>
+                  <p style={{ ...baseRowStyle, ...(type === "link" ? linkStyle : dottedStyle) }}>
+                    {item.content}
+                  </p>
+                </div>
+              ))}
+            {greaterThanMaxRowCount && (
+              <div style={rowStyle}>
+                <EllipsisOutlined style={type === "link" ? linkStyle : dottedStyle} />
               </div>
-            ))}
-          {greaterThanMaxRowCount && (
-            <div style={rowStyle}>
-              <EllipsisOutlined style={type === "link" ? linkStyle : dottedStyle} />
-            </div>
-          )}
+            )}
+          </>
         </Tooltip>
       ) : (
         rowEllipsis.map((item, index) => (
-          <div
-            style={{
-              ...baseRowStyle,
-              ...(rowEllipsis.some((u) => u.ellipsis)
-                ? type === "link"
-                  ? linkStyle
-                  : dottedStyle
-                : {}),
-            }}
-            key={index}
-          >
-            {item.content}
+          <div>
+            <p
+              style={{
+                ...baseRowStyle,
+                ...(rowEllipsis.some((u) => u.ellipsis)
+                  ? type === "link"
+                    ? linkStyle
+                    : dottedStyle
+                  : {}),
+              }}
+              key={index}
+            >
+              {item.content}
+            </p>
           </div>
         ))
       )}
