@@ -147,9 +147,9 @@ const EditableText: React.FC<EditableTextComponentProps> = ({
           autoFocus
           {...etc}
         >
-          {options.map(({ label, value, disabled = false }) => (
-            <Option value={value} key={value} disabled={disabled}>
-              {label}
+          {options.map(({ label: content, ...opts }) => (
+            <Option key={opts.value} {...opts}>
+              {content}
             </Option>
           ))}
         </Select>

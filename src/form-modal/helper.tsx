@@ -56,9 +56,9 @@ function renderDataEntry(
       const { options, ...etc } = props as SelectProps;
       element = (
         <Select size={size} style={{ width: "100%" }} {...etc}>
-          {options.map(({ label: _label, value, ...opts }) => (
-            <Option key={value} value={value} {...opts}>
-              {_label}
+          {options.map(({ label: content, ...opts }) => (
+            <Option key={opts.value} {...opts}>
+              {content}
             </Option>
           ))}
         </Select>
@@ -81,9 +81,9 @@ function renderDataEntry(
           }
           {...etc}
         >
-          {options.map(({ label: _label, value }) => (
-            <Option key={value} value={value}>
-              {_label}
+          {options.map(({ label: content, ...opts }) => (
+            <Option key={opts.value} {...opts}>
+              {content}
             </Option>
           ))}
         </Select>
@@ -104,9 +104,9 @@ function renderDataEntry(
           style={{ width: "100%" }}
           {...etc}
         >
-          {options.map(({ label: _label, value }) => (
-            <Option key={value} value={value}>
-              {_label}
+          {options.map(({ label: content, ...opts }) => (
+            <Option key={opts.value} {...opts}>
+              {content}
             </Option>
           ))}
         </Select>

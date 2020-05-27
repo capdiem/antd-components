@@ -117,9 +117,9 @@ const Filter: React.FC<FilterComponentProps<any>> = ({
 
         element = (
           <Select placeholder={placeholder || label} style={style} size={size} {...etc}>
-            {options.map((u) => (
-              <Option key={u.value} value={u.value}>
-                {u.label}
+            {options.map(({ label: content, ...opts }) => (
+              <Option key={opts.value} {...opts}>
+                {content}
               </Option>
             ))}
           </Select>
@@ -144,9 +144,9 @@ const Filter: React.FC<FilterComponentProps<any>> = ({
             }
             {...etc}
           >
-            {options.map(({ label: lb, value }) => (
-              <Option key={value} value={value}>
-                {lb}
+            {options.map(({ label: content, ...opts }) => (
+              <Option key={opts.value} {...opts}>
+                {content}
               </Option>
             ))}
           </Select>
@@ -169,9 +169,9 @@ const Filter: React.FC<FilterComponentProps<any>> = ({
             style={style}
             {...etc}
           >
-            {options.map((u) => (
-              <Option key={u.value} value={u.value}>
-                {u.label}
+            {options.map(({ label: content, ...opts }) => (
+              <Option key={opts.value} {...opts}>
+                {content}
               </Option>
             ))}
           </Select>
