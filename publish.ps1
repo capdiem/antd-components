@@ -6,11 +6,11 @@
 #>
 [CmdletBinding()]
 param (
-  [Parameter(Position = 0, HelpMessageBaseName = 'Please input npm publish tag')]
+  [Parameter(Mandatory = $true, Position = 0, HelpMessageBaseName = 'Please input npm publish tag')]
   [ValidateSet('latest', 'alpha', 'beta')]
   [string]
   $tag = 'latest',
-  [Parameter(Position = 1, HelpMessage = 'version can not be $null')]
+  [Parameter(Mandatory = $true, Position = 1, HelpMessage = 'version can not be $null')]
   [ValidateSet('major', 'minor', 'patch', 'incr.', 'custom')]
   [string]
   $version,
