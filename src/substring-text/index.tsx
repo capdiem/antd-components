@@ -95,7 +95,7 @@ const SubstringText: React.FC<SubstringTextComponentProps> = ({
     <div ref={divRef}>
       {greaterThanMaxRowCount || rowEllipsis.some((u) => u.ellipsis) ? (
         <Tooltip title={getTitle(rowEllipsis.map((u) => u.content))}>
-          <>
+          <div>
             {rowEllipsis
               .filter((_, index) =>
                 greaterThanMaxRowCount ? index < maxRowCount - 1 : index < maxRowCount
@@ -112,7 +112,7 @@ const SubstringText: React.FC<SubstringTextComponentProps> = ({
                 <EllipsisOutlined style={type === "link" ? linkStyle : dottedStyle} />
               </div>
             )}
-          </>
+          </div>
         </Tooltip>
       ) : (
         rowEllipsis.map((item, index) => (
