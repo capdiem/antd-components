@@ -37,9 +37,9 @@ export default function() {
   const [formModalVisibleWithoutData, setFormModalVisibleWithoutData] = useState<boolean>(false);
   const [tableModalVisible, setTableModalVisible] = useState<boolean>(false);
 
-  const dividersSample = (
+  const horizontalDividersSample = (
     <Dividers
-      type="vertical"
+      type="horizontal"
       rows={[
         { label: '编辑', icon: <EditOutlined /> },
         { label: '删除', icon: <DeleteOutlined /> },
@@ -47,7 +47,7 @@ export default function() {
     />
   );
 
-  const horDividersSample = (
+  const verticalDividersSample = (
     <Dividers
       type="vertical"
       dividerVisible={true}
@@ -327,7 +327,7 @@ export default function() {
         title: '操作',
         key: 'actions',
         width: 120,
-        render: () => horDividersSample,
+        render: () => verticalDividersSample,
       },
     ]);
   }, []);
@@ -437,9 +437,20 @@ export default function() {
           <h3>row as React.ReactNode</h3>
           <Dividers rows={[<a key="1">Action 1</a>, <a key="2">Action 2</a>]} type="vertical" />
           <h3>vertical row as Row</h3>
-          {dividersSample}
+          {horizontalDividersSample}
           <h3>horizontal row as Row</h3>
-          {horDividersSample}
+          {verticalDividersSample}
+        </Col>
+        <Col span={16}>
+          <h1>SubstringText</h1>
+          <SubstringText
+            text={[
+              '> LINE 1:SubstringText is a auto slice string text Component',
+              '> LINE 2:SubstringText is a auto slice string text Component',
+              '> LINE 3:SubstringText is a auto slice string text Component',
+              '> LINE 4:SubstringText is a auto slice string text Component',
+            ]}
+          />
         </Col>
       </Row>
       <Divider />
