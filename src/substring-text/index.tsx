@@ -71,7 +71,6 @@ const SubstringText: React.FC<SubstringTextComponentProps> = ({
     overflow: "hidden",
     margin: "-4px 0px",
     overflowWrap: "anywhere",
-    ...rowStyle,
   };
 
   const dottedStyle: React.CSSProperties = {
@@ -101,7 +100,7 @@ const SubstringText: React.FC<SubstringTextComponentProps> = ({
                 greaterThanMaxRowCount ? index < maxRowCount - 1 : index < maxRowCount
               ) // -1 because the last line is ellipsis
               .map((item, index) => (
-                <div key={index}>
+                <div key={index} style={rowStyle}>
                   <p style={{ ...baseRowStyle, ...(type === "link" ? linkStyle : dottedStyle) }}>
                     {item.content}
                   </p>
@@ -116,7 +115,7 @@ const SubstringText: React.FC<SubstringTextComponentProps> = ({
         </Tooltip>
       ) : (
         rowEllipsis.map((item, index) => (
-          <div>
+          <div key={index} style={rowStyle}>
             <p
               style={{
                 ...baseRowStyle,
