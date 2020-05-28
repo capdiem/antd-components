@@ -39,7 +39,7 @@ export declare type Style = "link" | "text";
 export declare type Value = string | number;
 
 export interface EditableTextComponentProps {
-  children: Value;
+  children?: Value;
   initialValue: Value;
   onOk: (value: any) => Promise<any>;
   needOnOkLoading?: boolean;
