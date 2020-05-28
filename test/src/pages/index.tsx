@@ -14,6 +14,8 @@ import {
   EditOutlined,
   FastBackwardFilled,
   PlusOutlined,
+  ProfileOutlined,
+  SyncOutlined,
   UploadOutlined,
 } from '@ant-design/icons';
 
@@ -26,6 +28,7 @@ import {
   Table,
   TableModal,
 } from '../../../src';
+import { RowsGroups } from '../../../src/dividers';
 import { ReloadBtnRef } from '../../../src/filter/types';
 import { TableColumnProps } from '../../../src/table/types';
 import styles from './index.css';
@@ -37,26 +40,9 @@ export default function() {
   const [formModalVisibleWithoutData, setFormModalVisibleWithoutData] = useState<boolean>(false);
   const [tableModalVisible, setTableModalVisible] = useState<boolean>(false);
 
-  const horizontalDividersSample = (
-    <Dividers
-      type="horizontal"
-      rows={[
-        { label: '编辑', icon: <EditOutlined /> },
-        { label: '删除', icon: <DeleteOutlined /> },
-      ]}
-    />
-  );
+  const horizontalDividersSample = (rows: RowsGroups) => <Dividers type="horizontal" rows={rows} />;
 
-  const verticalDividersSample = (
-    <Dividers
-      type="vertical"
-      dividerVisible={true}
-      rows={[
-        { label: '编辑信息', disabled: true },
-        { label: '删除', icon: <DeleteOutlined /> },
-      ]}
-    />
-  );
+  const verticalDividersSample = (rows: RowsGroups) => <Dividers type="vertical" rows={rows} />;
 
   useEffect(() => {
     setColumns([
@@ -326,8 +312,18 @@ export default function() {
       {
         title: '操作',
         key: 'actions',
-        width: 120,
-        render: () => verticalDividersSample,
+        width: 100,
+        render: () =>
+          verticalDividersSample([
+            [
+              { label: '编辑', icon: <EditOutlined /> },
+              { label: '删除', icon: <DeleteOutlined /> },
+            ],
+            [
+              { label: '同步', icon: <SyncOutlined /> },
+              { label: '查看详情', icon: <ProfileOutlined /> },
+            ],
+          ]),
       },
     ]);
   }, []);
@@ -437,11 +433,55 @@ export default function() {
           <h3>row as React.ReactNode</h3>
           <Dividers rows={[<a key="1">Action 1</a>, <a key="2">Action 2</a>]} type="vertical" />
           <h3>vertical row as Row</h3>
-          {horizontalDividersSample}
+          {horizontalDividersSample([
+            [
+              { label: '编辑', icon: <EditOutlined /> },
+              { label: '删除', icon: <DeleteOutlined /> },
+            ],
+          ])}
           <h3>horizontal row as Row</h3>
-          {verticalDividersSample}
+          {verticalDividersSample([
+            [
+              { label: '编辑', icon: <EditOutlined /> },
+              { label: '删除', icon: <DeleteOutlined /> },
+            ],
+          ])}
         </Col>
-        <Col span={16}>
+        <Col span={6}>
+          <h1>Dividers For Multi Rows</h1>
+          <h3>row as React.ReactNode</h3>
+          <Dividers
+            outerDividerVisible={false}
+            rows={[
+              [<a key="1-1">Action 1</a>, <a key="1-2">Action 2</a>],
+              [<a key="2-1">Action 1</a>, <a key="2-2">Action 2</a>],
+            ]}
+            type="vertical"
+          />
+          <h3>vertical row as Row</h3>
+          {horizontalDividersSample([
+            [
+              { label: '编辑', icon: <EditOutlined /> },
+              { label: '删除', icon: <DeleteOutlined /> },
+            ],
+            [
+              { label: '同步', icon: <SyncOutlined /> },
+              { label: '查看详情', icon: <ProfileOutlined /> },
+            ],
+          ])}
+          <h3>horizontal row as Row</h3>
+          {verticalDividersSample([
+            [
+              { label: '编辑', icon: <EditOutlined /> },
+              { label: '删除', icon: <DeleteOutlined /> },
+            ],
+            [
+              { label: '同步', icon: <SyncOutlined /> },
+              { label: '查看', icon: <ProfileOutlined /> },
+            ],
+          ])}
+        </Col>
+        <Col span={12}>
           <h1>SubstringText</h1>
           <SubstringText
             text={[
