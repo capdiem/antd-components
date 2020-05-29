@@ -124,12 +124,22 @@ const Dividers: React.FC<DividerComponentProps> = ({
 
     if (!isRow(groups[0][0])) return;
 
-    const results =
-      type === "vertical"
-        ? groups.map((g: Rows) => computeVertical(g))
-        : groups.map((g: Rows) => computeHorizontal(g));
+    if (type == "vertical") {
+      widthRef.current = groups.map((g: Rows) => computeVertical(g));
+    } else {
+      let iconSumPx = 0,
+        labelSumPx = 0,
+        fullSumPx = 0;
 
-    widthRef.current = results;
+      const results = groups.map((g: Rows) => computeHorizontal(g));
+      results.forEach((pxs) => {
+        iconSumPx += pxs[iconIndex];
+        labelSumPx += pxs[labelIndex];
+        fullSumPx += pxs[fullIndex];
+      });
+
+      widthRef.current = results.map(() => [iconSumPx, labelSumPx, fullSumPx]);
+    }
   }, []);
 
   function getSizeType(pxs: number[], size: number) {
