@@ -10,6 +10,7 @@ import InputNumber, { InputNumberProps as AntdInputNumberProps } from "antd/lib/
 import message from "antd/lib/message";
 import Select from "antd/lib/select";
 import Spin from "antd/lib/spin";
+import TreeSelect, { TreeSelectProps } from "antd/lib/tree-select";
 import React, { useState } from "react";
 
 import { EditOutlined } from "@ant-design/icons";
@@ -31,15 +32,18 @@ declare type SelectProps = Omit<
   "size" | "onBlur" | "onSelect" | "value" | "autoFocus"
 >;
 
-export declare type SharedDataEntryProps = InputProps | InputNumberProps | SelectProps;
+export declare type SharedDataEntryProps =
+  | InputProps
+  | InputNumberProps
+  | SelectProps
+  | TreeSelectProps<any>;
 
-export declare type Type = "input" | "inputNumber" | "select";
+export declare type Type = "input" | "inputNumber" | "select" | "treeSelect";
 export declare type Rule = "string" | "email";
 export declare type Style = "link" | "text";
 export declare type Value = string | number;
 
 export interface EditableTextComponentProps {
-  children?: Value;
   initialValue: Value;
   onOk: (value: any) => Promise<any>;
   needOnOkLoading?: boolean;
@@ -69,12 +73,6 @@ function validate(rule: string, value: any) {
   }
 }
 
-function formatAndReturnValue(value: Value, type: Type, props?: SharedDataEntryProps) {
-  return type === "select"
-    ? (props as SelectProps).options.find((u) => u.value == value)?.label
-    : value;
-}
-
 const EditableText: React.FC<EditableTextComponentProps> = ({
   initialValue,
   onOk,
@@ -85,14 +83,11 @@ const EditableText: React.FC<EditableTextComponentProps> = ({
   needOnOkLoading = true,
   rootStyle,
   props,
+  children,
 }) => {
   const [editable, setEditable] = useState(false);
   const [value, setValue] = useState(initialValue);
   const [spinning, setSpinning] = useState(false);
-
-  const [children, setChildren] = useState<React.ReactNode>(() =>
-    formatAndReturnValue(initialValue, type, props)
-  );
 
   function onBlur() {
     if (validate(rule, value)) {
@@ -104,7 +99,6 @@ const EditableText: React.FC<EditableTextComponentProps> = ({
       if (promise) {
         promise
           .then(() => {
-            setChildren(formatAndReturnValue(value, type, props));
             setSpinning(false);
           })
           .catch(() => {
@@ -153,6 +147,18 @@ const EditableText: React.FC<EditableTextComponentProps> = ({
             </Option>
           ))}
         </Select>
+      );
+    } else if (type === "treeSelect") {
+      element = (
+        <TreeSelect
+          size={size}
+          style={{ width: "100%" }}
+          onBlur={onBlur}
+          onChange={onChange}
+          value={value}
+          allowClear={true}
+          {...(props as TreeSelectProps<any>)}
+        />
       );
     } else {
       element = (
