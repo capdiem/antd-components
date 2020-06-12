@@ -41,11 +41,11 @@ export declare type SharedDataEntryProps =
 export declare type Type = "input" | "inputNumber" | "select" | "treeSelect";
 export declare type Rule = "string" | "email";
 export declare type Style = "link" | "text";
-export declare type Value = string | number;
+export declare type Value = string | number | string[];
 
 export interface EditableTextComponentProps {
   initialValue: Value;
-  onOk: (value: any) => Promise<any>;
+  onOk: (value: any) => Promise<any> | void;
   needOnOkLoading?: boolean;
   size?: Size;
   style?: Style;
