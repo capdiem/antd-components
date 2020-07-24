@@ -10,7 +10,7 @@ import useSize from "@umijs/hooks/lib/useSize";
 export interface SubstringTextComponentProps {
   text: string | string[];
   textStyle?: React.CSSProperties;
-  type?: "link" | "dotted";
+  type?: "link" | "dotted" | "plain";
   /** 每条数据多少行开启截取，默认一行 */
   rowLineClamp?: number;
   /** 最多显示条数，默认三条 */
@@ -90,6 +90,8 @@ const SubstringText: React.FC<SubstringTextComponentProps> = ({
 
   const greaterThanMaxRowCount = rowEllipsis.length > maxRowCount;
 
+  const borderStyle = type === "plain" ? {} : type === "link" ? linkStyle : dottedStyle;
+
   return (
     <div ref={divRef}>
       {greaterThanMaxRowCount || rowEllipsis.some((u) => u.ellipsis) ? (
@@ -101,14 +103,12 @@ const SubstringText: React.FC<SubstringTextComponentProps> = ({
               ) // -1 because the last line is ellipsis
               .map((item, index) => (
                 <div key={index} style={rowStyle}>
-                  <p style={{ ...baseRowStyle, ...(type === "link" ? linkStyle : dottedStyle) }}>
-                    {item.content}
-                  </p>
+                  <p style={{ ...baseRowStyle, ...borderStyle }}>{item.content}</p>
                 </div>
               ))}
             {greaterThanMaxRowCount && (
               <div style={rowStyle}>
-                <EllipsisOutlined style={type === "link" ? linkStyle : dottedStyle} />
+                <EllipsisOutlined style={borderStyle} />
               </div>
             )}
           </div>
@@ -119,11 +119,7 @@ const SubstringText: React.FC<SubstringTextComponentProps> = ({
             <p
               style={{
                 ...baseRowStyle,
-                ...(rowEllipsis.some((u) => u.ellipsis)
-                  ? type === "link"
-                    ? linkStyle
-                    : dottedStyle
-                  : {}),
+                ...(rowEllipsis.some((u) => u.ellipsis) ? borderStyle : {}),
               }}
               key={index}
             >
