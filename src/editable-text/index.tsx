@@ -114,6 +114,10 @@ const EditableText: React.FC<EditableTextComponentProps> = ({
     setValue(value);
   }
 
+  function onChangeEvent(e: any) {
+    setValue(e.target.value);
+  }
+
   let element: React.ReactElement;
 
   if (editable) {
@@ -167,7 +171,7 @@ const EditableText: React.FC<EditableTextComponentProps> = ({
           onBlur={onBlur}
           onPressEnter={onBlur}
           value={value}
-          onChange={onChange}
+          onChange={onChangeEvent}
           autoFocus
           {...(props as InputProps)}
         />
