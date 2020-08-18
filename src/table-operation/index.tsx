@@ -4,12 +4,14 @@ import "antd/lib/dropdown/style";
 import "antd/lib/menu/style";
 
 import Button from "antd/lib/button";
+import ConfigProvider from "antd/lib/config-provider";
 import Dropdown from "antd/lib/dropdown";
 import Menu from "antd/lib/menu";
 import React from "react";
 
 import { BarsOutlined, DownOutlined } from "@ant-design/icons";
 
+import { getConfigProviderProps } from "../";
 import { Items, TableOperationComponentProps } from "./types";
 
 const { Item: MenuItem, Divider: MenuDivider } = Menu;
@@ -60,12 +62,14 @@ const TableOperation: React.FC<TableOperationComponentProps> = ({
   };
 
   return (
-    <Dropdown overlay={<Menu>{menuItems}</Menu>} trigger={["click"]}>
-      <Button size={size} style={rootStyle}>
-        <BarsOutlined />
-        <DownOutlined />
-      </Button>
-    </Dropdown>
+    <ConfigProvider {...getConfigProviderProps()}>
+      <Dropdown overlay={<Menu>{menuItems}</Menu>} trigger={["click"]}>
+        <Button size={size} style={rootStyle}>
+          <BarsOutlined />
+          <DownOutlined />
+        </Button>
+      </Dropdown>
+    </ConfigProvider>
   );
 };
 

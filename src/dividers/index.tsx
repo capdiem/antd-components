@@ -3,6 +3,7 @@ import "antd/lib/tooltip/style";
 import "antd/lib/button/style";
 
 import Button from "antd/lib/button";
+import ConfigProvider from "antd/lib/config-provider";
 import Divider, { DividerProps } from "antd/lib/divider";
 import Tooltip from "antd/lib/tooltip";
 import Radium from "radium";
@@ -10,6 +11,8 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import stringWidth from "string-width";
 
 import useSize from "@umijs/hooks/lib/useSize";
+
+import { getConfigProviderProps } from "../";
 
 export interface Row {
   label: string;
@@ -224,28 +227,30 @@ const Dividers: React.FC<DividerComponentProps> = ({
   }
 
   return (
-    <div
-      ref={divRef}
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        flexDirection: type === "horizontal" ? "row" : "column",
-      }}
-    >
-      {(rows[0] instanceof Array ? rows : [rows]).map((u: Rows, i) => (
-        <>
-          {i !== 0 && outerDividerVisible && (
-            <Divider
-              style={{ ...defaultOuterDividerStyle, ...outerDividerStyle }}
-              type={switchedType}
-            />
-          )}
-          <div key={`row${i}`} style={{ ...defaultStyle, ...style }}>
-            {renderItem(u, i)}
-          </div>
-        </>
-      ))}
-    </div>
+    <ConfigProvider {...getConfigProviderProps()}>
+      <div
+        ref={divRef}
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          flexDirection: type === "horizontal" ? "row" : "column",
+        }}
+      >
+        {(rows[0] instanceof Array ? rows : [rows]).map((u: Rows, i) => (
+          <>
+            {i !== 0 && outerDividerVisible && (
+              <Divider
+                style={{ ...defaultOuterDividerStyle, ...outerDividerStyle }}
+                type={switchedType}
+              />
+            )}
+            <div key={`row${i}`} style={{ ...defaultStyle, ...style }}>
+              {renderItem(u, i)}
+            </div>
+          </>
+        ))}
+      </div>
+    </ConfigProvider>
   );
 };
 

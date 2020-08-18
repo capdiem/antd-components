@@ -13,6 +13,7 @@ import "antd/lib/upload/style";
 import Button from "antd/lib/button";
 import Cascader, { CascaderProps } from "antd/lib/cascader";
 import Col from "antd/lib/col";
+import ConfigProvider from "antd/lib/config-provider";
 import DatePicker from "antd/lib/date-picker";
 import Form from "antd/lib/form";
 import Input, { InputProps, TextAreaProps } from "antd/lib/input";
@@ -25,6 +26,7 @@ import React, { useEffect, useState } from "react";
 
 import { ReloadOutlined, SearchOutlined } from "@ant-design/icons";
 
+import { getConfigProviderProps } from "../";
 import { SelectProps } from "../form-modal/types";
 import { computeCell } from "../utils";
 import { Btn, Btns, BtnsGroups, FilterComponentProps, FilterItem, FilterMode } from "./types";
@@ -355,79 +357,81 @@ const Filter: React.FC<FilterComponentProps<any>> = ({
       : {};
 
   return (
-    <div style={rootStyle}>
-      {!!cols.length && (filterMode === undefined || filterMode === "advanced") && (
-        <Form form={form} initialValues={defaultValues}>
-          <Row gutter={4} style={formItemsGroupStyle}>
-            {cols}
-          </Row>
-        </Form>
-      )}
-      <Row justify="end" gutter={8}>
-        {!!cols.length && filterMode === "simple" && (
-          <Col>
-            <Form form={form} initialValues={defaultValues}>
-              <Row justify="end" gutter={4}>
-                {cols}
-              </Row>
-            </Form>
-          </Col>
+    <ConfigProvider {...getConfigProviderProps()}>
+      <div style={rootStyle}>
+        {!!cols.length && (filterMode === undefined || filterMode === "advanced") && (
+          <Form form={form} initialValues={defaultValues}>
+            <Row gutter={4} style={formItemsGroupStyle}>
+              {cols}
+            </Row>
+          </Form>
         )}
-        <Col>
-          <Row gutter={4}>
-            {btnElementGroups.map((btnElements, index) => (
-              <Col style={{ marginBottom: 4 }} key={index}>
-                <ButtonGroup size={size} style={{ display: "flex" }}>
-                  {btnElements}
-                </ButtonGroup>
-              </Col>
-            ))}
-            {cols.length > 0 && (
-              <>
-                <Col style={{ marginBottom: 4 }}>
-                  <ButtonGroup size={size}>
-                    <Button
-                      size={size}
-                      type="primary"
-                      icon={<SearchOutlined />}
-                      onClick={handleOnSearch}
-                    >
-                      {searchText}
-                    </Button>
-                    <Button
-                      size={size}
-                      type="primary"
-                      icon={<ReloadOutlined />}
-                      onClick={(e) => handleOnReload(e)}
-                      ref={reloadBtnRef as any}
-                    >
-                      {reloadText}
-                    </Button>
+        <Row justify="end" gutter={8}>
+          {!!cols.length && filterMode === "simple" && (
+            <Col>
+              <Form form={form} initialValues={defaultValues}>
+                <Row justify="end" gutter={4}>
+                  {cols}
+                </Row>
+              </Form>
+            </Col>
+          )}
+          <Col>
+            <Row gutter={4}>
+              {btnElementGroups.map((btnElements, index) => (
+                <Col style={{ marginBottom: 4 }} key={index}>
+                  <ButtonGroup size={size} style={{ display: "flex" }}>
+                    {btnElements}
                   </ButtonGroup>
                 </Col>
-                {mode !== undefined && (
+              ))}
+              {cols.length > 0 && (
+                <>
                   <Col style={{ marginBottom: 4 }}>
-                    <Button
-                      size={size}
-                      style={{ padding: 4 }}
-                      type="link"
-                      onClick={() => {
-                        const toggledMode = filterMode === "advanced" ? "simple" : "advanced";
-
-                        setFilterMode(toggledMode);
-                        onModeChange && onModeChange(toggledMode);
-                      }}
-                    >
-                      {filterMode === "advanced" ? "简单搜索" : "高级搜索"}
-                    </Button>
+                    <ButtonGroup size={size}>
+                      <Button
+                        size={size}
+                        type="primary"
+                        icon={<SearchOutlined />}
+                        onClick={handleOnSearch}
+                      >
+                        {searchText}
+                      </Button>
+                      <Button
+                        size={size}
+                        type="primary"
+                        icon={<ReloadOutlined />}
+                        onClick={(e) => handleOnReload(e)}
+                        ref={reloadBtnRef as any}
+                      >
+                        {reloadText}
+                      </Button>
+                    </ButtonGroup>
                   </Col>
-                )}
-              </>
-            )}
-          </Row>
-        </Col>
-      </Row>
-    </div>
+                  {mode !== undefined && (
+                    <Col style={{ marginBottom: 4 }}>
+                      <Button
+                        size={size}
+                        style={{ padding: 4 }}
+                        type="link"
+                        onClick={() => {
+                          const toggledMode = filterMode === "advanced" ? "simple" : "advanced";
+
+                          setFilterMode(toggledMode);
+                          onModeChange && onModeChange(toggledMode);
+                        }}
+                      >
+                        {filterMode === "advanced" ? "简单搜索" : "高级搜索"}
+                      </Button>
+                    </Col>
+                  )}
+                </>
+              )}
+            </Row>
+          </Col>
+        </Row>
+      </div>
+    </ConfigProvider>
   );
 };
 

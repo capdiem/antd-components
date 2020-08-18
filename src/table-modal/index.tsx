@@ -1,8 +1,10 @@
 import "antd/lib/modal/style";
 
+import ConfigProvider from "antd/lib/config-provider";
 import Modal, { ModalProps } from "antd/lib/modal";
 import React from "react";
 
+import { getConfigProviderProps } from "../";
 import Filter from "../filter";
 import Table from "../table";
 import { TableComponentProps } from "../table/types";
@@ -25,11 +27,13 @@ const TableModal: React.FC<TableModalComponentProps<any, any>> = ({
   };
 
   return (
-    <Modal {...modalProps}>
-      {header}
-      {filter && <Filter {...filter} />}
-      <Table {...tableProps} />
-    </Modal>
+    <ConfigProvider {...getConfigProviderProps()}>
+      <Modal {...modalProps}>
+        {header}
+        {filter && <Filter {...filter} />}
+        <Table {...tableProps} />
+      </Modal>
+    </ConfigProvider>
   );
 };
 

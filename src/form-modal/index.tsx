@@ -4,6 +4,7 @@ import "antd/lib/col/style";
 import "antd/lib/form/style";
 
 import Col, { ColProps } from "antd/lib/col";
+import ConfigProvider from "antd/lib/config-provider";
 import Divider from "antd/lib/divider";
 import Form from "antd/lib/form";
 import { FormInstance, FormProps } from "antd/lib/form/Form";
@@ -14,6 +15,7 @@ import React, { forwardRef, useEffect, useState } from "react";
 
 import { UploadOutlined } from "@ant-design/icons";
 
+import { getConfigProviderProps } from "../";
 import * as helper from "./helper";
 import { FormItem, FormModalComponentProps, UploadProps } from "./types";
 
@@ -234,43 +236,45 @@ const FormModal = forwardRef<FormInstance, Props>((props, ref) => {
     );
   }
   return (
-    <Modal
-      title={title}
-      visible={visible}
-      confirmLoading={confirmLoading}
-      okButtonProps={{ size, ...okButtonProps }}
-      cancelButtonProps={{ size, ...cancelButtonProps }}
-      maskClosable={maskClosable}
-      {...modalProps}
-      onCancel={handleCancel}
-      onOk={handleOk}
-    >
-      {tips && <div style={{ marginBottom: 12 }}>{tips}</div>}
-      <Form ref={ref} {...formProps}>
-        {formItemsGroups ? (
-          formItemsGroups.map(({ key, formItems, title, ...props }, index) => (
-            <div key={key || index}>
-              {title && (
-                <Divider orientation="left" {...props}>
-                  {title}
-                </Divider>
-              )}
-              <Row gutter={8}>
-                {formItems
-                  .filter((u) => u.visible === undefined || u.visible === true)
-                  .map((u) => renderFormItem(u))}
-              </Row>
-            </div>
-          ))
-        ) : (
-          <Row gutter={8}>
-            {(formItems || [])
-              .filter((u) => u.visible === undefined || u.visible === true)
-              .map((u) => renderFormItem(u))}
-          </Row>
-        )}
-      </Form>
-    </Modal>
+    <ConfigProvider {...getConfigProviderProps()}>
+      <Modal
+        title={title}
+        visible={visible}
+        confirmLoading={confirmLoading}
+        okButtonProps={{ size, ...okButtonProps }}
+        cancelButtonProps={{ size, ...cancelButtonProps }}
+        maskClosable={maskClosable}
+        {...modalProps}
+        onCancel={handleCancel}
+        onOk={handleOk}
+      >
+        {tips && <div style={{ marginBottom: 12 }}>{tips}</div>}
+        <Form ref={ref} {...formProps}>
+          {formItemsGroups ? (
+            formItemsGroups.map(({ key, formItems, title, ...props }, index) => (
+              <div key={key || index}>
+                {title && (
+                  <Divider orientation="left" {...props}>
+                    {title}
+                  </Divider>
+                )}
+                <Row gutter={8}>
+                  {formItems
+                    .filter((u) => u.visible === undefined || u.visible === true)
+                    .map((u) => renderFormItem(u))}
+                </Row>
+              </div>
+            ))
+          ) : (
+            <Row gutter={8}>
+              {(formItems || [])
+                .filter((u) => u.visible === undefined || u.visible === true)
+                .map((u) => renderFormItem(u))}
+            </Row>
+          )}
+        </Form>
+      </Modal>
+    </ConfigProvider>
   );
 });
 

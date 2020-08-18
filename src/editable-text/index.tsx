@@ -5,6 +5,7 @@ import "antd/lib/message/style";
 import "antd/lib/select/style";
 import "antd/lib/spin/style";
 
+import ConfigProvider from "antd/lib/config-provider";
 import Input, { InputProps as AntdInputProps } from "antd/lib/input";
 import InputNumber, { InputNumberProps as AntdInputNumberProps } from "antd/lib/input-number";
 import message from "antd/lib/message";
@@ -15,6 +16,7 @@ import React, { useState } from "react";
 
 import { EditOutlined } from "@ant-design/icons";
 
+import { getConfigProviderProps } from "../";
 import { SelectProps as FromModalSelectProps, Size } from "../form-modal/types";
 
 declare type InputProps = Omit<
@@ -196,12 +198,16 @@ const EditableText: React.FC<EditableTextComponentProps> = ({
     }
   }
 
-  return needOnOkLoading ? (
-    <Spin size={size === "middle" ? "default" : size} spinning={spinning}>
-      {element}
-    </Spin>
-  ) : (
-    element
+  return (
+    <ConfigProvider {...getConfigProviderProps()}>
+      {needOnOkLoading ? (
+        <Spin size={size === "middle" ? "default" : size} spinning={spinning}>
+          {element}
+        </Spin>
+      ) : (
+        element
+      )}
+    </ConfigProvider>
   );
 };
 

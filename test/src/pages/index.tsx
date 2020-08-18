@@ -1,6 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
-/* eslint-disable jsx-a11y/anchor-has-content */
-/* eslint-disable jsx-a11y/heading-has-content */
 import Button from 'antd/es/button';
 import Col from 'antd/es/col';
 import Divider from 'antd/es/divider';
@@ -12,7 +9,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import {
   DeleteOutlined,
   EditOutlined,
-  FastBackwardFilled,
   PlusOutlined,
   ProfileOutlined,
   SyncOutlined,
@@ -31,7 +27,6 @@ import {
 import { RowsGroups } from '../../../src/dividers';
 import { ReloadBtnRef } from '../../../src/filter/types';
 import { TableColumnProps } from '../../../src/table/types';
-import styles from './index.css';
 
 export default function() {
   const formRef = useRef<FormInstance>(null);
@@ -481,7 +476,7 @@ export default function() {
             ],
           ])}
         </Col>
-        <Col span={12}>
+        <Col span={6}>
           <h1>SubstringText</h1>
           <SubstringText
             text={[
@@ -491,6 +486,39 @@ export default function() {
               '> LINE 4:SubstringText is a auto slice string text Component',
             ]}
           />
+        </Col>
+        <Col span={6}>
+          <h1>EditableText</h1>
+          <EditableText
+            type="input"
+            style="text"
+            initialValue={'Editable Text Component'}
+            onOk={v => console.log('input', v)}
+          >
+            Editable Text Component
+          </EditableText>
+          <EditableText
+            type="inputNumber"
+            style="text"
+            initialValue={2}
+            onOk={v => console.log('inputNumber', v)}
+          >
+            2
+          </EditableText>
+          <EditableText
+            type="select"
+            style="link"
+            initialValue={'2'}
+            props={{
+              options: [
+                { value: 1, field: '1' },
+                { value: 2, field: '2' },
+              ],
+            }}
+            onOk={v => console.log('select', v)}
+          >
+            2
+          </EditableText>
         </Col>
       </Row>
       <Divider />

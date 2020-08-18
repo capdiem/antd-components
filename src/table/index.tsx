@@ -3,13 +3,15 @@ import "antd/lib/button/style";
 import "antd/lib/modal/style";
 
 import Button from "antd/lib/button";
+import ConfigProvider from "antd/lib/config-provider";
 import Modal from "antd/lib/modal";
-import AntTable from "antd/lib/table";
+import AntTable, { ColumnType } from "antd/lib/table";
 import { TableProps } from "antd/lib/table/Table";
 import React, { useState } from "react";
 
 import { FullscreenOutlined } from "@ant-design/icons";
 
+import { getConfigProviderProps } from "../";
 import { TableColumnProps, TableComponentProps } from "./types";
 
 function recursion(columns: TableColumnProps<any>[]) {
@@ -60,41 +62,43 @@ const Table: React.FC<TableComponentProps<any>> = ({
   }
 
   return (
-    <div style={{ position: "relative" }}>
-      {fullscreenAbility && (
-        <Button
-          type="link"
-          icon={<FullscreenOutlined />}
-          style={{ position: "absolute", zIndex: 1, right: 0 }}
-          onClick={() => setFullscreen(true)}
-          {...fullscreenButtonProps}
-        />
-      )}
-      {!fullscreen && (
-        <AntTable
-          {...(tableProps as TableProps<any>)}
-          columns={newColumns}
-          rowKey={(item) => getRowKey(item)}
-        />
-      )}
-      <Modal
-        visible={fullscreen}
-        title={null}
-        footer={null}
-        centered
-        closable={false}
-        width={fullscreenWidth}
-        onCancel={() => setFullscreen(false)}
-      >
+    <ConfigProvider {...getConfigProviderProps()}>
+      <div style={{ position: "relative" }}>
         {fullscreenAbility && (
+          <Button
+            type="link"
+            icon={<FullscreenOutlined />}
+            style={{ position: "absolute", zIndex: 1, right: 0 }}
+            onClick={() => setFullscreen(true)}
+            {...fullscreenButtonProps}
+          />
+        )}
+        {!fullscreen && (
           <AntTable
             {...(tableProps as TableProps<any>)}
-            columns={newColumns}
+            columns={newColumns as ColumnType<any>[]}
             rowKey={(item) => getRowKey(item)}
           />
         )}
-      </Modal>
-    </div>
+        <Modal
+          visible={fullscreen}
+          title={null}
+          footer={null}
+          centered
+          closable={false}
+          width={fullscreenWidth}
+          onCancel={() => setFullscreen(false)}
+        >
+          {fullscreenAbility && (
+            <AntTable
+              {...(tableProps as TableProps<any>)}
+              columns={newColumns as ColumnType<any>[]}
+              rowKey={(item) => getRowKey(item)}
+            />
+          )}
+        </Modal>
+      </div>
+    </ConfigProvider>
   );
 };
 

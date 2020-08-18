@@ -1,11 +1,14 @@
 import "antd/lib/tooltip/style";
 
+import ConfigProvider from "antd/lib/config-provider";
 import Tooltip from "antd/lib/tooltip";
 import React, { useEffect, useState } from "react";
 import stringWidth from "string-width";
 
 import { EllipsisOutlined } from "@ant-design/icons";
 import useSize from "@umijs/hooks/lib/useSize";
+
+import { getConfigProviderProps } from "../";
 
 export interface SubstringTextComponentProps {
   text: string | string[];
@@ -93,42 +96,44 @@ const SubstringText: React.FC<SubstringTextComponentProps> = ({
   const borderStyle = type === "plain" ? {} : type === "link" ? linkStyle : dottedStyle;
 
   return (
-    <div ref={divRef}>
-      {greaterThanMaxRowCount || rowEllipsis.some((u) => u.ellipsis) ? (
-        <Tooltip title={getTitle(rowEllipsis.map((u) => u.content))}>
-          <div>
-            {rowEllipsis
-              .filter((_, index) =>
-                greaterThanMaxRowCount ? index < maxRowCount - 1 : index < maxRowCount
-              ) // -1 because the last line is ellipsis
-              .map((item, index) => (
-                <div key={index} style={rowStyle}>
-                  <p style={{ ...baseRowStyle, ...borderStyle }}>{item.content}</p>
+    <ConfigProvider {...getConfigProviderProps()}>
+      <div ref={divRef}>
+        {greaterThanMaxRowCount || rowEllipsis.some((u) => u.ellipsis) ? (
+          <Tooltip title={getTitle(rowEllipsis.map((u) => u.content))}>
+            <div>
+              {rowEllipsis
+                .filter((_, index) =>
+                  greaterThanMaxRowCount ? index < maxRowCount - 1 : index < maxRowCount
+                ) // -1 because the last line is ellipsis
+                .map((item, index) => (
+                  <div key={index} style={rowStyle}>
+                    <p style={{ ...baseRowStyle, ...borderStyle }}>{item.content}</p>
+                  </div>
+                ))}
+              {greaterThanMaxRowCount && (
+                <div style={rowStyle}>
+                  <EllipsisOutlined style={borderStyle} />
                 </div>
-              ))}
-            {greaterThanMaxRowCount && (
-              <div style={rowStyle}>
-                <EllipsisOutlined style={borderStyle} />
-              </div>
-            )}
-          </div>
-        </Tooltip>
-      ) : (
-        rowEllipsis.map((item, index) => (
-          <div key={index} style={rowStyle}>
-            <p
-              style={{
-                ...baseRowStyle,
-                ...(rowEllipsis.some((u) => u.ellipsis) ? borderStyle : {}),
-              }}
-              key={index}
-            >
-              {item.content}
-            </p>
-          </div>
-        ))
-      )}
-    </div>
+              )}
+            </div>
+          </Tooltip>
+        ) : (
+          rowEllipsis.map((item, index) => (
+            <div key={index} style={rowStyle}>
+              <p
+                style={{
+                  ...baseRowStyle,
+                  ...(rowEllipsis.some((u) => u.ellipsis) ? borderStyle : {}),
+                }}
+                key={index}
+              >
+                {item.content}
+              </p>
+            </div>
+          ))
+        )}
+      </div>
+    </ConfigProvider>
   );
 };
 
