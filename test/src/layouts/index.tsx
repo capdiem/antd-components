@@ -1,12 +1,43 @@
-import React from 'react';
-import styles from './index.css';
+import 'antd/es/layout/style';
+import 'antd/es/menu/style';
 
-const BasicLayout: React.FC = props => {
+import Layout from 'antd/es/layout';
+import Menu from 'antd/es/menu';
+import React from 'react';
+import { history } from 'umi';
+
+const { Header, Content, Sider } = Layout;
+
+const BasicLayout: React.FC = ({ children }) => {
+  const onMenuClick = ({ item, key, keyPath }: any) => {
+    // console.log('item, key, keyPath', item, key, keyPath);
+    history.push({
+      pathname: '/' + key,
+    });
+  };
+
   return (
-    <div className={styles.normal}>
-      <h1 className={styles.title}>Yay! Welcome to umi!</h1>
-      {props.children}
-    </div>
+    <Layout style={{ height: '100%' }}>
+      <Header>
+        <h1 style={{ color: 'white' }}>🎉Welcome to antd-components!</h1>
+      </Header>
+      <Layout>
+        <Sider theme="light" style={{ background: 'none', margin: 24 }}>
+          <Menu onClick={onMenuClick} style={{ background: 'white', height: '100%' }}>
+            <Menu.Item key="blockText">BlockText</Menu.Item>
+            <Menu.Item key="dividers">Dividers</Menu.Item>
+            <Menu.Item key="editableText">EditableText</Menu.Item>
+            <Menu.Item key="filter">Filter</Menu.Item>
+            <Menu.Item key="formModal">FormModal</Menu.Item>
+            <Menu.Item key="substringText">SubstringText</Menu.Item>
+            <Menu.Item key="table">Table</Menu.Item>
+            <Menu.Item key="tableModal">TableModal</Menu.Item>
+            <Menu.Item key="tableOperation">TableOperation</Menu.Item>
+          </Menu>
+        </Sider>
+        <Content>{children}</Content>
+      </Layout>
+    </Layout>
   );
 };
 

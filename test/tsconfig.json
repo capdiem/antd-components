@@ -10,7 +10,9 @@
     "baseUrl": ".",
     "strict": true,
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@@/*": ["src/.umi/*"],
+      "components": ["../src/index.ts"]
     },
     "allowSyntheticDefaultImports": true
   }

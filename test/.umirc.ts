@@ -1,33 +1,19 @@
-import { IConfig } from 'umi-types';
+import { resolve } from 'path';
+import { defineConfig } from 'umi';
 
-// ref: https://umijs.org/config/
-const config: IConfig =  {
-  treeShaking: true,
-  routes: [
-    {
-      path: '/',
-      component: '../layouts/index',
-      routes: [
-        { path: '/', component: '../pages/index' }
-      ]
-    }
-  ],
-  plugins: [
-    // ref: https://umijs.org/plugin/umi-plugin-react.html
-    ['umi-plugin-react', {
-      antd: true,
-      dva: false,
-      dynamicImport: false,
-      title: 'test',
-      dll: false,
-      
-      routes: {
-        exclude: [
-          /components\//,
-        ],
-      },
-    }],
-  ],
-}
+const config = defineConfig({
+  antd: {
+    // compact: false
+  },
+
+  alias: {
+    components: resolve(__dirname.replace('\\test', ''), './src'),
+  },
+
+  chainWebpack(memo) {
+    memo.module.rule('ts-in-node_modules').include.clear();
+    return memo;
+  },
+});
 
 export default config;
