@@ -8,6 +8,7 @@ import "antd/lib/upload/style";
 import "antd/lib/switch/style";
 import "antd/lib/form/style";
 import "antd/lib/tree-select/style";
+import "antd/lib/radio/style";
 
 import Button from "antd/lib/button";
 import Cascader, { CascaderProps } from "antd/lib/cascader";
@@ -15,6 +16,7 @@ import DatePicker from "antd/lib/date-picker";
 import Form from "antd/lib/form";
 import Input, { InputProps, TextAreaProps } from "antd/lib/input";
 import InputNumber, { InputNumberProps } from "antd/lib/input-number";
+import Radio from "antd/lib/radio";
 import Select from "antd/lib/select";
 import Switch, { SwitchProps } from "antd/lib/switch";
 import TreeSelect, { TreeSelectProps } from "antd/lib/tree-select";
@@ -23,7 +25,15 @@ import React from "react";
 
 import { UploadOutlined } from "@ant-design/icons";
 
-import { DataEntryProps, DataEntryType, FormItem, SelectProps, Size, UploadProps } from "./types";
+import {
+  DataEntryProps,
+  DataEntryType,
+  FormItem,
+  RadioProps,
+  SelectProps,
+  Size,
+  UploadProps,
+} from "./types";
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -158,6 +168,19 @@ function renderDataEntry(
     case "switch": {
       element = (
         <Switch size={size === "small" ? "small" : "default"} {...(props as SwitchProps)} />
+      );
+      break;
+    }
+    case "radio": {
+      const { options, ...etc } = props as RadioProps;
+      element = (
+        <Radio.Group size={size} {...etc}>
+          {options.map(({ label, ...opts }) => (
+            <Radio key={opts.value} {...opts}>
+              {label}
+            </Radio>
+          ))}
+        </Radio.Group>
       );
       break;
     }

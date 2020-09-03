@@ -12,6 +12,7 @@ import FormItem, { FormItemProps as AntdFormItemProps } from "antd/lib/form/Form
 import { InputProps, TextAreaProps } from "antd/lib/input";
 import { InputNumberProps } from "antd/lib/input-number";
 import { ModalProps as AntdModalProps } from "antd/lib/modal";
+import { RadioProps as AntdRadioProps } from "antd/lib/radio";
 import { SelectProps as AntdSelectProps } from "antd/lib/select";
 import { SwitchProps } from "antd/lib/switch";
 import { TreeSelectProps } from "antd/lib/tree-select";
@@ -38,7 +39,9 @@ export declare type DataEntryType =
   | "textarea"
   | "switch"
   | "upload-image"
-  | "upload-images";
+  | "upload-images"
+  | "radio";
+
 export declare type Size = "large" | "middle" | "small";
 
 export declare type UploadFile = Pick<AntdUploadField, "url"> & {
@@ -51,6 +54,7 @@ export declare type UploadProps = AntdUploadProps & {
 export declare type SelectProps = Omit<AntdSelectProps<any>, "options"> & {
   options: OptionData[];
 };
+export declare type RadioProps = AntdRadioProps & { options: OptionData[] };
 declare type PickerSharedProps<DateType> = Pick<
   PickerProps<DateType>,
   | "allowClear"
@@ -147,7 +151,7 @@ export interface FormModalComponentProps<VT = any> extends ModalProps, FormProps
   formItemsGroups?: Array<FormItemsGroup<VT>>;
   formItemStyle?: React.CSSProperties;
   hasFeedback?: boolean;
-  initialValues?: VT;
+  initialValues?: Partial<VT>;
   /** use defaultValues as initialValues if initialValues do not exists and defaultValues exists */
   defaultValues?: Partial<VT>;
   labelCol?: ColProps | number;
