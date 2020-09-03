@@ -195,7 +195,7 @@ const Filter: React.FC<FilterComponentProps<any>> = ({
         element = (
           <RangePicker
             size={size}
-            placeholder={[`${placeholder}开始时间`, `${placeholder}结束时间`]}
+            placeholder={[`${placeholder || ""}开始时间`, `${placeholder || ""}结束时间`]}
             style={style}
             {...(props as any)}
           />
