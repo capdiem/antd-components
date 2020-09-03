@@ -183,14 +183,16 @@ const EditableText: React.FC<EditableTextComponentProps> = ({
     if (style === "link") {
       element = (
         <div style={rootStyle}>
-          <a onClick={() => setEditable(true)}>{children ?? <EditOutlined />}</a>
+          <a onClick={() => setEditable(true)} style={{ display: "block" }}>
+            {children ?? <EditOutlined />}
+          </a>
         </div>
       );
     } else {
       element = (
         <div style={rootStyle}>
           <span>{children}</span>
-          <a onClick={() => setEditable(true)} style={{ marginLeft: 4 }}>
+          <a onClick={() => setEditable(true)} style={{ display: "block", marginLeft: 4 }}>
             <EditOutlined />
           </a>
         </div>
