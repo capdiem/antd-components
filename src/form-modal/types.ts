@@ -149,7 +149,7 @@ export interface FormModalComponentProps<VT = any> extends ModalProps, FormProps
   hasFeedback?: boolean;
   initialValues?: VT;
   /** use defaultValues as initialValues if initialValues do not exists and defaultValues exists */
-  defaultValues?: VT;
+  defaultValues?: Partial<VT>;
   labelCol?: ColProps | number;
   wrapperCol?: ColProps | number;
   formItemCol?: ColProps | number;
