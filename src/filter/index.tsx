@@ -91,8 +91,12 @@ const Filter: React.FC<FilterComponentProps<any>> = ({
     const { type, field, placeholder, label, props, ...itemProps } = item;
 
     let element: React.ReactElement;
-    const style: React.CSSProperties =
-      mode === undefined || mode === "advanced" ? { width: "100%" } : {};
+    const itemStyle: React.CSSProperties =
+      mode === undefined || mode === "advanced"
+        ? { width: "100%" }
+        : {
+            minWidth: 174,
+          };
 
     switch (type) {
       case "textarea":
@@ -108,7 +112,7 @@ const Filter: React.FC<FilterComponentProps<any>> = ({
         element = (
           <InputNumber
             placeholder={placeholder || label}
-            style={style}
+            style={itemStyle}
             size={size}
             {...(props as InputNumberProps)}
           />
@@ -118,7 +122,7 @@ const Filter: React.FC<FilterComponentProps<any>> = ({
         const { options, ...etc } = props as SelectProps;
 
         element = (
-          <Select placeholder={placeholder || label} style={style} size={size} {...etc}>
+          <Select placeholder={placeholder || label} style={itemStyle} size={size} {...etc}>
             {options.map(({ label: content, ...opts }) => (
               <Option key={opts.value} {...opts}>
                 {content}
@@ -134,7 +138,7 @@ const Filter: React.FC<FilterComponentProps<any>> = ({
         element = (
           <Select
             placeholder={placeholder || label}
-            style={style}
+            style={itemStyle}
             size={size}
             allowClear
             showSearch
@@ -168,7 +172,7 @@ const Filter: React.FC<FilterComponentProps<any>> = ({
             defaultActiveFirstOption={false}
             notFoundContent={null}
             placeholder={placeholder || label}
-            style={style}
+            style={itemStyle}
             {...etc}
           >
             {options.map(({ label: content, ...opts }) => (
@@ -186,7 +190,7 @@ const Filter: React.FC<FilterComponentProps<any>> = ({
             size={size}
             changeOnSelect
             placeholder={placeholder || label}
-            style={style}
+            style={itemStyle}
             {...(props as CascaderProps)}
           />
         );
@@ -196,20 +200,25 @@ const Filter: React.FC<FilterComponentProps<any>> = ({
           <RangePicker
             size={size}
             placeholder={[`${placeholder || ""}开始时间`, `${placeholder || ""}结束时间`]}
-            style={style}
+            style={itemStyle}
             {...(props as any)}
           />
         );
         break;
       case "datePicker":
         element = (
-          <DatePicker size={size} placeholder={placeholder} style={style} {...(props as any)} />
+          <DatePicker size={size} placeholder={placeholder} style={itemStyle} {...(props as any)} />
         );
         break;
       case "input":
       default:
         element = (
-          <Input size={size} placeholder={placeholder || label} {...(props as InputProps)} />
+          <Input
+            size={size}
+            placeholder={placeholder || label}
+            style={itemStyle}
+            {...(props as InputProps)}
+          />
         );
         break;
     }
