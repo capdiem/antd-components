@@ -417,7 +417,7 @@ const Filter: React.FC<FilterComponentProps<any>> = ({
                       </Button>
                     </ButtonGroup>
                   </Col>
-                  {mode !== undefined && (
+                  {mode !== undefined && onModeChange !== undefined && (
                     <Col style={{ marginBottom: 4 }}>
                       <Button
                         size={size}
@@ -427,7 +427,7 @@ const Filter: React.FC<FilterComponentProps<any>> = ({
                           const toggledMode = filterMode === "advanced" ? "simple" : "advanced";
 
                           setFilterMode(toggledMode);
-                          onModeChange && onModeChange(toggledMode);
+                          onModeChange(toggledMode);
                         }}
                       >
                         {filterMode === "advanced" ? "简单搜索" : "高级搜索"}
