@@ -264,13 +264,13 @@ const Filter: React.FC<FilterComponentProps<any>> = ({
           ...btnProps
         } = item;
         if (mode === "upload") {
-          const style: React.CSSProperties = {};
+          const btnStyle: React.CSSProperties = {};
           if (index === 0 && items.length === 1) {
-            style.borderRadius = 2;
+            btnStyle.borderRadius = 2;
           } else if (index === 0 && items.length > 1) {
-            style.borderRadius = "2px 0 0 2px";
+            btnStyle.borderRadius = "2px 0 0 2px";
           } else if (index === items.length - 1) {
-            style.borderRadius = "0 2px 2px 0";
+            btnStyle.borderRadius = "0 2px 2px 0";
           }
 
           return (
@@ -296,7 +296,7 @@ const Filter: React.FC<FilterComponentProps<any>> = ({
                 loading={loading}
                 icon={icon}
                 disabled={disabled}
-                style={style}
+                style={btnStyle}
                 {...btnProps}
               >
                 {text}
