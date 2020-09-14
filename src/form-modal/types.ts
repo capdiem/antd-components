@@ -100,7 +100,7 @@ export declare type RangePickerProps<DateType = Moment> = BasicPickerProps<DateT
   > &
   Pick<RangePickerDateProps<DateType>, "showTime">;
 
-export declare type FormItemProps = Partial<Omit<AntdFormItemProps, "fieldKey">>;
+export declare type FormItemProps = Partial<Omit<AntdFormItemProps, "name" | "fieldKey">>;
 
 export declare type SharedDataEntryProps =
   | InputProps
@@ -124,7 +124,7 @@ export interface FormItem<VT = any> extends FormItemProps {
   type?: DataEntryType;
   props?: DataEntryProps;
   label?: string;
-  field: Extract<keyof VT, string>;
+  field: Extract<keyof VT, string> | (string | number)[];
   placeholder?: string;
   required?: boolean;
   readonly?: boolean;
