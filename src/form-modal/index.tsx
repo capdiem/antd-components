@@ -16,6 +16,7 @@ import React, { forwardRef, useEffect, useState } from "react";
 import { UploadOutlined } from "@ant-design/icons";
 
 import { getConfigProviderProps } from "../";
+import { getValueByNestedProps, setValueByNestedProps } from "../utils";
 import * as helper from "./helper";
 import { FormItem, FormModalComponentProps, UploadProps } from "./types";
 
@@ -59,19 +60,33 @@ const FormModal = forwardRef<FormInstance, Props>((props, ref) => {
     items
       .filter((u) => u.type === "upload-image")
       .forEach((u) => {
-        if (values && values[u.field]) {
-          obj[u.field] = [values[u.field]];
-          values[u.field] = [values[u.field]];
+        const fields = Array.isArray(u.field) ? u.field : [u.field];
+
+        if (values) {
+          const value = getValueByNestedProps(values, fields);
+          if (value) {
+            setValueByNestedProps(obj, fields, [value]);
+            setValueByNestedProps(values, fields, [value]);
+          } else {
+            setValueByNestedProps(obj, fields, []);
+          }
         } else {
-          obj[u.field] = [];
+          setValueByNestedProps(obj, fields, []);
         }
       });
 
     items
       .filter((u) => u.type === "upload-images")
       .forEach((u) => {
-        if (values && values[u.field]) obj[u.field] = values[u.field];
-        else obj[u.field] = [];
+        const fields = Array.isArray(u.field) ? u.field : [u.field];
+        if (values) {
+          const value = getValueByNestedProps(values, fields);
+          if (value) {
+            setValueByNestedProps(obj, fields, value);
+          } else {
+            setValueByNestedProps(obj, fields, []);
+          }
+        }
       });
 
     return obj;
@@ -143,6 +158,8 @@ const FormModal = forwardRef<FormInstance, Props>((props, ref) => {
 
   function renderFormItem(item: FormItem<any>) {
     const { type, field, label, readonly, required = false, rules = [], col, props } = item;
+    const name = Array.isArray(field) ? field : [field];
+    const key = Array.isArray(field) ? field.join("") : field;
 
     let _colProps: ColProps = col || {};
     if (!col && formItemCol) {
@@ -175,11 +192,11 @@ const FormModal = forwardRef<FormInstance, Props>((props, ref) => {
     }
 
     return (
-      <Col {...colProps} key={field} style={{ marginBottom: 8 }}>
+      <Col {...colProps} key={key} style={{ marginBottom: 8 }}>
         {type === "upload-image" || type === "upload-images" ? (
           <Form.Item
             label={label}
-            key={field}
+            key={key}
             name={field}
             rules={[requiredRule, ...rules]}
             valuePropName="fileList"
@@ -197,31 +214,32 @@ const FormModal = forwardRef<FormInstance, Props>((props, ref) => {
                 (props as UploadProps)
                   .onUpload(file)
                   .then((data) => {
-                    setFileList((state: any) => ({
-                      ...state,
-                      [field]: [
-                        ...state[field],
-                        {
-                          ...file,
-                          id: data.id,
-                          url: data.url,
-                        },
-                      ],
-                    }));
+                    const newState = { ...fileList };
+                    const prevValue = getValueByNestedProps(newState, name) || [];
+                    setValueByNestedProps(newState, name, [
+                      ...prevValue,
+                      {
+                        ...file,
+                        id: data.id,
+                        url: data.url,
+                      },
+                    ]);
 
+                    setFileList(newState);
                     onSuccess(data, file);
                   })
                   .catch(onError);
               }}
               onPreview={(props as UploadProps).onPreview}
               onRemove={(file) => {
-                setFileList((state: any) => ({
-                  ...state,
-                  [field]: state[field].filter((u: RcFile) => u.uid !== file.uid),
-                }));
+                const newState = { ...fileList };
+                const newValue = (getValueByNestedProps(fileList, name) || []).filter(
+                  (u: RcFile) => u.uid !== file.uid
+                );
+                setValueByNestedProps(newState, name, newValue);
               }}
             >
-              {fileList[field] && type === "upload-image" && fileList[field].length > 0 ? null : (
+              {type === "upload-image" && getValueByNestedProps(fileList, name)?.length > 0 && (
                 <div>
                   <UploadOutlined />
                   <span style={{ marginLeft: 2 }}>上传图片</span>
