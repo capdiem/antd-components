@@ -14,6 +14,8 @@ import { FullscreenOutlined } from "@ant-design/icons";
 import { getConfigProviderProps } from "../";
 import { TableColumnProps, TableComponentProps } from "./types";
 
+const { Summary, Column, ColumnGroup } = AntTable;
+
 function recursion(columns: TableColumnProps<any>[]) {
   return columns
     .filter((u) => u.visible === undefined || u.visible)
@@ -28,14 +30,16 @@ function recursion(columns: TableColumnProps<any>[]) {
     });
 }
 
-const Table: React.FC<TableComponentProps<any>> = ({
-  fullscreen: fullscreenAbility,
-  fullscreenWidth = "95%",
-  fullscreenButtonProps = {},
-  rowKey,
-  columns,
-  ...tableProps
-}) => {
+function Table<Record>(props: TableComponentProps<Record>) {
+  const {
+    fullscreen: fullscreenAbility,
+    fullscreenWidth = "95%",
+    fullscreenButtonProps = {},
+    rowKey,
+    columns,
+    ...tableProps
+  } = props;
+
   const [fullscreen, setFullscreen] = useState<boolean>(false);
 
   function getRowKey(item: any) {
@@ -100,6 +104,10 @@ const Table: React.FC<TableComponentProps<any>> = ({
       </div>
     </ConfigProvider>
   );
-};
+}
+
+Table.Column = Column;
+Table.ColumnGroup = ColumnGroup;
+Table.Summary = Summary;
 
 export default Table;
