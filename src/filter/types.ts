@@ -23,7 +23,7 @@ export type Btn<T = any> = Omit<ButtonProps, "onClick"> & {
   text?: string;
   mode?: ButtonMode;
   visible?: boolean;
-  props?: PopconfirmProps | UploadProps;
+  props?: PopconfirmProps | Omit<UploadProps, "onUpload">;
   onClick?: ((values?: T) => void) | ((file: File) => Promise<UploadFile>);
 };
 
