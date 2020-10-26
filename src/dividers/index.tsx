@@ -10,6 +10,7 @@ import Radium from "radium";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import stringWidth from "string-width";
 
+import { LoadingOutlined } from "@ant-design/icons";
 import useSize from "@umijs/hooks/lib/useSize";
 
 import { getConfigProviderProps } from "../";
@@ -19,6 +20,7 @@ export interface Row {
   icon?: React.ReactNode;
   visible?: boolean;
   disabled?: boolean;
+  loading?: boolean;
   onClick?: () => void;
 }
 
@@ -188,10 +190,18 @@ const Dividers: React.FC<DividerComponentProps> = ({
           style={{ padding: 0, height: "inherit", borderWidth: 0 }}
           disabled={row.disabled}
         >
-          {type !== "label" && row.icon}
-          {type !== "icon" && (
-            <span style={{ marginLeft: type === "full" ? marginLeft : 0 }}>{row.label}</span>
-          )}
+          {type !== "label" &&
+            (row.icon && row.loading ? (
+              <LoadingOutlined style={{ marginRight: marginLeft }} />
+            ) : (
+              row.icon
+            ))}
+          {type !== "icon" &&
+            (row.loading && (!row.icon || type === "label") ? (
+              <LoadingOutlined style={{ marginRight: marginLeft }} />
+            ) : (
+              <span style={{ marginLeft: type === "full" ? marginLeft : 0 }}>{row.label}</span>
+            ))}
         </Button>
       );
 
