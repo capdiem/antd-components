@@ -1,8 +1,4 @@
-import 'antd/es/layout/style';
-import 'antd/es/menu/style';
-
-import Layout from 'antd/es/layout';
-import Menu from 'antd/es/menu';
+import { Layout, Menu } from 'antd';
 import React from 'react';
 import { history } from 'umi';
 
@@ -35,7 +31,9 @@ const BasicLayout: React.FC = ({ children }) => {
             <Menu.Item key="tableOperation">TableOperation</Menu.Item>
           </Menu>
         </Sider>
-        <Content>{children}</Content>
+        <Content style={{ margin: '24px 24px 24px 0', padding: 24, background: 'white' }}>
+          {children}
+        </Content>
       </Layout>
     </Layout>
   );
