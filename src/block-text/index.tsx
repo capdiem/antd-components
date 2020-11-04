@@ -32,10 +32,11 @@ const BlockText: React.FC<BlockTextComponentProps> = ({
     ...majorStyle,
   };
 
-  const _minorStyle = {
+  const _minorStyle: React.CSSProperties = {
     fontSize: "smaller",
     display: "block",
     color: "darkgrey",
+    marginTop: "-4px",
     ...minorStyle,
   };
 
