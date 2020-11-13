@@ -24,7 +24,7 @@ const BasicLayout: React.FC = ({ children }) => {
             <Menu.Item key="dividers">Dividers</Menu.Item>
             <Menu.Item key="editableText">EditableText</Menu.Item>
             <Menu.Item key="filter">Filter</Menu.Item>
-            <Menu.Item key="formModal">FormModal</Menu.Item>
+            <Menu.Item key="form-modal">FormModal</Menu.Item>
             <Menu.Item key="substringText">SubstringText</Menu.Item>
             <Menu.Item key="table">Table</Menu.Item>
             <Menu.Item key="tableModal">TableModal</Menu.Item>
