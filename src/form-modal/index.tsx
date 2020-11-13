@@ -239,7 +239,8 @@ const FormModal = forwardRef<FormInstance, Props>((props, ref) => {
                 setValueByNestedProps(newState, name, newValue);
               }}
             >
-              {type === "upload-image" && getValueByNestedProps(fileList, name)?.length > 0 && (
+              {type === "upload-image" &&
+              getValueByNestedProps(fileList, name)?.length > 0 ? null : (
                 <div>
                   <UploadOutlined />
                   <span style={{ marginLeft: 2 }}>上传图片</span>
