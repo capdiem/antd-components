@@ -236,7 +236,9 @@ const FormModal = forwardRef<FormInstance, Props>((props, ref) => {
                 const newValue = (getValueByNestedProps(fileList, name) || []).filter(
                   (u: RcFile) => u.uid !== file.uid
                 );
+
                 setValueByNestedProps(newState, name, newValue);
+                setFileList(newState);
               }}
             >
               {type === "upload-image" &&
