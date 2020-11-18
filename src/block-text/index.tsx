@@ -43,31 +43,33 @@ const BlockText: React.FC<BlockTextComponentProps> = ({
     ...minorStyle,
   };
 
-  const tagsNode = tags.map(({ text, color }) => (
-    <Tag
-      color={color}
-      key={text}
-      style={
-        tagPosition === "outer"
-          ? {
-              whiteSpace: "unset",
-              padding: "0 4px",
-              marginRight: 4,
-              maxWidth: 60,
-              ...tagStyle,
-            }
-          : {
-              whiteSpace: "unset",
-              padding: "0 4px",
-              marginRight: 4,
-              lineHeight: "16px",
-              ...tagStyle,
-            }
-      }
-    >
-      {text}
-    </Tag>
-  ));
+  const tagsNode = tags
+    .filter((u) => u.text)
+    .map(({ text, color }) => (
+      <Tag
+        color={color}
+        key={text}
+        style={
+          tagPosition === "outer"
+            ? {
+                whiteSpace: "unset",
+                padding: "0 4px",
+                marginRight: 4,
+                maxWidth: 60,
+                ...tagStyle,
+              }
+            : {
+                whiteSpace: "unset",
+                padding: "0 4px",
+                marginRight: 4,
+                lineHeight: "16px",
+                ...tagStyle,
+              }
+        }
+      >
+        {text}
+      </Tag>
+    ));
 
   return (
     <ConfigProvider {...getConfigProviderProps()}>
