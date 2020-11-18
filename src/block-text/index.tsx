@@ -15,6 +15,8 @@ export interface BlockTextComponentProps {
   major: React.ReactNode;
   minor?: React.ReactNode;
   tags?: TagProps[];
+  tagPosition?: "outer" | "minor";
+  style?: React.CSSProperties;
   majorStyle?: React.CSSProperties;
   minorStyle?: React.CSSProperties;
   tagStyle?: React.CSSProperties;
@@ -22,8 +24,10 @@ export interface BlockTextComponentProps {
 
 const BlockText: React.FC<BlockTextComponentProps> = ({
   tags = [],
+  tagPosition = "outer",
   major,
   minor,
+  style,
   majorStyle,
   minorStyle,
   tagStyle,
@@ -33,12 +37,37 @@ const BlockText: React.FC<BlockTextComponentProps> = ({
   };
 
   const _minorStyle: React.CSSProperties = {
-    fontSize: "smaller",
-    display: "block",
+    fontSize: "12px",
     color: "darkgrey",
-    marginTop: "-4px",
+    marginTop: "-2px",
     ...minorStyle,
   };
+
+  const tagsNode = tags.map(({ text, color }) => (
+    <Tag
+      color={color}
+      key={text}
+      style={
+        tagPosition === "outer"
+          ? {
+              whiteSpace: "unset",
+              padding: "0 4px",
+              marginRight: 4,
+              maxWidth: 60,
+              ...tagStyle,
+            }
+          : {
+              whiteSpace: "unset",
+              padding: "0 4px",
+              marginRight: 4,
+              lineHeight: "16px",
+              ...tagStyle,
+            }
+      }
+    >
+      {text}
+    </Tag>
+  ));
 
   return (
     <ConfigProvider {...getConfigProviderProps()}>
@@ -47,26 +76,18 @@ const BlockText: React.FC<BlockTextComponentProps> = ({
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          ...style,
         }}
       >
-        {tags.map(({ text, color }) => (
-          <Tag
-            color={color}
-            key={text}
-            style={{
-              whiteSpace: "unset",
-              padding: "0 4px",
-              marginRight: 4,
-              maxWidth: 60,
-              ...tagStyle,
-            }}
-          >
-            {text}
-          </Tag>
-        ))}
+        {tagPosition === "outer" && tagsNode}
         <div>
-          <span style={_majorStyle}>{major}</span>
-          {minor && <span style={_minorStyle}>{minor}</span>}
+          <div style={_majorStyle}>{major}</div>
+          {minor && (
+            <div style={_minorStyle}>
+              {tagPosition === "minor" && tagsNode}
+              <span>{minor}</span>
+            </div>
+          )}
         </div>
       </div>
     </ConfigProvider>
