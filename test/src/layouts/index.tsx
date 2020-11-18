@@ -20,7 +20,7 @@ const BasicLayout: React.FC = ({ children }) => {
       <Layout>
         <Sider theme="light" style={{ background: 'none', margin: 24 }}>
           <Menu onClick={onMenuClick} style={{ background: 'white', height: '100%' }}>
-            <Menu.Item key="blockText">BlockText</Menu.Item>
+            <Menu.Item key="block-text">BlockText</Menu.Item>
             <Menu.Item key="dividers">Dividers</Menu.Item>
             <Menu.Item key="editableText">EditableText</Menu.Item>
             <Menu.Item key="filter">Filter</Menu.Item>
