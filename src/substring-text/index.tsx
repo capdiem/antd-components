@@ -13,7 +13,7 @@ import { getConfigProviderProps } from "../";
 export interface SubstringTextComponentProps {
   text: string | string[];
   textStyle?: React.CSSProperties;
-  type?: "link" | "dotted" | "plain";
+  type?: "link" | "dashed" | "plain";
   /** 每条数据多少行开启截取，默认一行 */
   rowLineClamp?: number;
   /** 最多显示条数，默认三条 */
@@ -24,7 +24,7 @@ export interface SubstringTextComponentProps {
 const SubstringText: React.FC<SubstringTextComponentProps> = ({
   text,
   textStyle = {},
-  type = "dotted",
+  type = "dashed",
   rowLineClamp = 1,
   maxRowCount = 3,
   rowStyle,
@@ -77,7 +77,7 @@ const SubstringText: React.FC<SubstringTextComponentProps> = ({
   };
 
   const dottedStyle: React.CSSProperties = {
-    borderBottomStyle: "dotted",
+    borderBottomStyle: "dashed",
     borderBottomWidth: 1,
     cursor: "default",
   };
