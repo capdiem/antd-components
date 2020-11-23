@@ -19,7 +19,6 @@ export interface SubstringTextComponentProps {
   /** 最多显示条数，默认三条 */
   maxRowCount?: number;
   rowStyle?: React.CSSProperties;
-  style?: React.CSSProperties;
 }
 
 const SubstringText: React.FC<SubstringTextComponentProps> = ({
@@ -29,7 +28,6 @@ const SubstringText: React.FC<SubstringTextComponentProps> = ({
   rowLineClamp = 1,
   maxRowCount = 3,
   rowStyle,
-  style,
 }) => {
   const [size, divRef] = useSize<HTMLDivElement>();
   const [rowEllipsis, setRowEllipsis] = useState<{ content: string; ellipsis: boolean }[]>([]);
@@ -99,10 +97,10 @@ const SubstringText: React.FC<SubstringTextComponentProps> = ({
 
   return (
     <ConfigProvider {...getConfigProviderProps()}>
-      <div ref={divRef} style={style}>
+      <div ref={divRef}>
         {greaterThanMaxRowCount || rowEllipsis.some((u) => u.ellipsis) ? (
           <Tooltip title={getTitle(rowEllipsis.map((u) => u.content))}>
-            <>
+            <div>
               {rowEllipsis
                 .filter((_, index) =>
                   greaterThanMaxRowCount ? index < maxRowCount - 1 : index < maxRowCount
@@ -117,7 +115,7 @@ const SubstringText: React.FC<SubstringTextComponentProps> = ({
                   <EllipsisOutlined style={borderStyle} />
                 </div>
               )}
-            </>
+            </div>
           </Tooltip>
         ) : (
           rowEllipsis.map((item, index) => (
