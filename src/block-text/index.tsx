@@ -7,7 +7,7 @@ import React from "react";
 import { getConfigProviderProps } from "../";
 
 export interface TagProps {
-  text: string;
+  text: React.ReactNode;
   color?: string;
 }
 
@@ -45,10 +45,10 @@ const BlockText: React.FC<BlockTextComponentProps> = ({
 
   const tagsNode = tags
     .filter((u) => u.text)
-    .map(({ text, color }) => (
+    .map(({ text, color }, key) => (
       <Tag
         color={color}
-        key={text}
+        key={key}
         style={
           tagPosition === "outer"
             ? {

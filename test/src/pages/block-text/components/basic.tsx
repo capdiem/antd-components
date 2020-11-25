@@ -1,4 +1,4 @@
-import { Radio } from 'antd';
+import { Radio, Tooltip } from 'antd';
 import { RadioChangeEvent } from 'antd/lib/radio';
 import { BlockText } from 'components';
 import React, { useState } from 'react';
@@ -21,7 +21,22 @@ const Basic = (params: any) => {
       <BlockText
         major="ORDER_ID_20201118092334982"
         minor="2020-11-18 09:23:34"
-        tags={[{ text: '在线支付', color: 'blue' }]}
+        tags={[
+          { text: '在线支付', color: 'blue' },
+          {
+            text: (
+              <Tooltip title="Try to click me">
+                <a
+                  onClick={() => {
+                    alert('Thanks to click me!');
+                  }}
+                >
+                  <span style={{ borderBottom: '1px dashed blue', color: 'blue' }}>click me!</span>
+                </a>
+              </Tooltip>
+            ),
+          },
+        ]}
         tagStyle={position === 'outer' ? { width: 34 } : {}}
         tagPosition={position}
       />
