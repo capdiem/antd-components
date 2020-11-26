@@ -22,7 +22,7 @@ const Basic = (params: any) => {
         major="ORDER_ID_20201118092334982"
         minor="2020-11-18 09:23:34"
         tags={[
-          { text: '在线支付', color: 'blue' },
+          { text: '在线支付', color: 'blue', style: position === 'outer' ? { width: 34 } : {} },
           {
             text: (
               <Tooltip title="Try to click me">
@@ -35,9 +35,9 @@ const Basic = (params: any) => {
                 </a>
               </Tooltip>
             ),
+            style: position === 'outer' ? { width: 34 } : {},
           },
         ]}
-        tagStyle={position === 'outer' ? { width: 34 } : {}}
         tagPosition={position}
       />
     </>

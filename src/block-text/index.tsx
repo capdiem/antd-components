@@ -9,6 +9,7 @@ import { getConfigProviderProps } from "../";
 export interface TagProps {
   text: React.ReactNode;
   color?: string;
+  style?: React.CSSProperties;
 }
 
 export interface BlockTextComponentProps {
@@ -19,7 +20,7 @@ export interface BlockTextComponentProps {
   style?: React.CSSProperties;
   majorStyle?: React.CSSProperties;
   minorStyle?: React.CSSProperties;
-  tagStyle?: React.CSSProperties;
+  tagsStyle?: React.CSSProperties;
 }
 
 const BlockText: React.FC<BlockTextComponentProps> = ({
@@ -30,7 +31,7 @@ const BlockText: React.FC<BlockTextComponentProps> = ({
   style,
   majorStyle,
   minorStyle,
-  tagStyle,
+  tagsStyle,
 }) => {
   const _majorStyle = {
     ...majorStyle,
@@ -45,7 +46,7 @@ const BlockText: React.FC<BlockTextComponentProps> = ({
 
   const tagsNode = tags
     .filter((u) => u.text)
-    .map(({ text, color }, key) => (
+    .map(({ text, color, style }, key) => (
       <Tag
         color={color}
         key={key}
@@ -56,14 +57,14 @@ const BlockText: React.FC<BlockTextComponentProps> = ({
                 padding: "0 4px",
                 marginRight: 4,
                 maxWidth: 60,
-                ...tagStyle,
+                ...style,
               }
             : {
                 whiteSpace: "unset",
                 padding: "0 4px",
                 marginRight: 4,
                 lineHeight: "16px",
-                ...tagStyle,
+                ...style,
               }
         }
       >
@@ -86,7 +87,7 @@ const BlockText: React.FC<BlockTextComponentProps> = ({
           <div style={_majorStyle}>{major}</div>
           {minor && (
             <div style={_minorStyle}>
-              {tagPosition === "minor" && tagsNode}
+              <span style={tagsStyle}>{tagPosition === "minor" && tagsNode}</span>
               <span>{minor}</span>
             </div>
           )}
