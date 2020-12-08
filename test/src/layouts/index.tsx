@@ -22,7 +22,7 @@ const BasicLayout: React.FC = ({ children }) => {
           <Menu onClick={onMenuClick} style={{ background: 'white', height: '100%' }}>
             <Menu.Item key="block-text">BlockText</Menu.Item>
             <Menu.Item key="dividers">Dividers</Menu.Item>
-            <Menu.Item key="editableText">EditableText</Menu.Item>
+            <Menu.Item key="editable-text">EditableText</Menu.Item>
             <Menu.Item key="filter">Filter</Menu.Item>
             <Menu.Item key="form-modal">FormModal</Menu.Item>
             <Menu.Item key="substringText">SubstringText</Menu.Item>
