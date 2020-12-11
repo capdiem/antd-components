@@ -164,10 +164,14 @@ const Dividers: React.FC<DividerComponentProps> = ({
   }, [size.width]);
 
   const defaultDividerStyle: React.CSSProperties =
-    type === "horizontal" ? { margin: "1px 0px" } : {};
+    type === "horizontal"
+      ? { margin: "1px 0px", borderTopStyle: dividerVisible ? "solid" : "none" }
+      : { borderLeftStyle: dividerVisible ? "solid" : "none" };
 
   const defaultOuterDividerStyle: React.CSSProperties =
-    type === "horizontal" ? { height: "auto" } : { margin: "2px 0px" };
+    type === "horizontal"
+      ? { height: "auto", borderLeftStyle: outerDividerVisible ? "solid" : "none" }
+      : { margin: "2px 0px", borderTopStyle: outerDividerVisible ? "solid" : "none" };
 
   const defaultStyle: React.CSSProperties =
     type === "vertical" ? { display: "flex", justifyContent: "center", alignItems: "center" } : {};
@@ -225,7 +229,7 @@ const Dividers: React.FC<DividerComponentProps> = ({
       .map((row, index) => {
         return (
           <>
-            {index !== 0 && dividerVisible && (
+            {index !== 0 && (
               <Divider style={{ ...defaultDividerStyle, ...dividerStyle }} type={type} />
             )}
             <span style={_rowStyle} key={`${groupIndex}-node${index}`}>
@@ -248,13 +252,26 @@ const Dividers: React.FC<DividerComponentProps> = ({
       >
         {(rows[0] instanceof Array ? rows : [rows]).map((u: Rows, i) => (
           <>
-            {i !== 0 && outerDividerVisible && (
+            {i !== 0 && (
               <Divider
                 style={{ ...defaultOuterDividerStyle, ...outerDividerStyle }}
                 type={switchedType}
               />
             )}
-            <div key={`row${i}`} style={{ ...defaultStyle, ...style }}>
+            <div
+              key={`row${i}`}
+              style={
+                i === 0
+                  ? {
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      flexDirection: type === "horizontal" ? "column" : "row",
+                      ...style,
+                    }
+                  : { ...defaultStyle, ...style }
+              }
+            >
               {renderItem(u, i)}
             </div>
           </>
