@@ -1,4 +1,10 @@
-## Basic
+---
+toc: false
+group:
+  title: EditableText
+---
+
+## 基本使用
 
 表单类型支持文本输入框、数字输入框、选择器、树选择。
 
@@ -157,38 +163,6 @@ export default () => {
         </EditableText>
       </div>
     </>
-  );
-};
-```
-
-## 规则验证
-
-```tsx
-import React, { useState } from "react";
-import { EditableText } from "antd-components";
-
-export default () => {
-  const [email, setEmail] = useState<string>("capdiem@hi.com");
-
-  return (
-    <div>
-      邮箱：
-      <EditableText
-        initialValue={email}
-        type="input"
-        rule="email"
-        onOk={(value) =>
-          new Promise((resolve) => {
-            setTimeout(() => {
-              setEmail(value);
-              resolve();
-            }, 1000);
-          })
-        }
-      >
-        {email}
-      </EditableText>
-    </div>
   );
 };
 ```
