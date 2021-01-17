@@ -53,7 +53,6 @@ export interface EditableTextComponentProps {
   style?: Style;
   type?: Type;
   rule?: Rule;
-  rootStyle?: React.CSSProperties;
   props?: SharedDataEntryProps;
 }
 
@@ -83,7 +82,6 @@ const EditableText: React.FC<EditableTextComponentProps> = ({
   type = "input",
   rule = "string",
   needOnOkLoading = true,
-  rootStyle,
   props,
   children,
 }) => {
